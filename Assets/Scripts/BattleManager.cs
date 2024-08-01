@@ -53,6 +53,7 @@ public class BattleManager: MonoBehaviour
 
     public IEnumerator BattleStart()
     {
+        Debug.Log("BattleStart");
         yield return new WaitForSeconds(1.0f);
 
         while (!Input.GetKeyDown(KeyCode.Space))
@@ -62,29 +63,19 @@ public class BattleManager: MonoBehaviour
 
         if (pLv > enemyStatusManager.DataList[randomNumber].eLv)
         {
-            StartCoroutine(PlayerComand());
+            Debug.Log("Playerfirst");
+            yield return StartCoroutine(PlayerComand());
 
-            yield return new WaitForSeconds(1.0f);
-
-            while (!Input.GetKeyDown(KeyCode.Space))
-            {
-                yield return null;
-            }
-
-            StartCoroutine(EnemyComand());
+            Debug.Log("Enemysecond");
+            yield return StartCoroutine(EnemyComand());
         }
         else if (pLv < enemyStatusManager.DataList[randomNumber].eLv)
         {
-            StartCoroutine(EnemyComand());
+            Debug.Log("Enemyfirst");
+            yield return StartCoroutine(EnemyComand());
 
-            yield return new WaitForSeconds(1.0f);
-
-            while (!Input.GetKeyDown(KeyCode.Space))
-            {
-                yield return null;
-            }
-
-            StartCoroutine(PlayerComand());
+            Debug.Log("Playersecond");
+            yield return StartCoroutine(PlayerComand());
 
         }
         else
@@ -93,25 +84,19 @@ public class BattleManager: MonoBehaviour
             battlerandom = Random.Range(0, 2);
             if (battlerandom == 0)
             {
-                StartCoroutine(PlayerComand());
+                Debug.Log("Playerfirst");
+                yield return StartCoroutine(PlayerComand());
 
-                while (!Input.GetKeyDown(KeyCode.Space))
-                {
-                    yield return null;
-                }
-
-                StartCoroutine(EnemyComand());
+                Debug.Log("Enemysecond");
+                yield return StartCoroutine(EnemyComand());
             }
             else
             {
-                StartCoroutine(EnemyComand());
+                Debug.Log("Enemyfirst");
+                yield return StartCoroutine(EnemyComand());
 
-                while (!Input.GetKeyDown(KeyCode.Space))
-                {
-                    yield return null;
-                }
-
-                StartCoroutine(PlayerComand());
+                Debug.Log("Playersecond");
+                yield return StartCoroutine(PlayerComand());
             }
         }
 
@@ -120,7 +105,7 @@ public class BattleManager: MonoBehaviour
             yield return null;
         }
 
-        StartCoroutine(BattleStart());
+        yield return StartCoroutine(BattleStart());
 
     }
 
@@ -139,9 +124,12 @@ public class BattleManager: MonoBehaviour
 
         yield return new WaitForSeconds(0.5f);
 
-        
-
         yield return new WaitForSeconds(1.0f);
+
+        while (!Input.GetKeyDown(KeyCode.Space))
+        {
+            yield return null;
+        }
 
     }
 
@@ -170,7 +158,12 @@ public class BattleManager: MonoBehaviour
 
         if (pHP == 0)
         {
-            StartCoroutine(PlayerLose());
+            yield return StartCoroutine(PlayerLose());
+        }
+
+        while (!Input.GetKeyDown(KeyCode.Space))
+        {
+            yield return null;
         }
 
     }
@@ -180,6 +173,8 @@ public class BattleManager: MonoBehaviour
         battleText.text = $"{pName} Lose";
 
         yield return new WaitForSeconds(1.0f);
+
+        StopAllCoroutines();
     }
 
 }
