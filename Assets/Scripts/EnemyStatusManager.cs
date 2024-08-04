@@ -6,9 +6,9 @@ using UnityEngine;
 public class EnemyData
 {
     public string eNAME;
+    public int eLv;
     public int eHP;
     public int eATK;
-    public int eLv;
     public int eEXP;
 }
 

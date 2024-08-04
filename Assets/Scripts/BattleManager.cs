@@ -12,12 +12,17 @@ public class BattleManager: MonoBehaviour
     public int pLv;
     public int pHP;
     public int pSP;
-    public int pATP;
+    public int pATK;
+
+    private string eNAME;
+    private int eLv;
+    private int eHP;
+    private int eATK;
 
     public Image displayMonster;
     public Sprite[] Monster;
     public TextMeshProUGUI[] pStatus;
-    public TextMeshProUGUI[] mStatus;
+    public TextMeshProUGUI[] eStatus;
     private Sprite[] sprites;
     private int randomNumber;
 
@@ -32,22 +37,28 @@ public class BattleManager: MonoBehaviour
         Sprite selectedSprite = sprites[randomNumber];
         displayMonster.sprite = selectedSprite;
 
-        battleText.text = "Batle Start";
+        eNAME = enemyStatusManager.DataList[randomNumber].eNAME;
+        eLv = enemyStatusManager.DataList[randomNumber].eLv;
+        eHP = enemyStatusManager.DataList[randomNumber].eHP;
+        eATK = enemyStatusManager.DataList[randomNumber].eATK;
+
+        pStatus[0].text = pName;
+        eStatus[0].text = eNAME;
+
+        battleText.text = "Battle Start";
         StartCoroutine(BattleStart());
     }
 
     void Update()
     {
-        pStatus[0].text = pName;
         pStatus[1].text = pLv.ToString();
         pStatus[2].text = pHP.ToString();
         pStatus[3].text = pSP.ToString();
-        pStatus[4].text = pATP.ToString();
+        pStatus[4].text = pATK.ToString();
 
-        mStatus[0].text = enemyStatusManager.DataList[randomNumber].eNAME;
-        mStatus[1].text = enemyStatusManager.DataList[randomNumber].eLv.ToString();
-        mStatus[2].text = enemyStatusManager.DataList[randomNumber].eHP.ToString();
-        mStatus[3].text = enemyStatusManager.DataList[randomNumber].eATK.ToString();
+        eStatus[1].text = eLv.ToString();
+        eStatus[2].text = eHP.ToString();
+        eStatus[3].text = eATK.ToString();
 
     }
 
@@ -61,20 +72,16 @@ public class BattleManager: MonoBehaviour
             yield return null;
         }
 
-        if (pLv > enemyStatusManager.DataList[randomNumber].eLv)
+        if (pLv > eLv)
         {
-            Debug.Log("Playerfirst");
             yield return StartCoroutine(PlayerComand());
 
-            Debug.Log("Enemysecond");
             yield return StartCoroutine(EnemyComand());
         }
-        else if (pLv < enemyStatusManager.DataList[randomNumber].eLv)
+        else if (pLv < eLv)
         {
-            Debug.Log("Enemyfirst");
             yield return StartCoroutine(EnemyComand());
 
-            Debug.Log("Playersecond");
             yield return StartCoroutine(PlayerComand());
 
         }
@@ -84,18 +91,14 @@ public class BattleManager: MonoBehaviour
             battlerandom = Random.Range(0, 2);
             if (battlerandom == 0)
             {
-                Debug.Log("Playerfirst");
                 yield return StartCoroutine(PlayerComand());
 
-                Debug.Log("Enemysecond");
                 yield return StartCoroutine(EnemyComand());
             }
             else
             {
-                Debug.Log("Enemyfirst");
                 yield return StartCoroutine(EnemyComand());
 
-                Debug.Log("Playersecond");
                 yield return StartCoroutine(PlayerComand());
             }
         }
@@ -120,11 +123,22 @@ public class BattleManager: MonoBehaviour
             yield return null;
         }
 
-        battleText.text = $"{pATP} Damage!";
+        battleText.text = $"{pATK} Damage!";
 
         yield return new WaitForSeconds(0.5f);
 
+        eHP = eHP - pATK;
+        if (eHP < 0)
+        {
+            eHP = 0;
+        }
+
         yield return new WaitForSeconds(1.0f);
+
+        if (eHP == 0)
+        {
+            yield return StartCoroutine(PlayerWin());
+        }
 
         while (!Input.GetKeyDown(KeyCode.Space))
         {
@@ -135,7 +149,7 @@ public class BattleManager: MonoBehaviour
 
     public IEnumerator EnemyComand()
     {
-        battleText.text = $"{enemyStatusManager.DataList[randomNumber].eNAME} Attack";
+        battleText.text = $"{eNAME} Attack";
 
         yield return new WaitForSeconds(1.0f);
 
@@ -144,11 +158,11 @@ public class BattleManager: MonoBehaviour
             yield return null;
         }
 
-        battleText.text = $"{enemyStatusManager.DataList[randomNumber].eATK} Damage!";
+        battleText.text = $"{eATK} Damage!";
 
         yield return new WaitForSeconds(0.5f);
 
-        pHP = pHP - enemyStatusManager.DataList[randomNumber].eATK;
+        pHP = pHP - eATK;
         if (pHP < 0 )
         {
             pHP = 0;
@@ -171,6 +185,15 @@ public class BattleManager: MonoBehaviour
     public IEnumerator PlayerLose()
     {
         battleText.text = $"{pName} Lose";
+
+        yield return new WaitForSeconds(1.0f);
+
+        StopAllCoroutines();
+    }
+
+    public IEnumerator PlayerWin()
+    {
+        battleText.text = $"{pName} Win";
 
         yield return new WaitForSeconds(1.0f);
 

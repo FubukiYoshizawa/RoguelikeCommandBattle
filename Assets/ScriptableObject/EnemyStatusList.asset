@@ -14,17 +14,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DataList:
   - eNAME: Slime
-    eHP: 5
-    eATK: 1
-    eLv: 1
-    eEXP: 1
+    eLv: 5
+    eHP: 30
+    eATK: 5
+    eEXP: 10
   - eNAME: LightDragonBaby
-    eHP: 50
-    eATK: 3
     eLv: 10
+    eHP: 100
+    eATK: 10
     eEXP: 100
   - eNAME: LightDragon
+    eLv: 50
     eHP: 300
     eATK: 30
-    eLv: 50
     eEXP: 1000
