@@ -152,7 +152,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 452b78f1f8bc8c647ab072fcee40e22d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyStatusManager: {fileID: 11400000, guid: c898d653b879a624d8e5daad96218e78, type: 2}
 --- !u!4 &291243881
 Transform:
   m_ObjectHideFlags: 0
@@ -605,7 +604,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b705c0b3f80db64d8265ecf19ea1334, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyStatusManager: {fileID: 11400000, guid: c898d653b879a624d8e5daad96218e78, type: 2}
+  esm: {fileID: 11400000, guid: c898d653b879a624d8e5daad96218e78, type: 2}
   pName: Ymamoto
   pLv: 10
   pHP: 100

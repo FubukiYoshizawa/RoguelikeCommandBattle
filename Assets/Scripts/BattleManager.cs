@@ -4,9 +4,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public class BattleManager: MonoBehaviour
+public class BattleManager: Singleton<BattleManager>
 {
-    public EnemyStatusManager enemyStatusManager;
+    public EnemyStatusManager esm;
 
     public string pName;
     public int pLv;
@@ -36,11 +36,10 @@ public class BattleManager: MonoBehaviour
         randomNumber = Random.Range(0, sprites.Length);
         Sprite selectedSprite = sprites[randomNumber];
         displayMonster.sprite = selectedSprite;
-
-        eNAME = enemyStatusManager.DataList[randomNumber].eNAME;
-        eLv = enemyStatusManager.DataList[randomNumber].eLv;
-        eHP = enemyStatusManager.DataList[randomNumber].eHP;
-        eATK = enemyStatusManager.DataList[randomNumber].eATK;
+        eNAME = esm.DataList[randomNumber].eNAME;
+        eLv = esm.DataList[randomNumber].eLv;
+        eHP = esm.DataList[randomNumber].eHP;
+        eATK = esm.DataList[randomNumber].eATK;
 
         pStatus[0].text = pName;
         eStatus[0].text = eNAME;
