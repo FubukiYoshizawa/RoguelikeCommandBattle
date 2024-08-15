@@ -13,14 +13,14 @@ public class GameManager : Singleton<GameManager>
     public int maxFloor = 10;
 
     public Image floorDisplay;
+    public Image floorIcon;
     // public Sprite[] floorImages;
-
+    public Sprite[] fIcon;
 
     void Start()
     {
-        mainText.text = "Start!";
         floorNumber.text = fn.ToString();
-        StartCoroutine(NextFloor());
+        StartCoroutine(StartAdventure());
     }
 
     void Update()
@@ -28,12 +28,24 @@ public class GameManager : Singleton<GameManager>
         
     }
 
+    public IEnumerator StartAdventure()
+    {
+        mainText.text = "Adventure Start!";
+
+        yield return new WaitForSeconds(1.0f);
+
+        while (!Input.GetKeyDown(KeyCode.Space))
+        {
+            yield return null;
+        }
+
+        yield return StartCoroutine(NextFloor());
+
+    }
+
     public IEnumerator NextFloor()
     {
-        if (fn != 0)
-        {
-            mainText.text = "Next Floor";
-        }
+        mainText.text = "Next Floor";
 
         yield return new WaitForSeconds(1.0f);
 
@@ -48,11 +60,12 @@ public class GameManager : Singleton<GameManager>
 
         if (fn == maxFloor)
         {
-            yield return StartCoroutine(BossBattleFloor());
+            yield return StartCoroutine(BossFloor());
         }
         else if (fn % 2 != 0)
         {
-            yield return StartCoroutine(BattleFloor());
+            floorIcon.sprite = fIcon[0];
+            yield return StartCoroutine(BattleManager.Instance.BattleStart());
         }
         else
         {
@@ -62,7 +75,7 @@ public class GameManager : Singleton<GameManager>
             EventFloor(),
             ItemFloor(),
             RestFloor(),
-            DifficultBattleFloor()
+            StrongFloor()
             };
 
             int randomIndex = UnityEngine.Random.Range(0, coroutines.Length);
@@ -73,7 +86,7 @@ public class GameManager : Singleton<GameManager>
 
     public IEnumerator BattleFloor()
     {
-        floorDisplay.color = Color.yellow;
+        floorIcon.sprite = fIcon[0];
         mainText.text = "Battle Floor";
 
         yield return new WaitForSeconds(1.0f);
@@ -86,9 +99,41 @@ public class GameManager : Singleton<GameManager>
         yield return StartCoroutine(NextFloor());
     }
 
+    public IEnumerator StrongFloor()
+    {
+        floorIcon.sprite = fIcon[1];
+        mainText.text = "Difficult Battle Floor";
+
+        yield return new WaitForSeconds(1.0f);
+
+        while (!Input.GetKeyDown(KeyCode.Space))
+        {
+            yield return null;
+        }
+
+        yield return StartCoroutine(NextFloor());
+
+    }
+
+    public IEnumerator BossFloor()
+    {
+        floorIcon.sprite = fIcon[2];
+        mainText.text = "Boss Floor";
+
+        yield return new WaitForSeconds(1.0f);
+
+        while (!Input.GetKeyDown(KeyCode.Space))
+        {
+            yield return null;
+        }
+
+        yield return StartCoroutine(Goal());
+
+    }
+
     public IEnumerator ShopFloor()
     {
-        floorDisplay.color = Color.blue;
+        floorIcon.sprite = fIcon[3];
         mainText.text = "Shop Floor";
 
         yield return new WaitForSeconds(1.0f);
@@ -104,7 +149,7 @@ public class GameManager : Singleton<GameManager>
 
     public IEnumerator EventFloor()
     {
-        floorDisplay.color = Color.cyan;
+        floorIcon.sprite = fIcon[4];
         mainText.text = "Event Floor";
 
         yield return new WaitForSeconds(1.0f);
@@ -120,7 +165,7 @@ public class GameManager : Singleton<GameManager>
 
     public IEnumerator ItemFloor()
     {
-        floorDisplay.color = Color.magenta;
+        floorIcon.sprite = fIcon[5];
         mainText.text = "Item Floor";
 
         yield return new WaitForSeconds(1.0f);
@@ -136,7 +181,7 @@ public class GameManager : Singleton<GameManager>
 
     public IEnumerator RestFloor()
     {
-        floorDisplay.color = Color.green;
+        floorIcon.sprite = fIcon[6];
         mainText.text = "Rest Floor";
 
         yield return new WaitForSeconds(1.0f);
@@ -147,38 +192,6 @@ public class GameManager : Singleton<GameManager>
         }
 
         yield return StartCoroutine(NextFloor());
-
-    }
-
-    public IEnumerator DifficultBattleFloor()
-    {
-        floorDisplay.color = Color.black;
-        mainText.text = "Difficult Battle Floor";
-
-        yield return new WaitForSeconds(1.0f);
-
-        while (!Input.GetKeyDown(KeyCode.Space))
-        {
-            yield return null;
-        }
-
-        yield return StartCoroutine(NextFloor());
-
-    }
-
-    public IEnumerator BossBattleFloor()
-    {
-        floorDisplay.color = Color.red;
-        mainText.text = "Boss Floor";
-
-        yield return new WaitForSeconds(1.0f);
-
-        while (!Input.GetKeyDown(KeyCode.Space))
-        {
-            yield return null;
-        }
-
-        yield return StartCoroutine(Goal());
 
     }
 

@@ -19,8 +19,8 @@ public class BattleManager: Singleton<BattleManager>
     private int eHP;
     private int eATK;
 
-    public Image displayMonster;
-    public Sprite[] Monster;
+    public Image displayEnemy;
+    public Sprite[] Enemy;
     public TextMeshProUGUI[] pStatus;
     public TextMeshProUGUI[] eStatus;
     private Sprite[] sprites;
@@ -28,24 +28,16 @@ public class BattleManager: Singleton<BattleManager>
 
     public TextMeshProUGUI battleText;
 
+    public GameObject enemyStatusWindow;
+    public GameObject itemWindow;
+    public GameObject comand;
+
+    private bool[] buttonOn;
+
     void Start()
     {
-        // スプライトを配列に格納
-        sprites = new Sprite[] { Monster[0], Monster[1], Monster[2] };
-
-        randomNumber = Random.Range(0, sprites.Length);
-        Sprite selectedSprite = sprites[randomNumber];
-        displayMonster.sprite = selectedSprite;
-        eNAME = esm.DataList[randomNumber].eNAME;
-        eLv = esm.DataList[randomNumber].eLv;
-        eHP = esm.DataList[randomNumber].eHP;
-        eATK = esm.DataList[randomNumber].eATK;
-
         pStatus[0].text = pName;
-        eStatus[0].text = eNAME;
-
-        battleText.text = "Battle Start";
-        StartCoroutine(BattleStart());
+        buttonOn = new bool[3];
     }
 
     void Update()
@@ -63,7 +55,8 @@ public class BattleManager: Singleton<BattleManager>
 
     public IEnumerator BattleStart()
     {
-        Debug.Log("BattleStart");
+        battleText.text = "Battle Floor!";
+
         yield return new WaitForSeconds(1.0f);
 
         while (!Input.GetKeyDown(KeyCode.Space))
@@ -71,47 +64,108 @@ public class BattleManager: Singleton<BattleManager>
             yield return null;
         }
 
-        if (pLv > eLv)
-        {
-            yield return StartCoroutine(PlayerComand());
+        sprites = new Sprite[] { Enemy[0], Enemy[1], Enemy[2] };
+        randomNumber = Random.Range(0, sprites.Length);
+        Sprite selectedSprite = sprites[randomNumber];
+        displayEnemy.sprite = selectedSprite;
 
-            yield return StartCoroutine(EnemyComand());
-        }
-        else if (pLv < eLv)
-        {
-            yield return StartCoroutine(EnemyComand());
+        eNAME = esm.DataList[randomNumber].eNAME;
+        eLv = esm.DataList[randomNumber].eLv;
+        eHP = esm.DataList[randomNumber].eHP;
+        eATK = esm.DataList[randomNumber].eATK;
+        eStatus[0].text = eNAME;
 
-            yield return StartCoroutine(PlayerComand());
+        battleText.text = $"{eNAME} Appeared!";
 
-        }
-        else
-        {
-            int battlerandom;
-            battlerandom = Random.Range(0, 2);
-            if (battlerandom == 0)
-            {
-                yield return StartCoroutine(PlayerComand());
+        enemyStatusWindow.SetActive(true);
+        itemWindow.SetActive(false);
 
-                yield return StartCoroutine(EnemyComand());
-            }
-            else
-            {
-                yield return StartCoroutine(EnemyComand());
-
-                yield return StartCoroutine(PlayerComand());
-            }
-        }
+        yield return new WaitForSeconds(1.0f);
 
         while (!Input.GetKeyDown(KeyCode.Space))
         {
             yield return null;
         }
 
-        yield return StartCoroutine(BattleStart());
+        yield return StartCoroutine(Battle());
 
     }
 
-    public IEnumerator PlayerComand()
+    public void AttackComand()
+    {
+        buttonOn[0] = true;
+    }
+
+    public void SkillComand()
+    {
+        buttonOn[1] = true;
+    }
+
+    public void ItemComand()
+    {
+        buttonOn[2] = true;
+    }
+
+    public void StrongStart()
+    {
+
+    }
+
+    public void BossStart()
+    {
+
+    }
+
+    public IEnumerator Battle()
+    {
+        battleText.text = "Command?";
+        comand.SetActive(true);
+
+        yield return new WaitForSeconds(1.0f);
+
+        while (!buttonOn[0] && !buttonOn[1] && !buttonOn[2])
+        {
+            yield return null;
+        }
+        comand.SetActive(false);
+
+        if (buttonOn[0])
+        {
+            comand.SetActive(false);
+            buttonOn[0] = false;
+            StartCoroutine(Attack());
+        }
+        else if (buttonOn[1])
+        {
+            comand.SetActive(false);
+            buttonOn[1] = false;
+            StartCoroutine(Battle());
+        }
+        else if (buttonOn[2])
+        {
+            comand.SetActive(false);
+            buttonOn[2] = false;
+            StartCoroutine(Battle());
+        }
+
+    }
+
+    public IEnumerator Attack()
+    {
+        yield return StartCoroutine(PlayerAttack());
+
+        yield return StartCoroutine(EnemyAttack());
+
+
+        while (!Input.GetKeyDown(KeyCode.Space))
+        {
+            yield return null;
+        }
+
+        yield return StartCoroutine(Battle());
+    }
+
+    public IEnumerator PlayerAttack()
     {
         battleText.text = $"{pName} Attack";
 
@@ -134,19 +188,19 @@ public class BattleManager: Singleton<BattleManager>
 
         yield return new WaitForSeconds(1.0f);
 
-        if (eHP == 0)
-        {
-            yield return StartCoroutine(PlayerWin());
-        }
-
         while (!Input.GetKeyDown(KeyCode.Space))
         {
             yield return null;
         }
 
+        if (eHP == 0)
+        {
+            yield return StartCoroutine(PlayerWin());
+        }
+
     }
 
-    public IEnumerator EnemyComand()
+    public IEnumerator EnemyAttack()
     {
         battleText.text = $"{eNAME} Attack";
 
@@ -169,14 +223,14 @@ public class BattleManager: Singleton<BattleManager>
 
         yield return new WaitForSeconds(1.0f);
 
-        if (pHP == 0)
-        {
-            yield return StartCoroutine(PlayerLose());
-        }
-
         while (!Input.GetKeyDown(KeyCode.Space))
         {
             yield return null;
+        }
+
+        if (pHP == 0)
+        {
+            yield return StartCoroutine(PlayerLose());
         }
 
     }
@@ -192,11 +246,19 @@ public class BattleManager: Singleton<BattleManager>
 
     public IEnumerator PlayerWin()
     {
+        displayEnemy.sprite = null;
         battleText.text = $"{pName} Win";
 
         yield return new WaitForSeconds(1.0f);
 
-        StopAllCoroutines();
+        while (!Input.GetKeyDown(KeyCode.Space))
+        {
+            yield return null;
+        }
+
+        enemyStatusWindow.SetActive(false);
+        itemWindow.SetActive(true);
+        yield return StartCoroutine(GameManager.Instance.NextFloor());
     }
 
 }
