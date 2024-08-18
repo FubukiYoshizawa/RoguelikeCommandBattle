@@ -28,16 +28,17 @@ public class BattleManager: Singleton<BattleManager>
 
     public TextMeshProUGUI battleText;
 
-    public GameObject enemyStatusWindow;
-    public GameObject itemWindow;
-    public GameObject comand;
+    public GameObject[] windows;
 
     private bool[] buttonOn;
+    public bool skillUse;
+    public bool itemUse;
+    public bool back;
 
     void Start()
     {
         pStatus[0].text = pName;
-        buttonOn = new bool[3];
+        buttonOn = new bool[8];
     }
 
     void Update()
@@ -77,8 +78,8 @@ public class BattleManager: Singleton<BattleManager>
 
         battleText.text = $"{eNAME} Appeared!";
 
-        enemyStatusWindow.SetActive(true);
-        itemWindow.SetActive(false);
+        windows[0].SetActive(true);
+        windows[1].SetActive(false);
 
         yield return new WaitForSeconds(1.0f);
 
@@ -89,21 +90,6 @@ public class BattleManager: Singleton<BattleManager>
 
         yield return StartCoroutine(Battle());
 
-    }
-
-    public void AttackComand()
-    {
-        buttonOn[0] = true;
-    }
-
-    public void SkillComand()
-    {
-        buttonOn[1] = true;
-    }
-
-    public void ItemComand()
-    {
-        buttonOn[2] = true;
     }
 
     public void StrongStart()
@@ -119,7 +105,7 @@ public class BattleManager: Singleton<BattleManager>
     public IEnumerator Battle()
     {
         battleText.text = "Command?";
-        comand.SetActive(true);
+        windows[2].SetActive(true);
 
         yield return new WaitForSeconds(1.0f);
 
@@ -127,25 +113,64 @@ public class BattleManager: Singleton<BattleManager>
         {
             yield return null;
         }
-        comand.SetActive(false);
+        windows[2].SetActive(false);
 
         if (buttonOn[0])
         {
-            comand.SetActive(false);
+            windows[2].SetActive(false);
             buttonOn[0] = false;
-            StartCoroutine(Attack());
+            yield return StartCoroutine(Attack());
         }
         else if (buttonOn[1])
         {
-            comand.SetActive(false);
+            windows[2].SetActive(false);
             buttonOn[1] = false;
-            StartCoroutine(Battle());
+            windows[3].SetActive(true);
+
+            while (!skillUse && !back)
+            {
+                yield return null;
+            }
+
+            if(skillUse)
+            {
+                windows[3].SetActive(false);
+                skillUse = false;
+                yield return StartCoroutine(Skill());
+            }
+            else
+            {
+                windows[3].SetActive(false);
+                back = false;
+                yield return StartCoroutine(Battle());
+
+            }
+
         }
         else if (buttonOn[2])
         {
-            comand.SetActive(false);
+            windows[2].SetActive(false);
             buttonOn[2] = false;
-            StartCoroutine(Battle());
+            windows[4].SetActive(true);
+
+            while (!itemUse && !back)
+            {
+                yield return null;
+            }
+
+            if (itemUse)
+            {
+                windows[4].SetActive(false);
+                itemUse = false;
+                yield return StartCoroutine(Item());
+            }
+            else
+            {
+                windows[4].SetActive(false);
+                back = false;
+                yield return StartCoroutine(Battle());
+
+            }
         }
 
     }
@@ -235,6 +260,73 @@ public class BattleManager: Singleton<BattleManager>
 
     }
 
+    public IEnumerator Skill()
+    {
+        if (buttonOn[3])
+        {
+            buttonOn[3] = false;
+            battleText.text = "Skill1 Use";
+        }
+        else if (buttonOn[4])
+        {
+            buttonOn[4] = false;
+            battleText.text = "Skill2 Use";
+        }
+        else if (buttonOn[5])
+        {
+            buttonOn[5] = false;
+            battleText.text = "Skill3 Use";
+        }
+
+        yield return new WaitForSeconds(1.0f);
+
+        while (!Input.GetKeyDown(KeyCode.Space))
+        {
+            yield return null;
+        }
+
+        yield return StartCoroutine(EnemyAttack());
+
+        while (!Input.GetKeyDown(KeyCode.Space))
+        {
+            yield return null;
+        }
+
+        yield return StartCoroutine(Battle());
+    }
+
+    public IEnumerator Item()
+    {
+        if (buttonOn[6])
+        {
+            buttonOn[6] = false;
+            battleText.text = "Item1 Use";
+        }
+        else if (buttonOn[7])
+        {
+            buttonOn[7] = false;
+            battleText.text = "Item2 Use";
+        }
+
+        yield return new WaitForSeconds(1.0f);
+
+        while (!Input.GetKeyDown(KeyCode.Space))
+        {
+            yield return null;
+        }
+
+        yield return StartCoroutine(EnemyAttack());
+
+        while (!Input.GetKeyDown(KeyCode.Space))
+        {
+            yield return null;
+        }
+
+        yield return StartCoroutine(Battle());
+
+
+    }
+
     public IEnumerator PlayerLose()
     {
         battleText.text = $"{pName} Lose";
@@ -256,10 +348,59 @@ public class BattleManager: Singleton<BattleManager>
             yield return null;
         }
 
-        enemyStatusWindow.SetActive(false);
-        itemWindow.SetActive(true);
+        windows[0].SetActive(false);
+        windows[1].SetActive(true);
         yield return StartCoroutine(GameManager.Instance.NextFloor());
     }
 
+    public void AttackComand()
+    {
+        buttonOn[0] = true;
+    }
+
+    public void SkillComand()
+    {
+        buttonOn[1] = true;
+    }
+
+    public void ItemComand()
+    {
+        buttonOn[2] = true;
+    }
+
+    public void Skill1()
+    {
+        skillUse = true;
+        buttonOn[3] = true;
+    }
+
+    public void Skill2()
+    {
+        skillUse = true;
+        buttonOn[4] = true;
+    }
+
+    public void Skill3()
+    {
+        skillUse = true;
+        buttonOn[5] = true;
+    }
+
+    public void Item1()
+    {
+        itemUse = true;
+        buttonOn[6] = true;
+    }
+
+    public void Item2()
+    {
+        itemUse = true;
+        buttonOn[7] = true;
+    }
+
+    public void Back()
+    {
+        back = true;
+    }
 }
 

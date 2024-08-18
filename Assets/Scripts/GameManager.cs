@@ -17,6 +17,9 @@ public class GameManager : Singleton<GameManager>
     // public Sprite[] floorImages;
     public Sprite[] fIcon;
 
+    public GameObject selectWindow;
+    public bool yes, no;
+
     void Start()
     {
         floorNumber.text = fn.ToString();
@@ -78,8 +81,8 @@ public class GameManager : Singleton<GameManager>
             StrongFloor()
             };
 
-            int randomIndex = UnityEngine.Random.Range(0, coroutines.Length);
-            yield return StartCoroutine(coroutines[randomIndex]);
+            int random = UnityEngine.Random.Range(0, coroutines.Length);
+            yield return StartCoroutine(coroutines[random]);
         }
 
     }
@@ -143,6 +146,44 @@ public class GameManager : Singleton<GameManager>
             yield return null;
         }
 
+        mainText.text = "Welcome Shop";
+
+        yield return new WaitForSeconds(1.0f);
+
+        while (!Input.GetKeyDown(KeyCode.Space))
+        {
+            yield return null;
+        }
+
+        mainText.text = "Do You Buy Potion?";
+
+        yield return new WaitForSeconds(1.0f);
+
+        selectWindow.SetActive(true);
+
+        while (!yes && !no)
+        {
+            yield return null;
+        }
+
+        if (yes)
+        {
+            yes = false;
+            mainText.text = "Thank you";
+        }
+        else
+        {
+            no = false;
+            mainText.text = "Oh... See You";
+        }
+
+        yield return new WaitForSeconds(1.0f);
+
+        while (!Input.GetKeyDown(KeyCode.Space))
+        {
+            yield return null;
+        }
+
         yield return StartCoroutine(NextFloor());
 
     }
@@ -151,6 +192,35 @@ public class GameManager : Singleton<GameManager>
     {
         floorIcon.sprite = fIcon[4];
         mainText.text = "Event Floor";
+
+        yield return new WaitForSeconds(1.0f);
+
+        while (!Input.GetKeyDown(KeyCode.Space))
+        {
+            yield return null;
+        }
+
+        mainText.text = "Do You Want Power?";
+
+        yield return new WaitForSeconds(1.0f);
+
+        selectWindow.SetActive(true);
+
+        while (!yes && !no)
+        {
+            yield return null;
+        }
+
+        if (yes)
+        {
+            yes = false;
+            mainText.text = "Present For You";
+        }
+        else
+        {
+            no = false;
+            mainText.text = "Ok Good Luck";
+        }
 
         yield return new WaitForSeconds(1.0f);
 
@@ -206,6 +276,16 @@ public class GameManager : Singleton<GameManager>
         {
             yield return null;
         }
+    }
+
+    public void Yes()
+    {
+        yes = true;
+    }
+
+    public void No()
+    {
+        no = true;
     }
 
 }
