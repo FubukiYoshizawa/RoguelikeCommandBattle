@@ -12,18 +12,16 @@ public class GameManager : Singleton<GameManager>
     public float fn = 0;
     public int maxFloor = 10;
 
-    public Image floorDisplay;
+    public Image floorBack;
+    public Sprite fBacks;
     public Image floorIcon;
-    // public Sprite[] floorImages;
     public Sprite[] fIcon;
-
-    public GameObject selectWindow;
-    public bool yes, no;
 
     void Start()
     {
         floorNumber.text = fn.ToString();
         StartCoroutine(StartAdventure());
+        floorBack.sprite = fBacks;
     }
 
     void Update()
@@ -63,7 +61,7 @@ public class GameManager : Singleton<GameManager>
 
         if (fn == maxFloor)
         {
-            yield return StartCoroutine(BossFloor());
+            yield return StartCoroutine(BattleManager.Instance.BossStart());
         }
         else if (fn % 2 != 0)
         {
@@ -74,63 +72,16 @@ public class GameManager : Singleton<GameManager>
         {
             IEnumerator[] coroutines = new IEnumerator[]
             {
-            ShopFloor(),
-            EventFloor(),
-            ItemFloor(),
-            RestFloor(),
-            StrongFloor()
+                ShopFloor(),
+                EventFloor(),
+                ItemFloor(),
+                RestFloor(),
+                BattleManager.Instance.StrongStart()
             };
 
             int random = UnityEngine.Random.Range(0, coroutines.Length);
             yield return StartCoroutine(coroutines[random]);
         }
-
-    }
-
-    public IEnumerator BattleFloor()
-    {
-        floorIcon.sprite = fIcon[0];
-        mainText.text = "Battle Floor";
-
-        yield return new WaitForSeconds(1.0f);
-
-        while (!Input.GetKeyDown(KeyCode.Space))
-        {
-            yield return null;
-        }
-
-        yield return StartCoroutine(NextFloor());
-    }
-
-    public IEnumerator StrongFloor()
-    {
-        floorIcon.sprite = fIcon[1];
-        mainText.text = "Difficult Battle Floor";
-
-        yield return new WaitForSeconds(1.0f);
-
-        while (!Input.GetKeyDown(KeyCode.Space))
-        {
-            yield return null;
-        }
-
-        yield return StartCoroutine(NextFloor());
-
-    }
-
-    public IEnumerator BossFloor()
-    {
-        floorIcon.sprite = fIcon[2];
-        mainText.text = "Boss Floor";
-
-        yield return new WaitForSeconds(1.0f);
-
-        while (!Input.GetKeyDown(KeyCode.Space))
-        {
-            yield return null;
-        }
-
-        yield return StartCoroutine(Goal());
 
     }
 
@@ -146,43 +97,15 @@ public class GameManager : Singleton<GameManager>
             yield return null;
         }
 
-        mainText.text = "Welcome Shop";
+        IEnumerator[] shopcoroutines = new IEnumerator[]
+            {
+                ShopManager.Instance.HPShop(),
+                ShopManager.Instance.SPShop(),
+                ShopManager.Instance.ATKShop()
+            };
 
-        yield return new WaitForSeconds(1.0f);
-
-        while (!Input.GetKeyDown(KeyCode.Space))
-        {
-            yield return null;
-        }
-
-        mainText.text = "Do You Buy Potion?";
-
-        yield return new WaitForSeconds(1.0f);
-
-        selectWindow.SetActive(true);
-
-        while (!yes && !no)
-        {
-            yield return null;
-        }
-
-        if (yes)
-        {
-            yes = false;
-            mainText.text = "Thank you";
-        }
-        else
-        {
-            no = false;
-            mainText.text = "Oh... See You";
-        }
-
-        yield return new WaitForSeconds(1.0f);
-
-        while (!Input.GetKeyDown(KeyCode.Space))
-        {
-            yield return null;
-        }
+        int random = UnityEngine.Random.Range(0, shopcoroutines.Length);
+        yield return StartCoroutine(shopcoroutines[random]);
 
         yield return StartCoroutine(NextFloor());
 
@@ -200,34 +123,15 @@ public class GameManager : Singleton<GameManager>
             yield return null;
         }
 
-        mainText.text = "Do You Want Power?";
+        IEnumerator[] eventcoroutines = new IEnumerator[]
+            {
+                EventManager.Instance.HPUpEvent(),
+                EventManager.Instance.SPUpEvent(),
+                EventManager.Instance.ATKUpEvent()
+            };
 
-        yield return new WaitForSeconds(1.0f);
-
-        selectWindow.SetActive(true);
-
-        while (!yes && !no)
-        {
-            yield return null;
-        }
-
-        if (yes)
-        {
-            yes = false;
-            mainText.text = "Present For You";
-        }
-        else
-        {
-            no = false;
-            mainText.text = "Ok Good Luck";
-        }
-
-        yield return new WaitForSeconds(1.0f);
-
-        while (!Input.GetKeyDown(KeyCode.Space))
-        {
-            yield return null;
-        }
+        int random = UnityEngine.Random.Range(0, eventcoroutines.Length);
+        yield return StartCoroutine(eventcoroutines[random]);
 
         yield return StartCoroutine(NextFloor());
 
@@ -245,6 +149,8 @@ public class GameManager : Singleton<GameManager>
             yield return null;
         }
 
+        yield return StartCoroutine(TreasureManager.Instance.Item());
+
         yield return StartCoroutine(NextFloor());
 
     }
@@ -261,13 +167,14 @@ public class GameManager : Singleton<GameManager>
             yield return null;
         }
 
+        yield return StartCoroutine(RestManager.Instance.Rest());
+
         yield return StartCoroutine(NextFloor());
 
     }
 
     public IEnumerator Goal()
     {
-        floorDisplay.color = Color.white;
         mainText.text = "Goal";
 
         yield return new WaitForSeconds(1.0f);
@@ -276,16 +183,6 @@ public class GameManager : Singleton<GameManager>
         {
             yield return null;
         }
-    }
-
-    public void Yes()
-    {
-        yes = true;
-    }
-
-    public void No()
-    {
-        no = true;
     }
 
 }

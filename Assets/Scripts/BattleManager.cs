@@ -92,14 +92,24 @@ public class BattleManager: Singleton<BattleManager>
 
     }
 
-    public void StrongStart()
+    public IEnumerator StrongStart()
     {
+        yield return new WaitForSeconds(1.0f);
 
+        while (!Input.GetKeyDown(KeyCode.Space))
+        {
+            yield return null;
+        }
     }
 
-    public void BossStart()
+    public IEnumerator BossStart()
     {
+        yield return new WaitForSeconds(1.0f);
 
+        while (!Input.GetKeyDown(KeyCode.Space))
+        {
+            yield return null;
+        }
     }
 
     public IEnumerator Battle()
