@@ -30,7 +30,7 @@ public class BattleManager: Singleton<BattleManager>
 
     public GameObject[] windows;
 
-    private bool[] buttonOn;
+    public bool[] buttonOn;
     public bool skillUse;
     public bool itemUse;
     public bool back;
@@ -38,7 +38,6 @@ public class BattleManager: Singleton<BattleManager>
     void Start()
     {
         pStatus[0].text = pName;
-        buttonOn = new bool[8];
     }
 
     void Update()
@@ -163,24 +162,8 @@ public class BattleManager: Singleton<BattleManager>
             buttonOn[2] = false;
             windows[4].SetActive(true);
 
-            while (!itemUse && !back)
-            {
-                yield return null;
-            }
+            yield return StartCoroutine(Item());
 
-            if (itemUse)
-            {
-                windows[4].SetActive(false);
-                itemUse = false;
-                yield return StartCoroutine(Item());
-            }
-            else
-            {
-                windows[4].SetActive(false);
-                back = false;
-                yield return StartCoroutine(Battle());
-
-            }
         }
 
     }
@@ -275,17 +258,20 @@ public class BattleManager: Singleton<BattleManager>
         if (buttonOn[3])
         {
             buttonOn[3] = false;
-            battleText.text = "Skill1 Use";
+            SkillManager.Instance.useSkill[0] = true;
+            yield return StartCoroutine(SkillManager.Instance.UseSkill());
         }
         else if (buttonOn[4])
         {
             buttonOn[4] = false;
-            battleText.text = "Skill2 Use";
+            SkillManager.Instance.useSkill[1] = true;
+            yield return StartCoroutine(SkillManager.Instance.UseSkill());
         }
         else if (buttonOn[5])
         {
             buttonOn[5] = false;
-            battleText.text = "Skill3 Use";
+            SkillManager.Instance.useSkill[2] = true;
+            yield return StartCoroutine(SkillManager.Instance.UseSkill());
         }
 
         yield return new WaitForSeconds(1.0f);
@@ -307,15 +293,31 @@ public class BattleManager: Singleton<BattleManager>
 
     public IEnumerator Item()
     {
+        if (ItemManager.Instance.getItem[0])
+        {
+            battleText.text = "HPPotion : Recovers 30 HP";
+        }
+        else
+        {
+            battleText.text = "Item : Recovers 30 HP";
+        }
+
+        while (!buttonOn[6] && !buttonOn[7])
+        {
+            yield return null;
+        }
+
         if (buttonOn[6])
         {
             buttonOn[6] = false;
-            battleText.text = "Item1 Use";
+            windows[4].SetActive(false);
+            yield return StartCoroutine(ItemManager.Instance.HaveItem());
         }
         else if (buttonOn[7])
         {
             buttonOn[7] = false;
-            battleText.text = "Item2 Use";
+            windows[4].SetActive(false);
+            yield return StartCoroutine(Battle());
         }
 
         yield return new WaitForSeconds(1.0f);
@@ -396,15 +398,13 @@ public class BattleManager: Singleton<BattleManager>
         buttonOn[5] = true;
     }
 
-    public void Item1()
+    public void ItemUse()
     {
-        itemUse = true;
         buttonOn[6] = true;
     }
 
-    public void Item2()
+    public void ItemBack()
     {
-        itemUse = true;
         buttonOn[7] = true;
     }
 

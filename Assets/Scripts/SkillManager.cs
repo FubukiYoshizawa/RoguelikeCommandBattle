@@ -4,54 +4,54 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public class ItemManager : Singleton<ItemManager>
+public class SkillManager : Singleton<SkillManager>
 {
     public TextMeshProUGUI mainText;
-    public bool[] getItem;
+    public bool[] useSkill;
 
     private void Start()
     {
-        getItem[0] = true;
+        
     }
 
-    public IEnumerator HaveItem()
+    public IEnumerator UseSkill()
     {
-        if (getItem[0])
+        if (useSkill[0])
         {
-            getItem[0] = false;
-            yield return StartCoroutine(HPPotion());
+            useSkill[0] = false;
+            yield return StartCoroutine(PowerAttack());
         }
-        else if (getItem[1])
+        else if (useSkill[1])
         {
-            getItem[1] = false;
-            yield return StartCoroutine(SPPotion());
+            useSkill[1] = false;
+            yield return StartCoroutine(PowerUp());
         }
-        else if (getItem[2])
+        else if (useSkill[2])
         {
-            getItem[2] = false;
-            yield return StartCoroutine(ATKPotion());
+            useSkill[2] = false;
+            yield return StartCoroutine(Meditation());
         }
-        else if (getItem[3])
+        else if (useSkill[3])
         {
-            getItem[3] = false;
-            yield return StartCoroutine(HealHerb());
+            useSkill[3] = false;
+            yield return StartCoroutine(FireBall());
         }
-        else if (getItem[4])
+        else if (useSkill[4])
         {
-            getItem[4] = false;
-            yield return StartCoroutine(DamageBomb());
+            useSkill[4] = false;
+            yield return StartCoroutine(IiceLance());
         }
-        else if (getItem[5])
+        else if (useSkill[5])
         {
-            getItem[5] = false;
-            yield return StartCoroutine(ATKJewel());
+            useSkill[5] = false;
+            yield return StartCoroutine(HealMagic());
         }
 
     }
 
-    public IEnumerator HPPotion()
+    public IEnumerator PowerAttack()
     {
-        mainText.text = "Using HP potion";
+        mainText.text = "Using PowerAttack";
 
         yield return new WaitForSeconds(1.0f);
 
@@ -60,19 +60,7 @@ public class ItemManager : Singleton<ItemManager>
             yield return null;
         }
 
-        mainText.text = "HP recovered 30 times.";
-
-        yield return new WaitForSeconds(1.0f);
-
-        while (!Input.GetKeyDown(KeyCode.Space))
-        {
-            yield return null;
-        }
-    }
-
-    public IEnumerator SPPotion()
-    {
-        mainText.text = "Using SP potion";
+        mainText.text = "30 damage to the enemy.";
 
         yield return new WaitForSeconds(1.0f);
 
@@ -82,9 +70,9 @@ public class ItemManager : Singleton<ItemManager>
         }
     }
 
-    public IEnumerator ATKPotion()
+    public IEnumerator PowerUp()
     {
-        mainText.text = "Using ATK potion";
+        mainText.text = "Using PowerUp";
 
         yield return new WaitForSeconds(1.0f);
 
@@ -94,9 +82,9 @@ public class ItemManager : Singleton<ItemManager>
         }
     }
 
-    public IEnumerator HealHerb()
+    public IEnumerator Meditation()
     {
-        mainText.text = "Using medicinal herbs.";
+        mainText.text = "Using Meditation";
 
         yield return new WaitForSeconds(1.0f);
 
@@ -106,9 +94,9 @@ public class ItemManager : Singleton<ItemManager>
         }
     }
 
-    public IEnumerator DamageBomb()
+    public IEnumerator FireBall()
     {
-        mainText.text = "Using a bomb.";
+        mainText.text = "Chanted FireBall";
 
         yield return new WaitForSeconds(1.0f);
 
@@ -118,9 +106,9 @@ public class ItemManager : Singleton<ItemManager>
         }
     }
 
-    public IEnumerator ATKJewel()
+    public IEnumerator IiceLance()
     {
-        mainText.text = "Using ATK Jewel";
+        mainText.text = "Chanted IiceLance";
 
         yield return new WaitForSeconds(1.0f);
 
@@ -130,4 +118,15 @@ public class ItemManager : Singleton<ItemManager>
         }
     }
 
+    public IEnumerator HealMagic()
+    {
+        mainText.text = "Chanted HealMagic";
+
+        yield return new WaitForSeconds(1.0f);
+
+        while (!Input.GetKeyDown(KeyCode.Space))
+        {
+            yield return null;
+        }
+    }
 }
