@@ -44,6 +44,7 @@ public class RestManager : Singleton<RestManager>
         }
 
         mainText.text = "Your Strength Has Been Restored";
+        BattleManager.Instance.pHP = BattleManager.Instance.pMaxHP;
 
         yield return new WaitForSeconds(1.0f);
 

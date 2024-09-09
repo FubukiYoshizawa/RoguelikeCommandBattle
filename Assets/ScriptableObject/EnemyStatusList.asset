@@ -18,13 +18,13 @@ MonoBehaviour:
     eHP: 30
     eATK: 5
     eEXP: 10
-  - eNAME: LightDragonBaby
+  - eNAME: IkeBat
     eLv: 10
-    eHP: 100
+    eHP: 50
     eATK: 10
-    eEXP: 100
-  - eNAME: LightDragon
-    eLv: 50
-    eHP: 300
-    eATK: 30
-    eEXP: 1000
+    eEXP: 20
+  - eNAME: HatGhost
+    eLv: 15
+    eHP: 70
+    eATK: 5
+    eEXP: 30

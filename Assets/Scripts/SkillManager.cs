@@ -8,11 +8,7 @@ public class SkillManager : Singleton<SkillManager>
 {
     public TextMeshProUGUI mainText;
     public bool[] useSkill;
-
-    private void Start()
-    {
-        
-    }
+    public int[] skillValue;
 
     public IEnumerator UseSkill()
     {
@@ -60,7 +56,24 @@ public class SkillManager : Singleton<SkillManager>
             yield return null;
         }
 
-        mainText.text = "30 damage to the enemy.";
+        mainText.text = $"{skillValue[0]} damage to the enemy.";
+
+        BattleManager.Instance.eHP -= skillValue[0];
+        if (BattleManager.Instance.eHP < 0)
+        {
+            BattleManager.Instance.eHP = 0;
+        }
+
+        if (BattleManager.Instance.powerUp2)
+        {
+            BattleManager.Instance.powerUp2 = false;
+            BattleManager.Instance.pATK /= 2;
+        }
+        else if (BattleManager.Instance.powerUp3)
+        {
+            BattleManager.Instance.powerUp3 = false;
+            BattleManager.Instance.pATK /= 3;
+        }
 
         yield return new WaitForSeconds(1.0f);
 
@@ -68,11 +81,28 @@ public class SkillManager : Singleton<SkillManager>
         {
             yield return null;
         }
+
+        if (BattleManager.Instance.eHP == 0)
+        {
+            yield return StartCoroutine(BattleManager.Instance.PlayerWin());
+        }
+
     }
 
     public IEnumerator PowerUp()
     {
         mainText.text = "Using PowerUp";
+
+        yield return new WaitForSeconds(1.0f);
+
+        while (!Input.GetKeyDown(KeyCode.Space))
+        {
+            yield return null;
+        }
+
+        mainText.text = "Double the power of the next attack";
+        BattleManager.Instance.powerUp2 = true;
+        BattleManager.Instance.pATK *= 2;
 
         yield return new WaitForSeconds(1.0f);
 
@@ -92,6 +122,22 @@ public class SkillManager : Singleton<SkillManager>
         {
             yield return null;
         }
+
+        mainText.text = $"{skillValue[1]} HP recovered";
+
+        BattleManager.Instance.pHP += skillValue[1];
+        if (BattleManager.Instance.pHP > BattleManager.Instance.pMaxHP)
+        {
+            BattleManager.Instance.pHP = BattleManager.Instance.pMaxHP;
+        }
+
+        yield return new WaitForSeconds(1.0f);
+
+        while (!Input.GetKeyDown(KeyCode.Space))
+        {
+            yield return null;
+        }
+
     }
 
     public IEnumerator FireBall()
@@ -103,6 +149,26 @@ public class SkillManager : Singleton<SkillManager>
         while (!Input.GetKeyDown(KeyCode.Space))
         {
             yield return null;
+        }
+
+        mainText.text = $"{skillValue[2]} damage to the enemy.";
+
+        BattleManager.Instance.eHP -= skillValue[2];
+        if (BattleManager.Instance.eHP < 0)
+        {
+            BattleManager.Instance.eHP = 0;
+        }
+
+        yield return new WaitForSeconds(1.0f);
+
+        while (!Input.GetKeyDown(KeyCode.Space))
+        {
+            yield return null;
+        }
+
+        if (BattleManager.Instance.eHP == 0)
+        {
+            yield return StartCoroutine(BattleManager.Instance.PlayerWin());
         }
     }
 
@@ -116,11 +182,46 @@ public class SkillManager : Singleton<SkillManager>
         {
             yield return null;
         }
+
+        mainText.text = $"{skillValue[3]} damage to the enemy.";
+
+        BattleManager.Instance.eHP -= skillValue[3];
+        if (BattleManager.Instance.eHP < 0)
+        {
+            BattleManager.Instance.eHP = 0;
+        }
+
+        yield return new WaitForSeconds(1.0f);
+
+        while (!Input.GetKeyDown(KeyCode.Space))
+        {
+            yield return null;
+        }
+
+        if (BattleManager.Instance.eHP == 0)
+        {
+            yield return StartCoroutine(BattleManager.Instance.PlayerWin());
+        }
     }
 
     public IEnumerator HealMagic()
     {
         mainText.text = "Chanted HealMagic";
+
+        yield return new WaitForSeconds(1.0f);
+
+        while (!Input.GetKeyDown(KeyCode.Space))
+        {
+            yield return null;
+        }
+
+        mainText.text = $"{skillValue[1]} HP recovered";
+
+        BattleManager.Instance.pHP += skillValue[1];
+        if (BattleManager.Instance.pHP > BattleManager.Instance.pMaxHP)
+        {
+            BattleManager.Instance.pHP = BattleManager.Instance.pMaxHP;
+        }
 
         yield return new WaitForSeconds(1.0f);
 

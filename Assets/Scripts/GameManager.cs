@@ -24,11 +24,6 @@ public class GameManager : Singleton<GameManager>
         floorBack.sprite = fBacks;
     }
 
-    void Update()
-    {
-        
-    }
-
     public IEnumerator StartAdventure()
     {
         mainText.text = "Adventure Start!";
@@ -57,7 +52,7 @@ public class GameManager : Singleton<GameManager>
 
         floorNumber.text = (fn += 1).ToString();
 
-        yield return new WaitForSeconds(2.0f);
+        yield return new WaitForSeconds(1.0f);
 
         if (fn == maxFloor)
         {

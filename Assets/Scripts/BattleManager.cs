@@ -11,16 +11,27 @@ public class BattleManager: Singleton<BattleManager>
     public string pName;
     public int pLv;
     public int pHP;
+    public int pMaxHP;
     public int pSP;
+    public int pMaxSP;
     public int pATK;
+    public int pEXP;
+    public int nEXP;
 
-    private string eNAME;
-    private int eLv;
-    private int eHP;
-    private int eATK;
+    public string eNAME;
+    public int eLv;
+    public int eHP;
+    public int eATK;
+    public int eEXP;
 
+    public bool powerUp2 = false;
+    public bool powerUp3 = false;
+
+    public Image floorBack;
+    public Sprite fBack;
     public Image displayEnemy;
     public Sprite[] Enemy;
+    public Sprite none;
     public TextMeshProUGUI[] pStatus;
     public TextMeshProUGUI[] eStatus;
     private Sprite[] sprites;
@@ -56,6 +67,7 @@ public class BattleManager: Singleton<BattleManager>
     public IEnumerator BattleStart()
     {
         battleText.text = "Battle Floor!";
+        floorBack.sprite = fBack;
 
         yield return new WaitForSeconds(1.0f);
 
@@ -204,6 +216,17 @@ public class BattleManager: Singleton<BattleManager>
             eHP = 0;
         }
 
+        if (powerUp2)
+        {
+            powerUp2 = false;
+            pATK /= 2;
+        }
+        else if (powerUp3)
+        {
+            powerUp3 = false;
+            pATK /= 3;
+        }
+
         yield return new WaitForSeconds(1.0f);
 
         while (!Input.GetKeyDown(KeyCode.Space))
@@ -220,35 +243,43 @@ public class BattleManager: Singleton<BattleManager>
 
     public IEnumerator EnemyAttack()
     {
-        battleText.text = $"{eNAME} Attack";
-
-        yield return new WaitForSeconds(1.0f);
-
-        while (!Input.GetKeyDown(KeyCode.Space))
+        if (Random.Range(0, 3) == 0)
         {
-            yield return null;
+            yield return StartCoroutine(EnemyActionManager.Instance.EnemyAction());
         }
-
-        battleText.text = $"{eATK} Damage!";
-
-        yield return new WaitForSeconds(0.5f);
-
-        pHP = pHP - eATK;
-        if (pHP < 0 )
+        else
         {
-            pHP = 0;
-        }
 
-        yield return new WaitForSeconds(1.0f);
+            battleText.text = $"{eNAME} Attack";
 
-        while (!Input.GetKeyDown(KeyCode.Space))
-        {
-            yield return null;
-        }
+            yield return new WaitForSeconds(1.0f);
 
-        if (pHP == 0)
-        {
-            yield return StartCoroutine(PlayerLose());
+            while (!Input.GetKeyDown(KeyCode.Space))
+            {
+                yield return null;
+            }
+
+            battleText.text = $"{eATK} Damage!";
+
+            yield return new WaitForSeconds(0.5f);
+
+            pHP = pHP - eATK;
+            if (pHP < 0)
+            {
+                pHP = 0;
+            }
+
+            yield return new WaitForSeconds(1.0f);
+
+            while (!Input.GetKeyDown(KeyCode.Space))
+            {
+                yield return null;
+            }
+
+            if (pHP == 0)
+            {
+                yield return StartCoroutine(PlayerLose());
+            }
         }
 
     }
@@ -297,9 +328,25 @@ public class BattleManager: Singleton<BattleManager>
         {
             battleText.text = "HPPotion : Recovers 30 HP";
         }
-        else
+        else if (ItemManager.Instance.getItem[1])
         {
-            battleText.text = "Item : Recovers 30 HP";
+            battleText.text = "SPPotion : Recovers 30 SP";
+        }
+        else if (ItemManager.Instance.getItem[2])
+        {
+            battleText.text = "ATKPotion : Double the next power";
+        }
+        else if (ItemManager.Instance.getItem[3])
+        {
+            battleText.text = "HealHerb : Recovers 50 HP";
+        }
+        else if (ItemManager.Instance.getItem[4])
+        {
+            battleText.text = "DamageBomb : 30 damage to the enemy";
+        }
+        else if (ItemManager.Instance.getItem[5])
+        {
+            battleText.text = "ATKJewel : Triple the next power";
         }
 
         while (!buttonOn[6] && !buttonOn[7])
@@ -350,7 +397,18 @@ public class BattleManager: Singleton<BattleManager>
 
     public IEnumerator PlayerWin()
     {
-        displayEnemy.sprite = null;
+        if (powerUp2)
+        {
+            powerUp2 = false;
+            pATK /= 2;
+        }
+        else if (powerUp3)
+        {
+            powerUp3 = false;
+            pATK /= 3;
+        }
+
+        displayEnemy.sprite = none;
         battleText.text = $"{pName} Win";
 
         yield return new WaitForSeconds(1.0f);
@@ -358,6 +416,35 @@ public class BattleManager: Singleton<BattleManager>
         while (!Input.GetKeyDown(KeyCode.Space))
         {
             yield return null;
+        }
+
+        battleText.text = $"{eEXP} Experience gained.";
+        pEXP += eEXP;
+
+        yield return new WaitForSeconds(1.0f);
+
+        while (!Input.GetKeyDown(KeyCode.Space))
+        {
+            yield return null;
+        }
+
+        if (pEXP > nEXP)
+        {
+            battleText.text = "Levels raised!";
+            pLv += 1;
+            pHP += 10;
+            pMaxHP += 10;
+            pSP += 5;
+            pMaxSP += 5;
+            pATK += 5;
+            nEXP *= 2;
+
+            yield return new WaitForSeconds(1.0f);
+
+            while (!Input.GetKeyDown(KeyCode.Space))
+            {
+                yield return null;
+            }
         }
 
         windows[0].SetActive(false);

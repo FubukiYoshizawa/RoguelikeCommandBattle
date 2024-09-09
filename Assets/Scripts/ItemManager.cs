@@ -7,7 +7,9 @@ using TMPro;
 public class ItemManager : Singleton<ItemManager>
 {
     public TextMeshProUGUI mainText;
+    public bool haveItem;
     public bool[] getItem;
+    public int[] itemValue;
 
     private void Start()
     {
@@ -60,7 +62,13 @@ public class ItemManager : Singleton<ItemManager>
             yield return null;
         }
 
-        mainText.text = "HP recovered 30 times.";
+        mainText.text = $"{itemValue[0]} recovered";
+
+        BattleManager.Instance.pHP += itemValue[0];
+        if (BattleManager.Instance.pHP > BattleManager.Instance.pMaxHP)
+        {
+            BattleManager.Instance.pHP = BattleManager.Instance.pMaxHP;
+        }
 
         yield return new WaitForSeconds(1.0f);
 
@@ -80,11 +88,37 @@ public class ItemManager : Singleton<ItemManager>
         {
             yield return null;
         }
+
+        mainText.text = $"{itemValue[1]} SP recovered";
+
+        BattleManager.Instance.pSP += itemValue[1];
+        if (BattleManager.Instance.pSP > BattleManager.Instance.pMaxSP)
+        {
+            BattleManager.Instance.pSP = BattleManager.Instance.pMaxSP;
+        }
+
+        yield return new WaitForSeconds(1.0f);
+
+        while (!Input.GetKeyDown(KeyCode.Space))
+        {
+            yield return null;
+        }
     }
 
     public IEnumerator ATKPotion()
     {
         mainText.text = "Using ATK potion";
+
+        yield return new WaitForSeconds(1.0f);
+
+        while (!Input.GetKeyDown(KeyCode.Space))
+        {
+            yield return null;
+        }
+
+        mainText.text = "Double the power of the next attack";
+        BattleManager.Instance.powerUp2 = true;
+        BattleManager.Instance.pATK *= 2;
 
         yield return new WaitForSeconds(1.0f);
 
@@ -104,6 +138,22 @@ public class ItemManager : Singleton<ItemManager>
         {
             yield return null;
         }
+
+        mainText.text = $"{itemValue[2]} recovered";
+
+        BattleManager.Instance.pHP += itemValue[2];
+        if (BattleManager.Instance.pHP > BattleManager.Instance.pMaxHP)
+        {
+            BattleManager.Instance.pHP = BattleManager.Instance.pMaxHP;
+        }
+
+        yield return new WaitForSeconds(1.0f);
+
+        while (!Input.GetKeyDown(KeyCode.Space))
+        {
+            yield return null;
+        }
+
     }
 
     public IEnumerator DamageBomb()
@@ -116,6 +166,22 @@ public class ItemManager : Singleton<ItemManager>
         {
             yield return null;
         }
+
+        mainText.text = $"{itemValue[3]} damage to the enemy.";
+
+        BattleManager.Instance.eHP -= itemValue[3];
+        if (BattleManager.Instance.eHP < 0)
+        {
+            BattleManager.Instance.eHP = 0;
+        }
+
+        yield return new WaitForSeconds(1.0f);
+
+        while (!Input.GetKeyDown(KeyCode.Space))
+        {
+            yield return null;
+        }
+
     }
 
     public IEnumerator ATKJewel()
@@ -128,6 +194,18 @@ public class ItemManager : Singleton<ItemManager>
         {
             yield return null;
         }
+
+        mainText.text = "Double the power of the next attack";
+        BattleManager.Instance.powerUp3 = true;
+        BattleManager.Instance.pATK *= 3;
+
+        yield return new WaitForSeconds(1.0f);
+
+        while (!Input.GetKeyDown(KeyCode.Space))
+        {
+            yield return null;
+        }
+
     }
 
 }

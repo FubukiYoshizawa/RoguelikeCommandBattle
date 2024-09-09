@@ -1282,8 +1282,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 7.5, y: 0}
-  m_SizeDelta: {x: -15, y: 0}
+  m_AnchoredPosition: {x: 10, y: 0}
+  m_SizeDelta: {x: -20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &288444781
 MonoBehaviour:
@@ -1396,6 +1396,7 @@ GameObject:
   m_Component:
   - component: {fileID: 295331723}
   - component: {fileID: 295331722}
+  - component: {fileID: 295331726}
   - component: {fileID: 295331724}
   - component: {fileID: 295331725}
   m_Layer: 0
@@ -1421,13 +1422,23 @@ MonoBehaviour:
   pName: Yamamoto
   pLv: 10
   pHP: 100
+  pMaxHP: 100
   pSP: 10
+  pMaxSP: 0
   pATK: 10
+  eNAME: 
+  eLv: 0
+  eHP: 0
+  eATK: 0
+  powerUp: 0
+  floorBack: {fileID: 1970361055}
+  fBack: {fileID: 21300000, guid: 03d472cd8667cf8499c2f5f25c8a4171, type: 3}
   displayEnemy: {fileID: 1133689603}
   Enemy:
   - {fileID: 21300000, guid: 75588ce01893f9146a8fb4d88e076702, type: 3}
-  - {fileID: 21300000, guid: 4b6143a538539ba459842a0ecfe74e3e, type: 3}
-  - {fileID: 21300000, guid: 4e51543c14dfa6a42b79b344fd46b671, type: 3}
+  - {fileID: 21300000, guid: 6576461d7c13aa041a260b775acf37cd, type: 3}
+  - {fileID: 21300000, guid: 23568a6a08e39a64db90dfe306172599, type: 3}
+  none: {fileID: 21300000, guid: 98722b3b4ac44714482477fe0595d89c, type: 3}
   pStatus:
   - {fileID: 1759210541}
   - {fileID: 841621180}
@@ -1479,6 +1490,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mainText: {fileID: 288444781}
   getItem: 000000000000
+  itemValue: 1e0000000a0000003200000064000000
 --- !u!114 &295331725
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1493,6 +1505,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mainText: {fileID: 288444781}
   useSkill: 000000000000
+  skillValue: 140000000a000000140000001e000000
+--- !u!114 &295331726
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 295331721}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a41dfc54ce04c2b47adb8183638f0982, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  battleText: {fileID: 288444781}
 --- !u!1 &315361383
 GameObject:
   m_ObjectHideFlags: 0
@@ -6209,7 +6235,7 @@ GameObject:
   - component: {fileID: 1516700060}
   - component: {fileID: 1516700059}
   m_Layer: 5
-  m_Name: SelectWindow
+  m_Name: ShopSelectWindow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7095,7 +7121,7 @@ GameObject:
   - component: {fileID: 1681974448}
   - component: {fileID: 1681974447}
   m_Layer: 5
-  m_Name: MapCanvas
+  m_Name: MainCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

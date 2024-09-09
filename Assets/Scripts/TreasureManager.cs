@@ -41,7 +41,7 @@ public class TreasureManager : Singleton<TreasureManager>
         if (randomValue == 0)
         {
             mainText.text = "To my surprise, I found a bomb in the treasure chest!";
-            // アイテム数がマックスだったら入れ替える処理
+            // アイテムを持っていたら入れ替える処理
 
         }
         else if (randomValue < 2)

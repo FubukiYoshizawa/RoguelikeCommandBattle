@@ -13,16 +13,6 @@ public class ShopManager : Singleton<ShopManager>
     public Image floorBack;
     public Sprite[] fBack;
 
-    void Start()
-    {
-        
-    }
-
-    void Update()
-    {
-        
-    }
-
     public IEnumerator HPShop()
     {
         floorBack.sprite = fBack[0];
@@ -61,7 +51,23 @@ public class ShopManager : Singleton<ShopManager>
         if (yes)
         {
             yes = false;
-            mainText.text = "Fine, You're A Good Customer.";
+
+            if (BattleManager.Instance.pHP <= 10)
+            {
+                mainText.text = "You don't have anything to pay for!";
+
+                yield return new WaitForSeconds(1.0f);
+
+                while (!Input.GetKeyDown(KeyCode.Space))
+                {
+                    yield return null;
+                }
+
+            }
+            else
+            {
+                mainText.text = "Fine, You're A Good Customer.";
+            }
         }
         else
         {
@@ -115,12 +121,22 @@ public class ShopManager : Singleton<ShopManager>
         if (yes)
         {
             yes = false;
-            mainText.text = "Fine, You're A Good Customer.";
-        }
-        else
-        {
-            no = false;
-            mainText.text = "Oh... See You";
+            if (BattleManager.Instance.pHP <= 10)
+            {
+                mainText.text = "You don't have anything to pay for!";
+
+                yield return new WaitForSeconds(1.0f);
+
+                while (!Input.GetKeyDown(KeyCode.Space))
+                {
+                    yield return null;
+                }
+
+            }
+            else
+            {
+                mainText.text = "Fine, You're A Good Customer.";
+            }
         }
 
         yield return new WaitForSeconds(1.0f);
@@ -168,13 +184,22 @@ public class ShopManager : Singleton<ShopManager>
 
         if (yes)
         {
-            yes = false;
-            mainText.text = "Fine, You're A Good Customer.";
-        }
-        else
-        {
-            no = false;
-            mainText.text = "Oh... See You";
+            if (BattleManager.Instance.pHP <= 10)
+            {
+                mainText.text = "You don't have anything to pay for!";
+
+                yield return new WaitForSeconds(1.0f);
+
+                while (!Input.GetKeyDown(KeyCode.Space))
+                {
+                    yield return null;
+                }
+
+            }
+            else
+            {
+                mainText.text = "Fine, You're A Good Customer.";
+            }
         }
 
         yield return new WaitForSeconds(1.0f);

@@ -12,16 +12,6 @@ public class EventManager : Singleton<EventManager>
     public Image floorBack;
     public Sprite[] fBack;
 
-    void Start()
-    {
-        
-    }
-
-    void Update()
-    {
-        
-    }
-
     public IEnumerator HPUpEvent()
     {
         floorBack.sprite = fBack[0];
@@ -55,10 +45,35 @@ public class EventManager : Singleton<EventManager>
             {
                 yield return null;
             }
+
+            mainText.text = "Your physical strength has been restored 50 times.";
+            BattleManager.Instance.pHP += 50;
+            if (BattleManager.Instance.pMaxHP < BattleManager.Instance.pHP)
+            {
+                BattleManager.Instance.pHP = BattleManager.Instance.pMaxHP;
+            }
+
+            yield return new WaitForSeconds(1.0f);
+
+            while (!Input.GetKeyDown(KeyCode.Space))
+            {
+                yield return null;
+            }
+
         }
         else
         {
             mainText.text = "Your body was gradually losing its strength!";
+
+            yield return new WaitForSeconds(1.0f);
+
+            while (!Input.GetKeyDown(KeyCode.Space))
+            {
+                yield return null;
+            }
+
+            mainText.text = "Attack power reduced by one.";
+            BattleManager.Instance.pATK -= 1;
 
             yield return new WaitForSeconds(1.0f);
 
@@ -121,10 +136,30 @@ public class EventManager : Singleton<EventManager>
             {
                 yield return null;
             }
+
+            mainText.text = "Attack power increased by three.";
+            BattleManager.Instance.pATK += 3;
+
+            yield return new WaitForSeconds(1.0f);
+
+            while (!Input.GetKeyDown(KeyCode.Space))
+            {
+                yield return null;
+            }
         }
         else
         {
             mainText.text = "You Have Sore Muscles!";
+
+            yield return new WaitForSeconds(1.0f);
+
+            while (!Input.GetKeyDown(KeyCode.Space))
+            {
+                yield return null;
+            }
+
+            mainText.text = "Attack power reduced by one.";
+            BattleManager.Instance.pATK -= 1;
 
             yield return new WaitForSeconds(1.0f);
 
@@ -186,10 +221,32 @@ public class EventManager : Singleton<EventManager>
             {
                 yield return null;
             }
+
+            mainText.text = "SP increased by 10.";
+            BattleManager.Instance.pMaxSP += 10;
+            BattleManager.Instance.pSP += 10;
+
+            yield return new WaitForSeconds(1.0f);
+
+            while (!Input.GetKeyDown(KeyCode.Space))
+            {
+                yield return null;
+            }
         }
         else
         {
             mainText.text = "You felt the magic drain out of you.";
+
+            yield return new WaitForSeconds(1.0f);
+
+            while (!Input.GetKeyDown(KeyCode.Space))
+            {
+                yield return null;
+            }
+
+            mainText.text = "SP reduced by five.";
+            BattleManager.Instance.pMaxSP -= 5;
+            BattleManager.Instance.pSP -= 5;
 
             yield return new WaitForSeconds(1.0f);
 
