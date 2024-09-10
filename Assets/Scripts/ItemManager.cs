@@ -6,10 +6,18 @@ using TMPro;
 
 public class ItemManager : Singleton<ItemManager>
 {
-    public TextMeshProUGUI mainText;
-    public bool haveItem;
-    public bool[] getItem;
-    public int[] itemValue;
+    public TextMeshProUGUI mainText; // テキスト表示
+    public bool haveItem; // アイテムを所持しているかどうか
+    public bool[] getItem; // どのアイテムを手に入れたか
+    /*
+    0:HPポーション
+    1:SPポーション
+    2:攻撃ポーション
+    3:薬草
+    4:爆弾
+    5:攻撃の宝石
+    */
+    public int[] itemValue; // アイテム使用時の効果量
 
     private void Start()
     {

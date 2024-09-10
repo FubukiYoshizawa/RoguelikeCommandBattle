@@ -6,12 +6,17 @@ using TMPro;
 
 public class ShopManager : Singleton<ShopManager>
 {
-    public TextMeshProUGUI mainText;
-    public GameObject selectWindow;
-    public bool yes, no;
+    public TextMeshProUGUI mainText; // テキスト表示
+    public GameObject selectWindow; // 選択ウィンドウ
+    public bool yes, no; // 選択肢
 
-    public Image floorBack;
-    public Sprite[] fBack;
+    public Image floorBack; // フロア背景
+    public Sprite[] fBack; // 背景画像
+    /*
+    0:HPポーション
+    1:SPポーション
+    2:攻撃ポーション
+    */
 
     public IEnumerator HPShop()
     {

@@ -6,45 +6,73 @@ using TMPro;
 
 public class BattleManager: Singleton<BattleManager>
 {
-    public EnemyStatusManager esm;
+    public EnemyStatusManager esm; // 敵ステータス用スクリプト
 
-    public string pName;
-    public int pLv;
-    public int pHP;
-    public int pMaxHP;
-    public int pSP;
-    public int pMaxSP;
-    public int pATK;
-    public int pEXP;
-    public int nEXP;
+    public string pName;  // プレイヤー名
+    public int pLv; // プレイヤーレベル
+    public int pHP; // プレイヤーHP
+    public int pMaxHP; // プレイヤー最大HP
+    public int pSP; // プレイヤーSP
+    public int pMaxSP; // プレイヤー最大SP
+    public int pATK; // プレイヤー攻撃力
+    public int pEXP; // プレイヤー経験値
+    public int nEXP; // レベルアップまでの経験値
 
-    public string eNAME;
-    public int eLv;
-    public int eHP;
-    public int eATK;
-    public int eEXP;
+    public string eNAME; // 敵名
+    public int eLv; // 敵レベル
+    public int eHP; // 敵HP
+    public int eATK; // 敵攻撃力
+    public int eEXP; // 敵経験値
 
-    public bool powerUp2 = false;
-    public bool powerUp3 = false;
+    public bool powerUp2 = false; // 攻撃力2倍状態を表す
+    public bool powerUp3 = false; // 攻撃力3倍状態を表す
 
-    public Image floorBack;
-    public Sprite fBack;
-    public Image displayEnemy;
-    public Sprite[] Enemy;
-    public Sprite none;
-    public TextMeshProUGUI[] pStatus;
-    public TextMeshProUGUI[] eStatus;
-    private Sprite[] sprites;
-    private int randomNumber;
+    public Image floorBack; // フロアの背景を当てはめるImageオブジェクト
+    public Sprite fBack; // フロア画像
+    public Image displayEnemy; // 敵を当てはめるImageオブジェクト
+    public Sprite[] Enemy; // 敵の画像
+    private Sprite[] sprites; // 現在戦っている敵の画像
+    public Sprite none; // 敵がいないときの画像
+    public TextMeshProUGUI[] pStatus; // 画面に表示するプレイヤーのステータス
+    /*
+    0:プレイヤー名
+    1:プレイヤーレベル
+    2:プレイヤーHP
+    3:プレイヤーSP
+    4:プレイヤー攻撃力
+    */
+    public TextMeshProUGUI[] eStatus; // 画面に表示する敵のステータス
+    /*
+    0:敵名
+    1:敵レベル
+    2:敵HP
+    3:敵攻撃力
+    */
+    public TextMeshProUGUI battleText; // バトル時のテキスト
 
-    public TextMeshProUGUI battleText;
+    public GameObject[] windows; // 各ウィンドウ
+    /*
+    0:敵ステータスウィンドウ
+    1:アイテムウィンドウ
+    2:コマンドウィンドウ
+    3:スキルウィンドウ
+    4:バトル時の選択ウィンドウ
+    */
 
-    public GameObject[] windows;
-
-    public bool[] buttonOn;
-    public bool skillUse;
-    public bool itemUse;
-    public bool back;
+    public bool[] buttonOn; // バトル時に使用するボタンを押しているかどうか
+    /*
+    0:攻撃
+    1:スキル
+    2:アイテム
+    3:スキル１
+    4:スキル２
+    5:スキル３
+    6:アイテム使用
+    7:戻る
+    */
+    public bool skillUse; // スキルコマンドを表示
+    public bool itemUse; // アイテムコマンドを表示
+    public bool back; // 各表示から戻る
 
     void Start()
     {
@@ -77,7 +105,7 @@ public class BattleManager: Singleton<BattleManager>
         }
 
         sprites = new Sprite[] { Enemy[0], Enemy[1], Enemy[2] };
-        randomNumber = Random.Range(0, sprites.Length);
+        int randomNumber = Random.Range(0, sprites.Length);
         Sprite selectedSprite = sprites[randomNumber];
         displayEnemy.sprite = selectedSprite;
 

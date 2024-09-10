@@ -6,20 +6,10 @@ using TMPro;
 
 public class RestManager : Singleton<RestManager>
 {
-    public TextMeshProUGUI mainText;
+    public TextMeshProUGUI mainText; // テキスト表示
 
-    public Image floorBack;
-    public Sprite fBack;
-
-    void Start()
-    {
-        
-    }
-
-    void Update()
-    {
-        
-    }
+    public Image floorBack; // フロア背景
+    public Sprite fBack; // 背景画像
 
     public IEnumerator Rest()
     {

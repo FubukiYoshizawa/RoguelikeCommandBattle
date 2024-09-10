@@ -5,22 +5,16 @@ using UnityEngine.UI;
 using TMPro;
 public class TreasureManager : Singleton<TreasureManager>
 {
-    public TextMeshProUGUI mainText;
-    public GameObject selectWindow;
-    public bool yes, no;
+    public TextMeshProUGUI mainText; // テキスト表示
+    public GameObject selectWindow; // 選択ウィンドウ
+    public bool yes, no; // 選択肢
 
-    public Image floorBack;
-    public Sprite[] fBack;
-
-    void Start()
-    {
-
-    }
-
-    void Update()
-    {
-
-    }
+    public Image floorBack; // フロア背景
+    public Sprite[] fBack; // フロア背景
+    /*
+    0:宝背景未開封
+    1:宝背景開封
+    */
 
     public IEnumerator Item()
     {

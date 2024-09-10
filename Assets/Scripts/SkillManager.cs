@@ -6,9 +6,17 @@ using TMPro;
 
 public class SkillManager : Singleton<SkillManager>
 {
-    public TextMeshProUGUI mainText;
-    public bool[] useSkill;
-    public int[] skillValue;
+    public TextMeshProUGUI mainText; // テキスト表示
+    public bool[] useSkill; // どのスキルを使用するか
+    /*
+    0:パワーアタック
+    1:パワーアップ
+    2:瞑想
+    3:ファイアボール
+    4:アイスランス
+    5:ヒール
+    */
+    public int[] skillValue; // スキルの効果量
 
     public IEnumerator UseSkill()
     {

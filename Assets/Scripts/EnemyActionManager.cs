@@ -6,7 +6,7 @@ using TMPro;
 
 public class EnemyActionManager : Singleton<EnemyActionManager>
 {
-    public TextMeshProUGUI battleText;
+    public TextMeshProUGUI battleText; // テキスト表示
 
     public IEnumerator EnemyAction()
     {

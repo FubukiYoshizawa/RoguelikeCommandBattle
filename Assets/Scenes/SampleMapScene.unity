@@ -1426,11 +1426,15 @@ MonoBehaviour:
   pSP: 10
   pMaxSP: 0
   pATK: 10
+  pEXP: 0
+  nEXP: 0
   eNAME: 
   eLv: 0
   eHP: 0
   eATK: 0
-  powerUp: 0
+  eEXP: 0
+  powerUp2: 0
+  powerUp3: 0
   floorBack: {fileID: 1970361055}
   fBack: {fileID: 21300000, guid: 03d472cd8667cf8499c2f5f25c8a4171, type: 3}
   displayEnemy: {fileID: 1133689603}
@@ -1489,6 +1493,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mainText: {fileID: 288444781}
+  haveItem: 0
   getItem: 000000000000
   itemValue: 1e0000000a0000003200000064000000
 --- !u!114 &295331725
@@ -2503,8 +2508,8 @@ MonoBehaviour:
   floorBack: {fileID: 1970361055}
   fBack:
   - {fileID: 21300000, guid: 08878b03ab97e0e498745ec6d156bdec, type: 3}
-  - {fileID: 21300000, guid: 54db1ad1b9981be49a5ac2b81ed027e5, type: 3}
   - {fileID: 21300000, guid: 87fa445634651524daff02a4cada1b17, type: 3}
+  - {fileID: 21300000, guid: 54db1ad1b9981be49a5ac2b81ed027e5, type: 3}
 --- !u!114 &528179723
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2518,7 +2523,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mainText: {fileID: 288444781}
-  selectWindow: {fileID: 1516700057}
   floorBack: {fileID: 1970361055}
   fBack:
   - {fileID: 21300000, guid: 30e3297173f9a4c43898dfabade44a7e, type: 3}

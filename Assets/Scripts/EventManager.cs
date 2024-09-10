@@ -6,11 +6,15 @@ using TMPro;
 
 public class EventManager : Singleton<EventManager>
 {
-    public TextMeshProUGUI mainText;
-    public GameObject selectWindow;
+    public TextMeshProUGUI mainText; // テキスト表示
 
-    public Image floorBack;
-    public Sprite[] fBack;
+    public Image floorBack; // フロア背景
+    public Sprite[] fBack; // 背景画像
+    /*
+    0:泉イベント
+    1:筋肉イベント
+    2:魔法使いイベント
+    */
 
     public IEnumerator HPUpEvent()
     {

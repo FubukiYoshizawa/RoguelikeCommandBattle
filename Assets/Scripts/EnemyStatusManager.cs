@@ -5,11 +5,11 @@ using UnityEngine;
 [Serializable]
 public class EnemyData
 {
-    public string eNAME;
-    public int eLv;
-    public int eHP;
-    public int eATK;
-    public int eEXP;
+    public string eNAME; // “G–¼
+    public int eLv; // “GƒŒƒxƒ‹
+    public int eHP; // “GHP
+    public int eATK; // “GUŒ‚—Í
+    public int eEXP; // “GŒoŒ±’l
 }
 
 [CreateAssetMenu(menuName = "ScriptableObject/Enemy Status Manager", fileName = "EnemyStatusManager")]

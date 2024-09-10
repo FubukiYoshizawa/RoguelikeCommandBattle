@@ -6,16 +6,25 @@ using TMPro;
 
 public class GameManager : Singleton<GameManager>
 {
-    public TextMeshProUGUI mainText;
-    public TextMeshProUGUI floorNumber;
+    public TextMeshProUGUI mainText; // テキスト表示
+    public TextMeshProUGUI floorNumber; // フロア数表示
 
-    public float fn = 0;
-    public int maxFloor = 10;
+    public float fn = 0; // フロア数
+    public int maxFloor; // 最大フロア数
 
-    public Image floorBack;
-    public Sprite fBacks;
-    public Image floorIcon;
-    public Sprite[] fIcon;
+    public Image floorBack; // フロア背景
+    public Sprite fBacks; // フロア背景画像
+    public Image floorIcon; // フロアアイコン
+    public Sprite[] fIcon; // フロアアイコン画像
+    /*
+    0:バトルフロア
+    1:強敵フロア
+    2:ボスフロア
+    3:ショップフロア
+    4:イベントフロア
+    5:アイテムフロア
+    6:休憩フロア
+    */
 
     void Start()
     {
