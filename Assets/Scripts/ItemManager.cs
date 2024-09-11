@@ -72,10 +72,10 @@ public class ItemManager : Singleton<ItemManager>
 
         mainText.text = $"{itemValue[0]} recovered";
 
-        BattleManager.Instance.pHP += itemValue[0];
-        if (BattleManager.Instance.pHP > BattleManager.Instance.pMaxHP)
+        BattleManager.Instance.playerHP += itemValue[0];
+        if (BattleManager.Instance.playerHP > BattleManager.Instance.playerMaxHP)
         {
-            BattleManager.Instance.pHP = BattleManager.Instance.pMaxHP;
+            BattleManager.Instance.playerHP = BattleManager.Instance.playerMaxHP;
         }
 
         yield return new WaitForSeconds(1.0f);
@@ -99,10 +99,10 @@ public class ItemManager : Singleton<ItemManager>
 
         mainText.text = $"{itemValue[1]} SP recovered";
 
-        BattleManager.Instance.pSP += itemValue[1];
-        if (BattleManager.Instance.pSP > BattleManager.Instance.pMaxSP)
+        BattleManager.Instance.playerSP += itemValue[1];
+        if (BattleManager.Instance.playerSP > BattleManager.Instance.playerMaxSP)
         {
-            BattleManager.Instance.pSP = BattleManager.Instance.pMaxSP;
+            BattleManager.Instance.playerSP = BattleManager.Instance.playerMaxSP;
         }
 
         yield return new WaitForSeconds(1.0f);
@@ -126,7 +126,7 @@ public class ItemManager : Singleton<ItemManager>
 
         mainText.text = "Double the power of the next attack";
         BattleManager.Instance.powerUp2 = true;
-        BattleManager.Instance.pATK *= 2;
+        BattleManager.Instance.playerATK *= 2;
 
         yield return new WaitForSeconds(1.0f);
 
@@ -149,10 +149,10 @@ public class ItemManager : Singleton<ItemManager>
 
         mainText.text = $"{itemValue[2]} recovered";
 
-        BattleManager.Instance.pHP += itemValue[2];
-        if (BattleManager.Instance.pHP > BattleManager.Instance.pMaxHP)
+        BattleManager.Instance.playerHP += itemValue[2];
+        if (BattleManager.Instance.playerHP > BattleManager.Instance.playerMaxHP)
         {
-            BattleManager.Instance.pHP = BattleManager.Instance.pMaxHP;
+            BattleManager.Instance.playerHP = BattleManager.Instance.playerMaxHP;
         }
 
         yield return new WaitForSeconds(1.0f);
@@ -177,10 +177,10 @@ public class ItemManager : Singleton<ItemManager>
 
         mainText.text = $"{itemValue[3]} damage to the enemy.";
 
-        BattleManager.Instance.eHP -= itemValue[3];
-        if (BattleManager.Instance.eHP < 0)
+        BattleManager.Instance.enemyHP -= itemValue[3];
+        if (BattleManager.Instance.enemyHP < 0)
         {
-            BattleManager.Instance.eHP = 0;
+            BattleManager.Instance.enemyHP = 0;
         }
 
         yield return new WaitForSeconds(1.0f);
@@ -205,7 +205,7 @@ public class ItemManager : Singleton<ItemManager>
 
         mainText.text = "Double the power of the next attack";
         BattleManager.Instance.powerUp3 = true;
-        BattleManager.Instance.pATK *= 3;
+        BattleManager.Instance.playerATK *= 3;
 
         yield return new WaitForSeconds(1.0f);
 

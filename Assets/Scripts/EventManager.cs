@@ -8,8 +8,8 @@ public class EventManager : Singleton<EventManager>
 {
     public TextMeshProUGUI mainText; // テキスト表示
 
-    public Image floorBack; // フロア背景
-    public Sprite[] fBack; // 背景画像
+    public Image floorImage; // フロア背景
+    public Sprite[] floorSprite; // 背景画像
     /*
     0:泉イベント
     1:筋肉イベント
@@ -18,7 +18,7 @@ public class EventManager : Singleton<EventManager>
 
     public IEnumerator HPUpEvent()
     {
-        floorBack.sprite = fBack[0];
+        floorImage.sprite = floorSprite[0];
 
         mainText.text = "You have found the fountain of miracles!";
 
@@ -51,10 +51,10 @@ public class EventManager : Singleton<EventManager>
             }
 
             mainText.text = "Your physical strength has been restored 50 times.";
-            BattleManager.Instance.pHP += 50;
-            if (BattleManager.Instance.pMaxHP < BattleManager.Instance.pHP)
+            BattleManager.Instance.playerHP += 50;
+            if (BattleManager.Instance.playerMaxHP < BattleManager.Instance.playerHP)
             {
-                BattleManager.Instance.pHP = BattleManager.Instance.pMaxHP;
+                BattleManager.Instance.playerHP = BattleManager.Instance.playerMaxHP;
             }
 
             yield return new WaitForSeconds(1.0f);
@@ -77,7 +77,7 @@ public class EventManager : Singleton<EventManager>
             }
 
             mainText.text = "Attack power reduced by one.";
-            BattleManager.Instance.pATK -= 1;
+            BattleManager.Instance.playerATK -= 1;
 
             yield return new WaitForSeconds(1.0f);
 
@@ -100,7 +100,7 @@ public class EventManager : Singleton<EventManager>
 
     public IEnumerator ATKUpEvent()
     {
-        floorBack.sprite = fBack[1];
+        floorImage.sprite = floorSprite[1];
 
         mainText.text = "You Are Suddenly Surrounded By Muscle!";
 
@@ -142,7 +142,7 @@ public class EventManager : Singleton<EventManager>
             }
 
             mainText.text = "Attack power increased by three.";
-            BattleManager.Instance.pATK += 3;
+            BattleManager.Instance.playerATK += 3;
 
             yield return new WaitForSeconds(1.0f);
 
@@ -163,7 +163,7 @@ public class EventManager : Singleton<EventManager>
             }
 
             mainText.text = "Attack power reduced by one.";
-            BattleManager.Instance.pATK -= 1;
+            BattleManager.Instance.playerATK -= 1;
 
             yield return new WaitForSeconds(1.0f);
 
@@ -185,7 +185,7 @@ public class EventManager : Singleton<EventManager>
 
     public IEnumerator SPUpEvent()
     {
-        floorBack.sprite = fBack[2];
+        floorImage.sprite = floorSprite[2];
 
         mainText.text = "You have met the magician!";
 
@@ -227,8 +227,8 @@ public class EventManager : Singleton<EventManager>
             }
 
             mainText.text = "SP increased by 10.";
-            BattleManager.Instance.pMaxSP += 10;
-            BattleManager.Instance.pSP += 10;
+            BattleManager.Instance.playerMaxSP += 10;
+            BattleManager.Instance.playerSP += 10;
 
             yield return new WaitForSeconds(1.0f);
 
@@ -249,8 +249,8 @@ public class EventManager : Singleton<EventManager>
             }
 
             mainText.text = "SP reduced by five.";
-            BattleManager.Instance.pMaxSP -= 5;
-            BattleManager.Instance.pSP -= 5;
+            BattleManager.Instance.playerMaxSP -= 5;
+            BattleManager.Instance.playerSP -= 5;
 
             yield return new WaitForSeconds(1.0f);
 

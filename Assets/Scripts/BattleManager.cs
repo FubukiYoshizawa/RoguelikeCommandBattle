@@ -6,34 +6,34 @@ using TMPro;
 
 public class BattleManager: Singleton<BattleManager>
 {
-    public EnemyStatusManager esm; // 敵ステータス用スクリプト
+    public EnemyStatusManager enemyStatusManager; // 敵ステータス用スクリプト
 
-    public string pName;  // プレイヤー名
-    public int pLv; // プレイヤーレベル
-    public int pHP; // プレイヤーHP
-    public int pMaxHP; // プレイヤー最大HP
-    public int pSP; // プレイヤーSP
-    public int pMaxSP; // プレイヤー最大SP
-    public int pATK; // プレイヤー攻撃力
-    public int pEXP; // プレイヤー経験値
-    public int nEXP; // レベルアップまでの経験値
+    public string playerName;  // プレイヤー名
+    public int playerLv; // プレイヤーレベル
+    public int playerHP; // プレイヤーHP
+    public int playerMaxHP; // プレイヤー最大HP
+    public int playerSP; // プレイヤーSP
+    public int playerMaxSP; // プレイヤー最大SP
+    public int playerATK; // プレイヤー攻撃力
+    public int playerEXP; // プレイヤー経験値
+    public int playerNextLvEXP; // レベルアップまでの経験値
 
-    public string eNAME; // 敵名
-    public int eLv; // 敵レベル
-    public int eHP; // 敵HP
-    public int eATK; // 敵攻撃力
-    public int eEXP; // 敵経験値
+    public string enemyName; // 敵名
+    public int enemyLv; // 敵レベル
+    public int enemyHP; // 敵HP
+    public int enemyATK; // 敵攻撃力
+    public int enemyEXP; // 敵経験値
 
     public bool powerUp2 = false; // 攻撃力2倍状態を表す
     public bool powerUp3 = false; // 攻撃力3倍状態を表す
 
-    public Image floorBack; // フロアの背景を当てはめるImageオブジェクト
-    public Sprite fBack; // フロア画像
-    public Image displayEnemy; // 敵を当てはめるImageオブジェクト
-    public Sprite[] Enemy; // 敵の画像
-    private Sprite[] sprites; // 現在戦っている敵の画像
-    public Sprite none; // 敵がいないときの画像
-    public TextMeshProUGUI[] pStatus; // 画面に表示するプレイヤーのステータス
+    public Image floorBackImage; // フロアの背景を当てはめるImageオブジェクト
+    public Sprite floorBackSprite; // フロア画像
+    public Image displayEnemyImage; // 敵を当てはめるImageオブジェクト
+    public Sprite[] enemySprite; // 敵の画像
+    private Sprite[] nowEnemySprite; // 現在戦っている敵の画像
+    public Sprite noneEnemy; // 敵がいないときの画像
+    public TextMeshProUGUI[] playerStatusText; // 画面に表示するプレイヤーのステータス
     /*
     0:プレイヤー名
     1:プレイヤーレベル
@@ -41,7 +41,7 @@ public class BattleManager: Singleton<BattleManager>
     3:プレイヤーSP
     4:プレイヤー攻撃力
     */
-    public TextMeshProUGUI[] eStatus; // 画面に表示する敵のステータス
+    public TextMeshProUGUI[] enemyStatusText; // 画面に表示する敵のステータス
     /*
     0:敵名
     1:敵レベル
@@ -76,26 +76,26 @@ public class BattleManager: Singleton<BattleManager>
 
     void Start()
     {
-        pStatus[0].text = pName;
+        playerStatusText[0].text = playerName;
     }
 
     void Update()
     {
-        pStatus[1].text = pLv.ToString();
-        pStatus[2].text = pHP.ToString();
-        pStatus[3].text = pSP.ToString();
-        pStatus[4].text = pATK.ToString();
+        playerStatusText[1].text = playerLv.ToString();
+        playerStatusText[2].text = playerHP.ToString();
+        playerStatusText[3].text = playerSP.ToString();
+        playerStatusText[4].text = playerATK.ToString();
 
-        eStatus[1].text = eLv.ToString();
-        eStatus[2].text = eHP.ToString();
-        eStatus[3].text = eATK.ToString();
+        enemyStatusText[1].text = enemyLv.ToString();
+        enemyStatusText[2].text = enemyHP.ToString();
+        enemyStatusText[3].text = enemyATK.ToString();
 
     }
 
     public IEnumerator BattleStart()
     {
         battleText.text = "Battle Floor!";
-        floorBack.sprite = fBack;
+        floorBackImage.sprite = floorBackSprite;
 
         yield return new WaitForSeconds(1.0f);
 
@@ -104,18 +104,19 @@ public class BattleManager: Singleton<BattleManager>
             yield return null;
         }
 
-        sprites = new Sprite[] { Enemy[0], Enemy[1], Enemy[2] };
-        int randomNumber = Random.Range(0, sprites.Length);
-        Sprite selectedSprite = sprites[randomNumber];
-        displayEnemy.sprite = selectedSprite;
+        nowEnemySprite = new Sprite[] { enemySprite[0], enemySprite[1], enemySprite[2] };
+        int randomNumber = Random.Range(0, nowEnemySprite.Length);
+        Sprite selectedSprite = nowEnemySprite[randomNumber];
+        displayEnemyImage.sprite = selectedSprite;
 
-        eNAME = esm.DataList[randomNumber].eNAME;
-        eLv = esm.DataList[randomNumber].eLv;
-        eHP = esm.DataList[randomNumber].eHP;
-        eATK = esm.DataList[randomNumber].eATK;
-        eStatus[0].text = eNAME;
+        enemyName = enemyStatusManager.DataList[randomNumber].eNAME;
+        enemyLv = enemyStatusManager.DataList[randomNumber].eLv;
+        enemyHP = enemyStatusManager.DataList[randomNumber].eHP;
+        enemyATK = enemyStatusManager.DataList[randomNumber].eATK;
+        enemyEXP = enemyStatusManager.DataList[randomNumber].eEXP;
+        enemyStatusText[0].text = enemyName;
 
-        battleText.text = $"{eNAME} Appeared!";
+        battleText.text = $"{enemyName} Appeared!";
 
         windows[0].SetActive(true);
         windows[1].SetActive(false);
@@ -225,7 +226,7 @@ public class BattleManager: Singleton<BattleManager>
 
     public IEnumerator PlayerAttack()
     {
-        battleText.text = $"{pName} Attack";
+        battleText.text = $"{playerName} Attack";
 
         yield return new WaitForSeconds(1.0f);
 
@@ -234,25 +235,25 @@ public class BattleManager: Singleton<BattleManager>
             yield return null;
         }
 
-        battleText.text = $"{pATK} Damage!";
+        battleText.text = $"{playerATK} Damage!";
 
         yield return new WaitForSeconds(0.5f);
 
-        eHP = eHP - pATK;
-        if (eHP < 0)
+        enemyHP = enemyHP - playerATK;
+        if (enemyHP < 0)
         {
-            eHP = 0;
+            enemyHP = 0;
         }
 
         if (powerUp2)
         {
             powerUp2 = false;
-            pATK /= 2;
+            playerATK /= 2;
         }
         else if (powerUp3)
         {
             powerUp3 = false;
-            pATK /= 3;
+            playerATK /= 3;
         }
 
         yield return new WaitForSeconds(1.0f);
@@ -262,7 +263,7 @@ public class BattleManager: Singleton<BattleManager>
             yield return null;
         }
 
-        if (eHP == 0)
+        if (enemyHP == 0)
         {
             yield return StartCoroutine(PlayerWin());
         }
@@ -278,7 +279,7 @@ public class BattleManager: Singleton<BattleManager>
         else
         {
 
-            battleText.text = $"{eNAME} Attack";
+            battleText.text = $"{enemyName} Attack";
 
             yield return new WaitForSeconds(1.0f);
 
@@ -287,14 +288,14 @@ public class BattleManager: Singleton<BattleManager>
                 yield return null;
             }
 
-            battleText.text = $"{eATK} Damage!";
+            battleText.text = $"{enemyATK} Damage!";
 
             yield return new WaitForSeconds(0.5f);
 
-            pHP = pHP - eATK;
-            if (pHP < 0)
+            playerHP = playerHP - enemyATK;
+            if (playerHP < 0)
             {
-                pHP = 0;
+                playerHP = 0;
             }
 
             yield return new WaitForSeconds(1.0f);
@@ -304,7 +305,7 @@ public class BattleManager: Singleton<BattleManager>
                 yield return null;
             }
 
-            if (pHP == 0)
+            if (playerHP == 0)
             {
                 yield return StartCoroutine(PlayerLose());
             }
@@ -416,7 +417,7 @@ public class BattleManager: Singleton<BattleManager>
 
     public IEnumerator PlayerLose()
     {
-        battleText.text = $"{pName} Lose";
+        battleText.text = $"{playerName} Lose";
 
         yield return new WaitForSeconds(1.0f);
 
@@ -428,16 +429,16 @@ public class BattleManager: Singleton<BattleManager>
         if (powerUp2)
         {
             powerUp2 = false;
-            pATK /= 2;
+            playerATK /= 2;
         }
         else if (powerUp3)
         {
             powerUp3 = false;
-            pATK /= 3;
+            playerATK /= 3;
         }
 
-        displayEnemy.sprite = none;
-        battleText.text = $"{pName} Win";
+        displayEnemyImage.sprite = noneEnemy;
+        battleText.text = $"{playerName} Win";
 
         yield return new WaitForSeconds(1.0f);
 
@@ -446,8 +447,8 @@ public class BattleManager: Singleton<BattleManager>
             yield return null;
         }
 
-        battleText.text = $"{eEXP} Experience gained.";
-        pEXP += eEXP;
+        battleText.text = $"{enemyEXP} Experience gained.";
+        playerEXP += enemyEXP;
 
         yield return new WaitForSeconds(1.0f);
 
@@ -456,16 +457,16 @@ public class BattleManager: Singleton<BattleManager>
             yield return null;
         }
 
-        if (pEXP > nEXP)
+        if (playerEXP >= playerNextLvEXP)
         {
-            battleText.text = "Levels raised!";
-            pLv += 1;
-            pHP += 10;
-            pMaxHP += 10;
-            pSP += 5;
-            pMaxSP += 5;
-            pATK += 5;
-            nEXP *= 2;
+            battleText.text = "Levels raised!\nYour Status Up.";
+            playerLv += 1;
+            playerHP += 10;
+            playerMaxHP += 10;
+            playerSP += 5;
+            playerMaxSP += 5;
+            playerATK += 5;
+            playerNextLvEXP *= 2;
 
             yield return new WaitForSeconds(1.0f);
 

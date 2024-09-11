@@ -8,12 +8,12 @@ public class RestManager : Singleton<RestManager>
 {
     public TextMeshProUGUI mainText; // ƒeƒLƒXƒg•\¦
 
-    public Image floorBack; // ƒtƒƒA”wŒi
-    public Sprite fBack; // ”wŒi‰æ‘œ
+    public Image floorImage; // ƒtƒƒA”wŒi
+    public Sprite floorSprite; // ”wŒi‰æ‘œ
 
     public IEnumerator Rest()
     {
-        floorBack.sprite = fBack;
+        floorImage.sprite = floorSprite;
 
         mainText.text = "You've Found A Place Where You Can Take A Break";
 
@@ -34,7 +34,7 @@ public class RestManager : Singleton<RestManager>
         }
 
         mainText.text = "Your Strength Has Been Restored";
-        BattleManager.Instance.pHP = BattleManager.Instance.pMaxHP;
+        BattleManager.Instance.playerHP = BattleManager.Instance.playerMaxHP;
 
         yield return new WaitForSeconds(1.0f);
 

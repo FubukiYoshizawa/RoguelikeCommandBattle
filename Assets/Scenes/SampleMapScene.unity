@@ -1418,38 +1418,38 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b705c0b3f80db64d8265ecf19ea1334, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  esm: {fileID: 11400000, guid: c898d653b879a624d8e5daad96218e78, type: 2}
-  pName: Yamamoto
-  pLv: 10
-  pHP: 100
-  pMaxHP: 100
-  pSP: 10
-  pMaxSP: 0
-  pATK: 10
-  pEXP: 0
-  nEXP: 0
-  eNAME: 
-  eLv: 0
-  eHP: 0
-  eATK: 0
-  eEXP: 0
+  enemyStatusManager: {fileID: 11400000, guid: c898d653b879a624d8e5daad96218e78, type: 2}
+  playerName: YAMADA
+  playerLv: 10
+  playerHP: 100
+  playerMaxHP: 100
+  playerSP: 10
+  playerMaxSP: 10
+  playerATK: 10
+  playerEXP: 0
+  playerNextLvEXP: 10
+  enemyName: 
+  enemyLv: 0
+  enemyHP: 0
+  enemyATK: 0
+  enemyEXP: 0
   powerUp2: 0
   powerUp3: 0
-  floorBack: {fileID: 1970361055}
-  fBack: {fileID: 21300000, guid: 03d472cd8667cf8499c2f5f25c8a4171, type: 3}
-  displayEnemy: {fileID: 1133689603}
-  Enemy:
+  floorBackImage: {fileID: 1970361055}
+  floorBackSprite: {fileID: 21300000, guid: 03d472cd8667cf8499c2f5f25c8a4171, type: 3}
+  displayEnemyImage: {fileID: 1133689603}
+  enemySprite:
   - {fileID: 21300000, guid: 75588ce01893f9146a8fb4d88e076702, type: 3}
   - {fileID: 21300000, guid: 6576461d7c13aa041a260b775acf37cd, type: 3}
   - {fileID: 21300000, guid: 23568a6a08e39a64db90dfe306172599, type: 3}
-  none: {fileID: 21300000, guid: 98722b3b4ac44714482477fe0595d89c, type: 3}
-  pStatus:
+  noneEnemy: {fileID: 21300000, guid: 98722b3b4ac44714482477fe0595d89c, type: 3}
+  playerStatusText:
   - {fileID: 1759210541}
   - {fileID: 841621180}
   - {fileID: 345554029}
   - {fileID: 1667955640}
   - {fileID: 1550487815}
-  eStatus:
+  enemyStatusText:
   - {fileID: 708883405}
   - {fileID: 1008936336}
   - {fileID: 1424621262}
@@ -2460,13 +2460,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mainText: {fileID: 288444781}
-  floorNumber: {fileID: 1320571065}
-  fn: 0
-  maxFloor: 10
-  floorBack: {fileID: 1970361055}
-  fBacks: {fileID: 21300000, guid: 03d472cd8667cf8499c2f5f25c8a4171, type: 3}
-  floorIcon: {fileID: 2009018107}
-  fIcon:
+  floorNumberText: {fileID: 1320571065}
+  floorNumber: 0
+  maxFloorNumber: 10
+  floorImage: {fileID: 1970361055}
+  floorSprite: {fileID: 21300000, guid: 03d472cd8667cf8499c2f5f25c8a4171, type: 3}
+  floorIconImage: {fileID: 2009018107}
+  floorIconSprite:
   - {fileID: 21300000, guid: 69f3dd1dc0fb2f24ba03365618f1a730, type: 3}
   - {fileID: 21300000, guid: fc3ca8609de10d541b723209e30310b8, type: 3}
   - {fileID: 21300000, guid: f3d71bca9e0600a4891804dd2568df6b, type: 3}
@@ -2487,8 +2487,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mainText: {fileID: 288444781}
-  floorBack: {fileID: 1970361055}
-  fBack: {fileID: 21300000, guid: 39c8cdeded9b0e347aee076990f3947e, type: 3}
+  floorImage: {fileID: 1970361055}
+  floorSprite: {fileID: 21300000, guid: 39c8cdeded9b0e347aee076990f3947e, type: 3}
 --- !u!114 &528179721
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2505,8 +2505,8 @@ MonoBehaviour:
   selectWindow: {fileID: 1516700057}
   yes: 0
   no: 0
-  floorBack: {fileID: 1970361055}
-  fBack:
+  floorImage: {fileID: 1970361055}
+  floorSprite:
   - {fileID: 21300000, guid: 08878b03ab97e0e498745ec6d156bdec, type: 3}
   - {fileID: 21300000, guid: 87fa445634651524daff02a4cada1b17, type: 3}
   - {fileID: 21300000, guid: 54db1ad1b9981be49a5ac2b81ed027e5, type: 3}
@@ -2523,8 +2523,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mainText: {fileID: 288444781}
-  floorBack: {fileID: 1970361055}
-  fBack:
+  floorImage: {fileID: 1970361055}
+  floorSprite:
   - {fileID: 21300000, guid: 30e3297173f9a4c43898dfabade44a7e, type: 3}
   - {fileID: 21300000, guid: d91ded891cbe07d40801847760769af8, type: 3}
   - {fileID: 21300000, guid: cdde4bbeb2bb0a3459d7543caa2bfa52, type: 3}
@@ -2544,8 +2544,8 @@ MonoBehaviour:
   selectWindow: {fileID: 284257623}
   yes: 0
   no: 0
-  floorBack: {fileID: 1970361055}
-  fBack:
+  floorImage: {fileID: 1970361055}
+  floorSprite:
   - {fileID: 21300000, guid: 93e2eef4b9c9a5243b10012c9a082a5b, type: 3}
   - {fileID: 21300000, guid: 2dbe676f2c2c2254a95b302c32213c4b, type: 3}
 --- !u!1 &544133912

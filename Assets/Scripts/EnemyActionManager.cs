@@ -10,23 +10,23 @@ public class EnemyActionManager : Singleton<EnemyActionManager>
 
     public IEnumerator EnemyAction()
     {
-        if (BattleManager.Instance.eNAME == "Slime")
+        if (BattleManager.Instance.enemyName == "Slime")
         {
             yield return StartCoroutine(SlimeAction());
         }
-        else if (BattleManager.Instance.eNAME == "IkeBat")
+        else if (BattleManager.Instance.enemyName == "IkeBat")
         {
             yield return StartCoroutine(IkeBat());
         }
-        else if (BattleManager.Instance.eNAME == "HatGhost")
+        else if (BattleManager.Instance.enemyName == "HatGhost")
         {
             yield return StartCoroutine(HatGhost());
         }
-        else if (BattleManager.Instance.eNAME == "LightDragonBaby")
+        else if (BattleManager.Instance.enemyName == "LightDragonBaby")
         {
             yield return StartCoroutine(BabyAction());
         }
-        else if (BattleManager.Instance.eNAME == "LightDragon")
+        else if (BattleManager.Instance.enemyName == "LightDragon")
         {
             yield return StartCoroutine(LightDragonAction());
         }
@@ -35,7 +35,7 @@ public class EnemyActionManager : Singleton<EnemyActionManager>
 
     public IEnumerator SlimeAction()
     {
-        battleText.text = $"{BattleManager.Instance.eNAME} Slime Shoot!";
+        battleText.text = $"{BattleManager.Instance.enemyName} Slime Shoot!";
 
         yield return new WaitForSeconds(1.0f);
 
@@ -44,16 +44,16 @@ public class EnemyActionManager : Singleton<EnemyActionManager>
             yield return null;
         }
 
-        int damage = (int)(BattleManager.Instance.eATK * 1.5);
+        int damage = (int)(BattleManager.Instance.enemyATK * 1.5);
 
         battleText.text = $"{damage} Damage!";
 
         yield return new WaitForSeconds(0.5f);
 
-        BattleManager.Instance.pHP -= damage;
-        if (BattleManager.Instance.pHP < 0)
+        BattleManager.Instance.playerHP -= damage;
+        if (BattleManager.Instance.playerHP < 0)
         {
-            BattleManager.Instance.pHP = 0;
+            BattleManager.Instance.playerHP = 0;
         }
 
         yield return new WaitForSeconds(1.0f);
@@ -63,7 +63,7 @@ public class EnemyActionManager : Singleton<EnemyActionManager>
             yield return null;
         }
 
-        if (BattleManager.Instance.pHP == 0)
+        if (BattleManager.Instance.playerHP == 0)
         {
             yield return StartCoroutine(BattleManager.Instance.PlayerLose());
         }
@@ -72,7 +72,7 @@ public class EnemyActionManager : Singleton<EnemyActionManager>
 
     public IEnumerator IkeBat()
     {
-        battleText.text = $"{BattleManager.Instance.eNAME} Flying attack!";
+        battleText.text = $"{BattleManager.Instance.enemyName} Flying attack!";
 
         yield return new WaitForSeconds(1.0f);
 
@@ -81,16 +81,16 @@ public class EnemyActionManager : Singleton<EnemyActionManager>
             yield return null;
         }
 
-        int damage = (int)(BattleManager.Instance.eATK * 1.5);
+        int damage = (int)(BattleManager.Instance.enemyATK * 1.5);
 
         battleText.text = $"{damage} Damage!";
 
         yield return new WaitForSeconds(0.5f);
 
-        BattleManager.Instance.pHP -= damage;
-        if (BattleManager.Instance.pHP < 0)
+        BattleManager.Instance.playerHP -= damage;
+        if (BattleManager.Instance.playerHP < 0)
         {
-            BattleManager.Instance.pHP = 0;
+            BattleManager.Instance.playerHP = 0;
         }
 
         yield return new WaitForSeconds(1.0f);
@@ -100,7 +100,7 @@ public class EnemyActionManager : Singleton<EnemyActionManager>
             yield return null;
         }
 
-        if (BattleManager.Instance.pHP == 0)
+        if (BattleManager.Instance.playerHP == 0)
         {
             yield return StartCoroutine(BattleManager.Instance.PlayerLose());
         }
@@ -109,7 +109,7 @@ public class EnemyActionManager : Singleton<EnemyActionManager>
 
     public IEnumerator HatGhost()
     {
-        battleText.text = $"{BattleManager.Instance.eNAME} Fire Ball!";
+        battleText.text = $"{BattleManager.Instance.enemyName} Fire Ball!";
 
         yield return new WaitForSeconds(1.0f);
 
@@ -118,14 +118,14 @@ public class EnemyActionManager : Singleton<EnemyActionManager>
             yield return null;
         }
 
-        battleText.text = $"{BattleManager.Instance.eATK * 4} Damage!";
+        battleText.text = $"{BattleManager.Instance.enemyATK * 4} Damage!";
 
         yield return new WaitForSeconds(0.5f);
 
-        BattleManager.Instance.pHP = BattleManager.Instance.pHP - (BattleManager.Instance.eATK * 2);
-        if (BattleManager.Instance.pHP < 0)
+        BattleManager.Instance.playerHP = BattleManager.Instance.playerHP - (BattleManager.Instance.enemyATK * 2);
+        if (BattleManager.Instance.playerHP < 0)
         {
-            BattleManager.Instance.pHP = 0;
+            BattleManager.Instance.playerHP = 0;
         }
 
         yield return new WaitForSeconds(1.0f);
@@ -135,7 +135,7 @@ public class EnemyActionManager : Singleton<EnemyActionManager>
             yield return null;
         }
 
-        if (BattleManager.Instance.pHP == 0)
+        if (BattleManager.Instance.playerHP == 0)
         {
             yield return StartCoroutine(BattleManager.Instance.PlayerLose());
         }
@@ -144,7 +144,7 @@ public class EnemyActionManager : Singleton<EnemyActionManager>
 
     public IEnumerator BabyAction()
     {
-        battleText.text = $"{BattleManager.Instance.eNAME} LightDragonBaby breath!";
+        battleText.text = $"{BattleManager.Instance.enemyName} LightDragonBaby breath!";
 
         yield return new WaitForSeconds(1.0f);
 
@@ -153,16 +153,16 @@ public class EnemyActionManager : Singleton<EnemyActionManager>
             yield return null;
         }
 
-        int damage = (int)(BattleManager.Instance.eATK * 1.5);
+        int damage = (int)(BattleManager.Instance.enemyATK * 1.5);
 
         battleText.text = $"{damage} Damage!";
 
         yield return new WaitForSeconds(0.5f);
 
-        BattleManager.Instance.pHP -= damage;
-        if (BattleManager.Instance.pHP < 0)
+        BattleManager.Instance.playerHP -= damage;
+        if (BattleManager.Instance.playerHP < 0)
         {
-            BattleManager.Instance.pHP = 0;
+            BattleManager.Instance.playerHP = 0;
         }
 
         yield return new WaitForSeconds(1.0f);
@@ -172,7 +172,7 @@ public class EnemyActionManager : Singleton<EnemyActionManager>
             yield return null;
         }
 
-        if (BattleManager.Instance.pHP == 0)
+        if (BattleManager.Instance.playerHP == 0)
         {
             yield return StartCoroutine(BattleManager.Instance.PlayerLose());
         }
@@ -181,7 +181,7 @@ public class EnemyActionManager : Singleton<EnemyActionManager>
 
     public IEnumerator LightDragonAction()
     {
-        battleText.text = $"{BattleManager.Instance.eNAME} LightDragon breath!";
+        battleText.text = $"{BattleManager.Instance.enemyName} LightDragon breath!";
 
         yield return new WaitForSeconds(1.0f);
 
@@ -190,14 +190,14 @@ public class EnemyActionManager : Singleton<EnemyActionManager>
             yield return null;
         }
 
-        battleText.text = $"{BattleManager.Instance.eATK * 2} Damage!";
+        battleText.text = $"{BattleManager.Instance.enemyATK * 2} Damage!";
 
         yield return new WaitForSeconds(0.5f);
 
-        BattleManager.Instance.pHP = BattleManager.Instance.pHP - (BattleManager.Instance.eATK * 2);
-        if (BattleManager.Instance.pHP < 0)
+        BattleManager.Instance.playerHP = BattleManager.Instance.playerHP - (BattleManager.Instance.enemyATK * 2);
+        if (BattleManager.Instance.playerHP < 0)
         {
-            BattleManager.Instance.pHP = 0;
+            BattleManager.Instance.playerHP = 0;
         }
 
         yield return new WaitForSeconds(1.0f);
@@ -207,7 +207,7 @@ public class EnemyActionManager : Singleton<EnemyActionManager>
             yield return null;
         }
 
-        if (BattleManager.Instance.pHP == 0)
+        if (BattleManager.Instance.playerHP == 0)
         {
             yield return StartCoroutine(BattleManager.Instance.PlayerLose());
         }

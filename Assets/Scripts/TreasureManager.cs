@@ -9,8 +9,8 @@ public class TreasureManager : Singleton<TreasureManager>
     public GameObject selectWindow; // ‘I‘ğƒEƒBƒ“ƒhƒE
     public bool yes, no; // ‘I‘ğˆ
 
-    public Image floorBack; // ƒtƒƒA”wŒi
-    public Sprite[] fBack; // ƒtƒƒA”wŒi
+    public Image floorImage; // ƒtƒƒA”wŒi
+    public Sprite[] floorSprite; // ƒtƒƒA”wŒi
     /*
     0:•ó”wŒi–¢ŠJ••
     1:•ó”wŒiŠJ••
@@ -18,7 +18,7 @@ public class TreasureManager : Singleton<TreasureManager>
 
     public IEnumerator Item()
     {
-        floorBack.sprite = fBack[0];
+        floorImage.sprite = floorSprite[0];
 
         mainText.text = "You found a treasure chest";
 
@@ -29,22 +29,147 @@ public class TreasureManager : Singleton<TreasureManager>
             yield return null;
         }
 
-        floorBack.sprite = fBack[1];
+        floorImage.sprite = floorSprite[1];
 
         int randomValue = Random.Range(0, 5);
         if (randomValue == 0)
         {
             mainText.text = "To my surprise, I found a bomb in the treasure chest!";
-            // ƒAƒCƒeƒ€‚ğ‚Á‚Ä‚¢‚½‚ç“ü‚ê‘Ö‚¦‚éˆ—
+
+            yield return new WaitForSeconds(1.0f);
+
+            while (!Input.GetKeyDown(KeyCode.Space))
+            {
+                yield return null;
+            }
+
+            if (ItemManager.Instance.haveItem)
+            {
+                mainText.text = "Do you want to replace items you already own?";
+
+                yield return new WaitForSeconds(0.5f);
+
+                selectWindow.SetActive(true);
+
+                while (!yes && !no)
+                {
+                    yield return null;
+                }
+
+                selectWindow.SetActive(false);
+
+                if (yes)
+                {
+                    for (int i = 0; i < ItemManager.Instance.getItem.Length; i++)
+                    {
+                        ItemManager.Instance.getItem[i] = false;
+                    }
+                    ItemManager.Instance.getItem[4] = true;
+                    mainText.text = "You got the bomb!";
+                }
+                else if (no)
+                {
+                    mainText.text = "You put the treasure chest back together.";
+                }
+            }
+            else
+            {
+                ItemManager.Instance.getItem[4] = true;
+                mainText.text = "You got the bomb!";
+            }
 
         }
         else if (randomValue < 2)
         {
             mainText.text = "To my surprise, I found medicinal herbs in the treasure chest!";
+
+            yield return new WaitForSeconds(1.0f);
+
+            while (!Input.GetKeyDown(KeyCode.Space))
+            {
+                yield return null;
+            }
+
+            if (ItemManager.Instance.haveItem)
+            {
+                mainText.text = "Do you want to replace items you already own?";
+
+                yield return new WaitForSeconds(0.5f);
+
+                selectWindow.SetActive(true);
+
+                while (!yes && !no)
+                {
+                    yield return null;
+                }
+
+                selectWindow.SetActive(false);
+
+                if (yes)
+                {
+                    for (int i = 0; i < ItemManager.Instance.getItem.Length; i++)
+                    {
+                        ItemManager.Instance.getItem[i] = false;
+                    }
+                    ItemManager.Instance.getItem[3] = true;
+                    mainText.text = "You got medicinal herbs!";
+                }
+                else if (no)
+                {
+                    mainText.text = "You put the treasure chest back together.";
+                }
+            }
+            else
+            {
+                ItemManager.Instance.getItem[3] = true;
+                mainText.text = "You got medicinal herbs!";
+            }
         }
         else
         {
             mainText.text = "To my surprise, I found a jewel of power in a treasure chest!";
+
+            yield return new WaitForSeconds(1.0f);
+
+            while (!Input.GetKeyDown(KeyCode.Space))
+            {
+                yield return null;
+            }
+
+            if (ItemManager.Instance.haveItem)
+            {
+                mainText.text = "Do you want to replace items you already own?";
+
+                yield return new WaitForSeconds(0.5f);
+
+                selectWindow.SetActive(true);
+
+                while (!yes && !no)
+                {
+                    yield return null;
+                }
+
+                selectWindow.SetActive(false);
+
+                if (yes)
+                {
+                    for (int i = 0; i < ItemManager.Instance.getItem.Length; i++)
+                    {
+                        ItemManager.Instance.getItem[i] = false;
+                    }
+                    ItemManager.Instance.getItem[5] = true;
+                    mainText.text = "You got a jewel of power!";
+                }
+                else if (no)
+                {
+                    mainText.text = "You put the treasure chest back together.";
+                }
+            }
+            else
+            {
+                ItemManager.Instance.getItem[5] = true;
+                mainText.text = "You got a jewel of power!";
+            }
         }
 
 

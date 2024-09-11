@@ -7,15 +7,15 @@ using TMPro;
 public class GameManager : Singleton<GameManager>
 {
     public TextMeshProUGUI mainText; // テキスト表示
-    public TextMeshProUGUI floorNumber; // フロア数表示
+    public TextMeshProUGUI floorNumberText; // フロア数表示
 
-    public float fn = 0; // フロア数
-    public int maxFloor; // 最大フロア数
+    public float floorNumber = 0; // フロア数
+    public int maxFloorNumber; // 最大フロア数
 
-    public Image floorBack; // フロア背景
-    public Sprite fBacks; // フロア背景画像
-    public Image floorIcon; // フロアアイコン
-    public Sprite[] fIcon; // フロアアイコン画像
+    public Image floorImage; // フロア背景
+    public Sprite floorSprite; // フロア背景画像
+    public Image floorIconImage; // フロアアイコン
+    public Sprite[] floorIconSprite; // フロアアイコン画像
     /*
     0:バトルフロア
     1:強敵フロア
@@ -28,9 +28,9 @@ public class GameManager : Singleton<GameManager>
 
     void Start()
     {
-        floorNumber.text = fn.ToString();
+        floorNumberText.text = floorNumber.ToString();
         StartCoroutine(StartAdventure());
-        floorBack.sprite = fBacks;
+        floorImage.sprite = floorSprite;
     }
 
     public IEnumerator StartAdventure()
@@ -59,17 +59,17 @@ public class GameManager : Singleton<GameManager>
             yield return null;
         }
 
-        floorNumber.text = (fn += 1).ToString();
+        floorNumberText.text = (floorNumber += 1).ToString();
 
         yield return new WaitForSeconds(1.0f);
 
-        if (fn == maxFloor)
+        if (floorNumber == maxFloorNumber)
         {
             yield return StartCoroutine(BattleManager.Instance.BossStart());
         }
-        else if (fn % 2 != 0)
+        else if (floorNumber % 2 != 0)
         {
-            floorIcon.sprite = fIcon[0];
+            floorIconImage.sprite = floorIconSprite[0];
             yield return StartCoroutine(BattleManager.Instance.BattleStart());
         }
         else
@@ -91,7 +91,7 @@ public class GameManager : Singleton<GameManager>
 
     public IEnumerator ShopFloor()
     {
-        floorIcon.sprite = fIcon[3];
+        floorIconImage.sprite = floorIconSprite[3];
         mainText.text = "Shop Floor";
 
         yield return new WaitForSeconds(1.0f);
@@ -117,7 +117,7 @@ public class GameManager : Singleton<GameManager>
 
     public IEnumerator EventFloor()
     {
-        floorIcon.sprite = fIcon[4];
+        floorIconImage.sprite = floorIconSprite[4];
         mainText.text = "Event Floor";
 
         yield return new WaitForSeconds(1.0f);
@@ -143,7 +143,7 @@ public class GameManager : Singleton<GameManager>
 
     public IEnumerator ItemFloor()
     {
-        floorIcon.sprite = fIcon[5];
+        floorIconImage.sprite = floorIconSprite[5];
         mainText.text = "Item Floor";
 
         yield return new WaitForSeconds(1.0f);
@@ -161,7 +161,7 @@ public class GameManager : Singleton<GameManager>
 
     public IEnumerator RestFloor()
     {
-        floorIcon.sprite = fIcon[6];
+        floorIconImage.sprite = floorIconSprite[6];
         mainText.text = "Rest Floor";
 
         yield return new WaitForSeconds(1.0f);

@@ -10,8 +10,8 @@ public class ShopManager : Singleton<ShopManager>
     public GameObject selectWindow; // 選択ウィンドウ
     public bool yes, no; // 選択肢
 
-    public Image floorBack; // フロア背景
-    public Sprite[] fBack; // 背景画像
+    public Image floorImage; // フロア背景
+    public Sprite[] floorSprite; // 背景画像
     /*
     0:HPポーション
     1:SPポーション
@@ -20,7 +20,7 @@ public class ShopManager : Singleton<ShopManager>
 
     public IEnumerator HPShop()
     {
-        floorBack.sprite = fBack[0];
+        floorImage.sprite = floorSprite[0];
 
         mainText.text = "Welcome Shop";
 
@@ -44,22 +44,73 @@ public class ShopManager : Singleton<ShopManager>
 
         yield return new WaitForSeconds(1.0f);
 
-        selectWindow.SetActive(true);
-
-        while (!yes && !no)
+        while (!Input.GetKeyDown(KeyCode.Space))
         {
             yield return null;
         }
 
-        selectWindow.SetActive(false);
-
-        if (yes)
+        if (BattleManager.Instance.playerHP <= 10)
         {
-            yes = false;
+            mainText.text = "Oops, looks like you don't have anything to pay for.\nCome back in.";
+        }
+        else
+        {
+            mainText.text = "Do You Need HP Potion?";
 
-            if (BattleManager.Instance.pHP <= 10)
+            yield return new WaitForSeconds(0.5f);
+
+            selectWindow.SetActive(true);
+
+            while (!yes && !no)
             {
-                mainText.text = "You don't have anything to pay for!";
+                yield return null;
+            }
+
+            selectWindow.SetActive(false);
+
+            if (yes)
+            {
+                yes = false;
+
+                if (ItemManager.Instance.haveItem)
+                {
+                    mainText.text = "I already have the item, do you want to buy it?";
+
+                    yield return new WaitForSeconds(0.5f);
+
+                    selectWindow.SetActive(true);
+
+                    while (!yes && !no)
+                    {
+                        yield return null;
+                    }
+
+                    selectWindow.SetActive(false);
+
+                    if (yes)
+                    {
+                        yes = false;
+                        mainText.text = "Fine, You're A Good Customer.";
+                        BattleManager.Instance.playerHP -= 10;
+                        for (int i = 0; i < ItemManager.Instance.getItem.Length; i++)
+                        {
+                            ItemManager.Instance.getItem[i] = false;
+                        }
+                        ItemManager.Instance.getItem[0] = true;
+                    }
+                    else
+                    {
+                        no = false;
+                        mainText.text = "I hope you don't regret it.";
+                    }
+
+                }
+                else
+                {
+                    mainText.text = "Fine, You're A Good Customer.";
+                    BattleManager.Instance.playerHP -= 10;
+                    ItemManager.Instance.getItem[0] = true;
+                }
 
                 yield return new WaitForSeconds(1.0f);
 
@@ -67,17 +118,12 @@ public class ShopManager : Singleton<ShopManager>
                 {
                     yield return null;
                 }
-
             }
             else
             {
-                mainText.text = "Fine, You're A Good Customer.";
+                no = false;
+                mainText.text = "I hope you don't regret it.";
             }
-        }
-        else
-        {
-            no = false;
-            mainText.text = "Oh... See You";
         }
 
         yield return new WaitForSeconds(1.0f);
@@ -90,7 +136,7 @@ public class ShopManager : Singleton<ShopManager>
 
     public IEnumerator SPShop()
     {
-        floorBack.sprite = fBack[1];
+        floorImage.sprite = floorSprite[1];
 
         mainText.text = "Welcome Shop";
 
@@ -110,25 +156,68 @@ public class ShopManager : Singleton<ShopManager>
             yield return null;
         }
 
-        mainText.text = "Do You Need SP Potion?";
-
-        yield return new WaitForSeconds(1.0f);
-
-        selectWindow.SetActive(true);
-
-        while (!yes && !no)
+        if (BattleManager.Instance.playerHP <= 10)
         {
-            yield return null;
+            mainText.text = "Oops, looks like you don't have anything to pay for.\nCome back in.";
         }
-
-        selectWindow.SetActive(false);
-
-        if (yes)
+        else
         {
-            yes = false;
-            if (BattleManager.Instance.pHP <= 10)
+            mainText.text = "Do You Need SP Potion?";
+
+            yield return new WaitForSeconds(0.5f);
+
+            selectWindow.SetActive(true);
+
+            while (!yes && !no)
             {
-                mainText.text = "You don't have anything to pay for!";
+                yield return null;
+            }
+
+            selectWindow.SetActive(false);
+
+            if (yes)
+            {
+                yes = false;
+
+                if (ItemManager.Instance.haveItem)
+                {
+                    mainText.text = "I already have the item, do you want to buy it?";
+
+                    yield return new WaitForSeconds(0.5f);
+
+                    selectWindow.SetActive(true);
+
+                    while (!yes && !no)
+                    {
+                        yield return null;
+                    }
+
+                    selectWindow.SetActive(false);
+
+                    if (yes)
+                    {
+                        yes = false;
+                        mainText.text = "Fine, You're A Good Customer.";
+                        BattleManager.Instance.playerHP -= 10;
+                        for (int i = 0; i < ItemManager.Instance.getItem.Length; i++)
+                        {
+                            ItemManager.Instance.getItem[i] = false;
+                        }
+                        ItemManager.Instance.getItem[1] = true;
+                    }
+                    else
+                    {
+                        no = false;
+                        mainText.text = "I hope you don't regret it.";
+                    }
+
+                }
+                else
+                {
+                    mainText.text = "Fine, You're A Good Customer.";
+                    BattleManager.Instance.playerHP -= 10;
+                    ItemManager.Instance.getItem[1] = true;
+                }
 
                 yield return new WaitForSeconds(1.0f);
 
@@ -136,11 +225,11 @@ public class ShopManager : Singleton<ShopManager>
                 {
                     yield return null;
                 }
-
             }
             else
             {
-                mainText.text = "Fine, You're A Good Customer.";
+                no = false;
+                mainText.text = "I hope you don't regret it.";
             }
         }
 
@@ -150,11 +239,12 @@ public class ShopManager : Singleton<ShopManager>
         {
             yield return null;
         }
+
     }
 
     public IEnumerator ATKShop()
     {
-        floorBack.sprite = fBack[2];
+        floorImage.sprite = floorSprite[2];
 
         mainText.text = "Welcome Shop";
 
@@ -174,24 +264,68 @@ public class ShopManager : Singleton<ShopManager>
             yield return null;
         }
 
-        mainText.text = "Do You Need ATK Potion?";
-
-        yield return new WaitForSeconds(1.0f);
-
-        selectWindow.SetActive(true);
-
-        while (!yes && !no)
+        if (BattleManager.Instance.playerHP <= 10)
         {
-            yield return null;
+            mainText.text = "Oops, looks like you don't have anything to pay for.\nCome back in.";
         }
-
-        selectWindow.SetActive(false);
-
-        if (yes)
+        else
         {
-            if (BattleManager.Instance.pHP <= 10)
+            mainText.text = "Do You Need ATK Potion?";
+
+            yield return new WaitForSeconds(0.5f);
+
+            selectWindow.SetActive(true);
+
+            while (!yes && !no)
             {
-                mainText.text = "You don't have anything to pay for!";
+                yield return null;
+            }
+
+            selectWindow.SetActive(false);
+
+            if (yes)
+            {
+                yes = false;
+
+                if (ItemManager.Instance.haveItem)
+                {
+                    mainText.text = "I already have the item, do you want to buy it?";
+
+                    yield return new WaitForSeconds(0.5f);
+
+                    selectWindow.SetActive(true);
+
+                    while (!yes && !no)
+                    {
+                        yield return null;
+                    }
+
+                    selectWindow.SetActive(false);
+
+                    if (yes)
+                    {
+                        yes = false;
+                        mainText.text = "Fine, You're A Good Customer.";
+                        BattleManager.Instance.playerHP -= 10;
+                        for (int i = 0; i < ItemManager.Instance.getItem.Length; i++)
+                        {
+                            ItemManager.Instance.getItem[i] = false;
+                        }
+                        ItemManager.Instance.getItem[2] = true;
+                    }
+                    else
+                    {
+                        no = false;
+                        mainText.text = "I hope you don't regret it.";
+                    }
+
+                }
+                else
+                {
+                    mainText.text = "Fine, You're A Good Customer.";
+                    BattleManager.Instance.playerHP -= 10;
+                    ItemManager.Instance.getItem[2] = true;
+                }
 
                 yield return new WaitForSeconds(1.0f);
 
@@ -199,11 +333,11 @@ public class ShopManager : Singleton<ShopManager>
                 {
                     yield return null;
                 }
-
             }
             else
             {
-                mainText.text = "Fine, You're A Good Customer.";
+                no = false;
+                mainText.text = "I hope you don't regret it.";
             }
         }
 
