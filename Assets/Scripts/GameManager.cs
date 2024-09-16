@@ -29,8 +29,8 @@ public class GameManager : Singleton<GameManager>
     void Start()
     {
         floorNumberText.text = floorNumber.ToString();
-        StartCoroutine(StartAdventure());
         floorImage.sprite = floorSprite;
+        StartCoroutine(StartAdventure());
     }
 
     public IEnumerator StartAdventure()

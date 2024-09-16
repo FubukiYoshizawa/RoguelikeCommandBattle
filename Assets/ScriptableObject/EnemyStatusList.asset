@@ -14,17 +14,52 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DataList:
   - eNAME: Slime
-    eLv: 5
-    eHP: 30
-    eATK: 5
+    eLv: 1
+    eHP: 5
+    eATK: 1
     eEXP: 10
   - eNAME: IkeBat
-    eLv: 10
-    eHP: 50
-    eATK: 10
-    eEXP: 20
+    eLv: 1
+    eHP: 10
+    eATK: 2
+    eEXP: 10
   - eNAME: HatGhost
-    eLv: 15
-    eHP: 70
+    eLv: 1
+    eHP: 15
+    eATK: 1
+    eEXP: 10
+  - eNAME: GodADeath
+    eLv: 3
+    eHP: 25
     eATK: 5
     eEXP: 30
+  - eNAME: TornadoMan
+    eLv: 3
+    eHP: 30
+    eATK: 3
+    eEXP: 30
+  - eNAME: ThunderOni
+    eLv: 3
+    eHP: 20
+    eATK: 7
+    eEXP: 30
+  - eNAME: InfernoButterfly
+    eLv: 5
+    eHP: 30
+    eATK: 10
+    eEXP: 50
+  - eNAME: DarkDragon
+    eLv: 5
+    eHP: 60
+    eATK: 5
+    eEXP: 50
+  - eNAME: IceDragon
+    eLv: 5
+    eHP: 50
+    eATK: 7
+    eEXP: 50
+  - eNAME: LightDragon
+    eLv: 10
+    eHP: 120
+    eATK: 12
+    eEXP: 100

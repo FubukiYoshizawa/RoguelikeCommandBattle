@@ -7,6 +7,8 @@ using TMPro;
 public class SkillManager : Singleton<SkillManager>
 {
     public TextMeshProUGUI mainText; // テキスト表示
+    public GameObject[] useSkillButton; // スキル使用時のボタン
+    public TextMeshProUGUI[] useSkillButtonText; // 表示するスキル名
     public bool[] useSkill; // どのスキルを使用するか
     /*
     0:パワーアタック
@@ -16,41 +18,138 @@ public class SkillManager : Singleton<SkillManager>
     4:アイスランス
     5:ヒール
     */
+    public int[] needSkillPoint; // スキル使用に必要な
     public int[] skillValue; // スキルの効果量
+
+    private void Start()
+    {
+        if (DebugScript.Instance.Fighter)
+        {
+            useSkillButtonText[0].text = "PowerAttack";
+            useSkillButtonText[1].text = "PowerUp";
+            useSkillButtonText[2].text = "Meditation";
+        }
+        else if (DebugScript.Instance.Magician)
+        {
+            useSkillButtonText[0].text = "FireBall";
+            useSkillButtonText[1].text = "IiceLance";
+            useSkillButtonText[2].text = "HealMagic";
+        }
+
+        useSkillButton[0].SetActive(false);
+        useSkillButton[1].SetActive(false);
+        useSkillButton[2].SetActive(false);
+
+    }
+
+    private void Update()
+    {
+        if (BattleManager.Instance.playerLv >= 2)
+        {
+            useSkillButton[0].SetActive(true);
+        }
+        
+        if (BattleManager.Instance.playerLv >= 5)
+        {
+            useSkillButton[1].SetActive(true);
+        }
+
+        if (BattleManager.Instance.playerLv >= 7)
+        {
+            useSkillButton[2].SetActive(true);
+        }
+
+    }
 
     public IEnumerator UseSkill()
     {
         if (useSkill[0])
         {
-            useSkill[0] = false;
-            yield return StartCoroutine(PowerAttack());
+            if (BattleManager.Instance.playerSP < needSkillPoint[0])
+            {
+                yield return StartCoroutine(NotEnoughSP());
+            }
+            else
+            {
+                useSkill[0] = false;
+                yield return StartCoroutine(PowerAttack());
+            }
         }
         else if (useSkill[1])
         {
-            useSkill[1] = false;
-            yield return StartCoroutine(PowerUp());
+            if (BattleManager.Instance.playerSP < needSkillPoint[1])
+            {
+                yield return StartCoroutine(NotEnoughSP());
+            }
+            else
+            {
+                useSkill[1] = false;
+                yield return StartCoroutine(PowerUp());
+            }
         }
         else if (useSkill[2])
         {
-            useSkill[2] = false;
-            yield return StartCoroutine(Meditation());
+            if (BattleManager.Instance.playerSP < needSkillPoint[2])
+            {
+                yield return StartCoroutine(NotEnoughSP());
+            }
+            else
+            {
+                useSkill[2] = false;
+                yield return StartCoroutine(Meditation());
+            }
         }
         else if (useSkill[3])
         {
-            useSkill[3] = false;
-            yield return StartCoroutine(FireBall());
+            if (BattleManager.Instance.playerSP < needSkillPoint[3])
+            {
+                yield return StartCoroutine(NotEnoughSP());
+            }
+            else
+            {
+                useSkill[3] = false;
+                yield return StartCoroutine(FireBall());
+            }
         }
         else if (useSkill[4])
         {
-            useSkill[4] = false;
-            yield return StartCoroutine(IiceLance());
+            if (BattleManager.Instance.playerSP < needSkillPoint[4])
+            {
+                yield return StartCoroutine(NotEnoughSP());
+            }
+            else
+            {
+                useSkill[4] = false;
+                yield return StartCoroutine(IiceLance());
+            }
         }
         else if (useSkill[5])
         {
-            useSkill[5] = false;
-            yield return StartCoroutine(HealMagic());
+            if (BattleManager.Instance.playerSP < needSkillPoint[5])
+            {
+                yield return StartCoroutine(NotEnoughSP());
+            }
+            else
+            {
+                useSkill[5] = false;
+                yield return StartCoroutine(HealMagic());
+            }
         }
 
+    }
+
+    public IEnumerator NotEnoughSP()
+    {
+        mainText.text = "Not enough SP.";
+
+        yield return new WaitForSeconds(1.0f);
+
+        while (!Input.GetKeyDown(KeyCode.Space))
+        {
+            yield return null;
+        }
+
+        yield return StartCoroutine(BattleManager.Instance.Battle());
     }
 
     public IEnumerator PowerAttack()
@@ -66,6 +165,7 @@ public class SkillManager : Singleton<SkillManager>
 
         mainText.text = $"{skillValue[0]} damage to the enemy.";
 
+        BattleManager.Instance.playerSP -= needSkillPoint[0];
         BattleManager.Instance.enemyHP -= skillValue[0];
         if (BattleManager.Instance.enemyHP < 0)
         {
@@ -109,6 +209,8 @@ public class SkillManager : Singleton<SkillManager>
         }
 
         mainText.text = "Double the power of the next attack";
+
+        BattleManager.Instance.playerSP -= needSkillPoint[1];
         BattleManager.Instance.powerUp2 = true;
         BattleManager.Instance.playerATK *= 2;
 
@@ -133,6 +235,7 @@ public class SkillManager : Singleton<SkillManager>
 
         mainText.text = $"{skillValue[1]} HP recovered";
 
+        BattleManager.Instance.playerSP -= needSkillPoint[2];
         BattleManager.Instance.playerHP += skillValue[1];
         if (BattleManager.Instance.playerHP > BattleManager.Instance.playerMaxHP)
         {
@@ -161,6 +264,7 @@ public class SkillManager : Singleton<SkillManager>
 
         mainText.text = $"{skillValue[2]} damage to the enemy.";
 
+        BattleManager.Instance.playerSP -= needSkillPoint[3];
         BattleManager.Instance.enemyHP -= skillValue[2];
         if (BattleManager.Instance.enemyHP < 0)
         {
@@ -193,6 +297,7 @@ public class SkillManager : Singleton<SkillManager>
 
         mainText.text = $"{skillValue[3]} damage to the enemy.";
 
+        BattleManager.Instance.playerSP -= needSkillPoint[4];
         BattleManager.Instance.enemyHP -= skillValue[3];
         if (BattleManager.Instance.enemyHP < 0)
         {
@@ -225,6 +330,7 @@ public class SkillManager : Singleton<SkillManager>
 
         mainText.text = $"{skillValue[1]} HP recovered";
 
+        BattleManager.Instance.playerSP -= needSkillPoint[5];
         BattleManager.Instance.playerHP += skillValue[1];
         if (BattleManager.Instance.playerHP > BattleManager.Instance.playerMaxHP)
         {

@@ -21,7 +21,7 @@ public class ItemManager : Singleton<ItemManager>
 
     private void Start()
     {
-        getItem[0] = true;
+
     }
 
     public IEnumerator HaveItem()
@@ -77,6 +77,7 @@ public class ItemManager : Singleton<ItemManager>
         {
             BattleManager.Instance.playerHP = BattleManager.Instance.playerMaxHP;
         }
+        haveItem = false;
 
         yield return new WaitForSeconds(1.0f);
 
@@ -104,6 +105,7 @@ public class ItemManager : Singleton<ItemManager>
         {
             BattleManager.Instance.playerSP = BattleManager.Instance.playerMaxSP;
         }
+        haveItem = false;
 
         yield return new WaitForSeconds(1.0f);
 
@@ -127,6 +129,7 @@ public class ItemManager : Singleton<ItemManager>
         mainText.text = "Double the power of the next attack";
         BattleManager.Instance.powerUp2 = true;
         BattleManager.Instance.playerATK *= 2;
+        haveItem = false;
 
         yield return new WaitForSeconds(1.0f);
 
@@ -154,6 +157,7 @@ public class ItemManager : Singleton<ItemManager>
         {
             BattleManager.Instance.playerHP = BattleManager.Instance.playerMaxHP;
         }
+        haveItem = false;
 
         yield return new WaitForSeconds(1.0f);
 
@@ -182,6 +186,7 @@ public class ItemManager : Singleton<ItemManager>
         {
             BattleManager.Instance.enemyHP = 0;
         }
+        haveItem = false;
 
         yield return new WaitForSeconds(1.0f);
 
@@ -206,6 +211,7 @@ public class ItemManager : Singleton<ItemManager>
         mainText.text = "Double the power of the next attack";
         BattleManager.Instance.powerUp3 = true;
         BattleManager.Instance.playerATK *= 3;
+        haveItem = false;
 
         yield return new WaitForSeconds(1.0f);
 

@@ -35,6 +35,7 @@ public class RestManager : Singleton<RestManager>
 
         mainText.text = "Your Strength Has Been Restored";
         BattleManager.Instance.playerHP = BattleManager.Instance.playerMaxHP;
+        BattleManager.Instance.playerSP = BattleManager.Instance.playerMaxSP;
 
         yield return new WaitForSeconds(1.0f);
 

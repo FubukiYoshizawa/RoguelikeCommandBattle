@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.EventSystems;
+
 public class TreasureManager : Singleton<TreasureManager>
 {
     public TextMeshProUGUI mainText; // テキスト表示
     public GameObject selectWindow; // 選択ウィンドウ
     public bool yes, no; // 選択肢
+    public GameObject defaultButton; // 選択肢表示でデフォルトで選択するボタン
 
     public Image floorImage; // フロア背景
     public Sprite[] floorSprite; // フロア背景
@@ -50,6 +53,7 @@ public class TreasureManager : Singleton<TreasureManager>
                 yield return new WaitForSeconds(0.5f);
 
                 selectWindow.SetActive(true);
+                EventSystem.current.SetSelectedGameObject(defaultButton);
 
                 while (!yes && !no)
                 {
@@ -97,6 +101,7 @@ public class TreasureManager : Singleton<TreasureManager>
                 yield return new WaitForSeconds(0.5f);
 
                 selectWindow.SetActive(true);
+                EventSystem.current.SetSelectedGameObject(defaultButton);
 
                 while (!yes && !no)
                 {
@@ -143,6 +148,7 @@ public class TreasureManager : Singleton<TreasureManager>
                 yield return new WaitForSeconds(0.5f);
 
                 selectWindow.SetActive(true);
+                EventSystem.current.SetSelectedGameObject(defaultButton);
 
                 while (!yes && !no)
                 {

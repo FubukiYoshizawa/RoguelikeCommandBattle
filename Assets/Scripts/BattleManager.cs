@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.EventSystems;
 
 public class BattleManager: Singleton<BattleManager>
 {
     public EnemyStatusManager enemyStatusManager; // 敵ステータス用スクリプト
+    public PlayerStatusManager playerStatusManager; // プレイヤー初期ステータス用スクリプト
 
     public string playerName;  // プレイヤー名
     public int playerLv; // プレイヤーレベル
@@ -59,6 +61,13 @@ public class BattleManager: Singleton<BattleManager>
     4:バトル時の選択ウィンドウ
     */
 
+    public GameObject[] defaultButton; // 選択ウィンドウで最初に選択しているボタン
+    /*
+    0:攻撃ボタン
+    1:スキル１ボタン
+    2:アイテムの仕様選択はい
+    */
+
     public bool[] buttonOn; // バトル時に使用するボタンを押しているかどうか
     /*
     0:攻撃
@@ -76,6 +85,28 @@ public class BattleManager: Singleton<BattleManager>
 
     void Start()
     {
+        if (DebugScript.Instance.Fighter)
+        {
+            playerName = playerStatusManager.DataList[0].pNAME;
+            playerLv = playerStatusManager.DataList[0].pLv;
+            playerHP = playerStatusManager.DataList[0].pHP;
+            playerMaxHP = playerStatusManager.DataList[0].pHP;
+            playerSP = playerStatusManager.DataList[0].pSP;
+            playerMaxSP = playerStatusManager.DataList[0].pSP;
+            playerATK = playerStatusManager.DataList[0].pATK;
+
+        }
+        else if (DebugScript.Instance.Magician)
+        {
+            playerName = playerStatusManager.DataList[1].pNAME;
+            playerLv = playerStatusManager.DataList[1].pLv;
+            playerHP = playerStatusManager.DataList[1].pHP;
+            playerMaxHP = playerStatusManager.DataList[1].pHP;
+            playerSP = playerStatusManager.DataList[1].pSP;
+            playerMaxSP = playerStatusManager.DataList[1].pSP;
+            playerATK = playerStatusManager.DataList[1].pATK;
+        }
+
         playerStatusText[0].text = playerName;
     }
 
@@ -104,17 +135,34 @@ public class BattleManager: Singleton<BattleManager>
             yield return null;
         }
 
-        nowEnemySprite = new Sprite[] { enemySprite[0], enemySprite[1], enemySprite[2] };
-        int randomNumber = Random.Range(0, nowEnemySprite.Length);
-        Sprite selectedSprite = nowEnemySprite[randomNumber];
-        displayEnemyImage.sprite = selectedSprite;
+        if (GameManager.Instance.floorNumber <= GameManager.Instance.maxFloorNumber / 2)
+        {
+            nowEnemySprite = new Sprite[] { enemySprite[0], enemySprite[1], enemySprite[2] };
+            int randomNumber = Random.Range(0, nowEnemySprite.Length);
+            Sprite selectedSprite = nowEnemySprite[randomNumber];
+            displayEnemyImage.sprite = selectedSprite;
 
-        enemyName = enemyStatusManager.DataList[randomNumber].eNAME;
-        enemyLv = enemyStatusManager.DataList[randomNumber].eLv;
-        enemyHP = enemyStatusManager.DataList[randomNumber].eHP;
-        enemyATK = enemyStatusManager.DataList[randomNumber].eATK;
-        enemyEXP = enemyStatusManager.DataList[randomNumber].eEXP;
-        enemyStatusText[0].text = enemyName;
+            enemyName = enemyStatusManager.DataList[randomNumber].eNAME;
+            enemyLv = enemyStatusManager.DataList[randomNumber].eLv;
+            enemyHP = enemyStatusManager.DataList[randomNumber].eHP;
+            enemyATK = enemyStatusManager.DataList[randomNumber].eATK;
+            enemyEXP = enemyStatusManager.DataList[randomNumber].eEXP;
+            enemyStatusText[0].text = enemyName;
+        }
+        else
+        {
+            nowEnemySprite = new Sprite[] { enemySprite[3], enemySprite[4], enemySprite[5] };
+            int randomNumber = Random.Range(3, nowEnemySprite.Length);
+            Sprite selectedSprite = nowEnemySprite[randomNumber];
+            displayEnemyImage.sprite = selectedSprite;
+
+            enemyName = enemyStatusManager.DataList[randomNumber].eNAME;
+            enemyLv = enemyStatusManager.DataList[randomNumber].eLv;
+            enemyHP = enemyStatusManager.DataList[randomNumber].eHP;
+            enemyATK = enemyStatusManager.DataList[randomNumber].eATK;
+            enemyEXP = enemyStatusManager.DataList[randomNumber].eEXP;
+            enemyStatusText[0].text = enemyName;
+        }
 
         battleText.text = $"{enemyName} Appeared!";
 
@@ -156,6 +204,7 @@ public class BattleManager: Singleton<BattleManager>
     {
         battleText.text = "Command?";
         windows[2].SetActive(true);
+        EventSystem.current.SetSelectedGameObject(defaultButton[0]);
 
         yield return new WaitForSeconds(1.0f);
 
@@ -176,6 +225,7 @@ public class BattleManager: Singleton<BattleManager>
             windows[2].SetActive(false);
             buttonOn[1] = false;
             windows[3].SetActive(true);
+            EventSystem.current.SetSelectedGameObject(defaultButton[1]);
 
             while (!skillUse && !back)
             {
@@ -201,7 +251,6 @@ public class BattleManager: Singleton<BattleManager>
         {
             windows[2].SetActive(false);
             buttonOn[2] = false;
-            windows[4].SetActive(true);
 
             yield return StartCoroutine(Item());
 
@@ -318,20 +367,44 @@ public class BattleManager: Singleton<BattleManager>
         if (buttonOn[3])
         {
             buttonOn[3] = false;
-            SkillManager.Instance.useSkill[0] = true;
-            yield return StartCoroutine(SkillManager.Instance.UseSkill());
+            if (DebugScript.Instance.Fighter)
+            {
+                SkillManager.Instance.useSkill[0] = true;
+                yield return StartCoroutine(SkillManager.Instance.UseSkill());
+            }
+            else if (DebugScript.Instance.Magician)
+            {
+                SkillManager.Instance.useSkill[3] = true;
+                yield return StartCoroutine(SkillManager.Instance.UseSkill());
+            }
         }
         else if (buttonOn[4])
         {
             buttonOn[4] = false;
-            SkillManager.Instance.useSkill[1] = true;
-            yield return StartCoroutine(SkillManager.Instance.UseSkill());
+            if (DebugScript.Instance.Fighter)
+            {
+                SkillManager.Instance.useSkill[1] = true;
+                yield return StartCoroutine(SkillManager.Instance.UseSkill());
+            }
+            else if (DebugScript.Instance.Magician)
+            {
+                SkillManager.Instance.useSkill[4] = true;
+                yield return StartCoroutine(SkillManager.Instance.UseSkill());
+            }
         }
         else if (buttonOn[5])
         {
             buttonOn[5] = false;
-            SkillManager.Instance.useSkill[2] = true;
-            yield return StartCoroutine(SkillManager.Instance.UseSkill());
+            if (DebugScript.Instance.Fighter)
+            {
+                SkillManager.Instance.useSkill[2] = true;
+                yield return StartCoroutine(SkillManager.Instance.UseSkill());
+            }
+            else if (DebugScript.Instance.Magician)
+            {
+                SkillManager.Instance.useSkill[5] = true;
+                yield return StartCoroutine(SkillManager.Instance.UseSkill());
+            }
         }
 
         yield return new WaitForSeconds(1.0f);
@@ -353,6 +426,25 @@ public class BattleManager: Singleton<BattleManager>
 
     public IEnumerator Item()
     {
+        if (!ItemManager.Instance.haveItem)
+        {
+            battleText.text = "I don't have the item.";
+
+            yield return new WaitForSeconds(1.0f);
+
+            while (!Input.GetKeyDown(KeyCode.Space))
+            {
+                yield return null;
+            }
+
+            yield return StartCoroutine(Battle());
+        }
+        else
+        {
+            windows[4].SetActive(true);
+            EventSystem.current.SetSelectedGameObject(defaultButton[2]);
+        }
+
         if (ItemManager.Instance.getItem[0])
         {
             battleText.text = "HPPotion : Recovers 30 HP";
@@ -460,13 +552,24 @@ public class BattleManager: Singleton<BattleManager>
         if (playerEXP >= playerNextLvEXP)
         {
             battleText.text = "Levels raised!\nYour Status Up.";
-            playerLv += 1;
-            playerHP += 10;
-            playerMaxHP += 10;
-            playerSP += 5;
-            playerMaxSP += 5;
-            playerATK += 5;
-            playerNextLvEXP *= 2;
+            if (DebugScript.Instance.Fighter)
+            {
+                playerLv += 1;
+                playerMaxHP += 10;
+                playerMaxSP += 2;
+                playerATK += 2;
+                playerEXP = 0;
+                playerNextLvEXP *= 2;
+            }
+            else if (DebugScript.Instance.Magician)
+            {
+                playerLv += 1;
+                playerMaxHP += 5;
+                playerMaxSP += 10;
+                playerATK += 1;
+                playerEXP = 0;
+                playerNextLvEXP *= 2;
+            }
 
             yield return new WaitForSeconds(1.0f);
 
