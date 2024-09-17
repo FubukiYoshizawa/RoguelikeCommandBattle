@@ -16,18 +16,20 @@ public class GameManager : Singleton<GameManager>
     public Sprite floorSprite; // フロア背景画像
     public Image floorIconImage; // フロアアイコン
     public Sprite[] floorIconSprite; // フロアアイコン画像
-    /*
-    0:バトルフロア
-    1:強敵フロア
-    2:ボスフロア
-    3:ショップフロア
-    4:イベントフロア
-    5:アイテムフロア
-    6:休憩フロア
-    */
+    public enum enumFloorIconSprite
+    {
+        BattleFloor, // 戦闘フロアアイコン
+        StrongFloor, // 強敵フロアアイコン
+        BossFloor, // ボスフロアアイコン
+        ShopFloor, // ショップフロアアイコン
+        ItemFloor, // アイテムフロアアイコン
+        RestFloor, // 休憩フロアアイコン
+        Num // フロアアイコン画像数
+    }
 
     void Start()
     {
+        floorIconSprite = new Sprite[(int)enumFloorIconSprite.Num];
         floorNumberText.text = floorNumber.ToString();
         floorImage.sprite = floorSprite;
         StartCoroutine(StartAdventure());
@@ -69,7 +71,7 @@ public class GameManager : Singleton<GameManager>
         }
         else if (floorNumber % 2 != 0)
         {
-            floorIconImage.sprite = floorIconSprite[0];
+            floorIconImage.sprite = floorIconSprite[(int)enumFloorIconSprite.BattleFloor];
             yield return StartCoroutine(BattleManager.Instance.BattleStart());
         }
         else
@@ -91,7 +93,7 @@ public class GameManager : Singleton<GameManager>
 
     public IEnumerator ShopFloor()
     {
-        floorIconImage.sprite = floorIconSprite[3];
+        floorIconImage.sprite = floorIconSprite[(int)enumFloorIconSprite.ShopFloor];
         mainText.text = "Shop Floor";
 
         yield return new WaitForSeconds(1.0f);
@@ -117,7 +119,7 @@ public class GameManager : Singleton<GameManager>
 
     public IEnumerator EventFloor()
     {
-        floorIconImage.sprite = floorIconSprite[4];
+        floorIconImage.sprite = floorIconSprite[(int)enumFloorIconSprite.ItemFloor];
         mainText.text = "Event Floor";
 
         yield return new WaitForSeconds(1.0f);
@@ -143,7 +145,7 @@ public class GameManager : Singleton<GameManager>
 
     public IEnumerator ItemFloor()
     {
-        floorIconImage.sprite = floorIconSprite[5];
+        floorIconImage.sprite = floorIconSprite[(int)enumFloorIconSprite.RestFloor];
         mainText.text = "Item Floor";
 
         yield return new WaitForSeconds(1.0f);

@@ -10,15 +10,22 @@ public class EventManager : Singleton<EventManager>
 
     public Image floorImage; // フロア背景
     public Sprite[] floorSprite; // 背景画像
-    /*
-    0:泉イベント
-    1:筋肉イベント
-    2:魔法使いイベント
-    */
+    public enum enumFloorSprite
+    {
+        HPUpEvent, // 泉イベント
+        ATKUpEvent, // 筋肉イベント
+        SPUpEvent, // 魔法使いイベント
+        Num // 背景数
+    }
+
+    private void Start()
+    {
+        floorSprite = new Sprite[(int)enumFloorSprite.Num];
+    }
 
     public IEnumerator HPUpEvent()
     {
-        floorImage.sprite = floorSprite[0];
+        floorImage.sprite = floorSprite[(int)enumFloorSprite.HPUpEvent];
 
         mainText.text = "You have found the fountain of miracles!";
 
@@ -100,7 +107,7 @@ public class EventManager : Singleton<EventManager>
 
     public IEnumerator ATKUpEvent()
     {
-        floorImage.sprite = floorSprite[1];
+        floorImage.sprite = floorSprite[(int)enumFloorSprite.ATKUpEvent];
 
         mainText.text = "You Are Suddenly Surrounded By Muscle!";
 
@@ -185,7 +192,7 @@ public class EventManager : Singleton<EventManager>
 
     public IEnumerator SPUpEvent()
     {
-        floorImage.sprite = floorSprite[2];
+        floorImage.sprite = floorSprite[(int)enumFloorSprite.SPUpEvent];
 
         mainText.text = "You have met the magician!";
 

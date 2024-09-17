@@ -10,19 +10,22 @@ public class SkillManager : Singleton<SkillManager>
     public GameObject[] useSkillButton; // スキル使用時のボタン
     public TextMeshProUGUI[] useSkillButtonText; // 表示するスキル名
     public bool[] useSkill; // どのスキルを使用するか
-    /*
-    0:パワーアタック
-    1:パワーアップ
-    2:瞑想
-    3:ファイアボール
-    4:アイスランス
-    5:ヒール
-    */
+    public enum enumUseSkill
+    {
+        PowerAttack, // パワーアタック
+        PowerUp, // パワーアップ
+        Meditation, // 瞑想
+        FireBall, // ファイアボール
+        IceLance, // アイスランス
+        HealMagic, // ヒール
+        Num // どのスキルを使うかの数
+    }
     public int[] needSkillPoint; // スキル使用に必要な
     public int[] skillValue; // スキルの効果量
 
     private void Start()
     {
+        useSkill = new bool[(int)enumUseSkill.Num];
         if (DebugScript.Instance.Fighter)
         {
             useSkillButtonText[0].text = "PowerAttack";
@@ -63,7 +66,7 @@ public class SkillManager : Singleton<SkillManager>
 
     public IEnumerator UseSkill()
     {
-        if (useSkill[0])
+        if (useSkill[(int)enumUseSkill.PowerAttack])
         {
             if (BattleManager.Instance.playerSP < needSkillPoint[0])
             {
@@ -71,11 +74,11 @@ public class SkillManager : Singleton<SkillManager>
             }
             else
             {
-                useSkill[0] = false;
+                useSkill[(int)enumUseSkill.PowerAttack] = false;
                 yield return StartCoroutine(PowerAttack());
             }
         }
-        else if (useSkill[1])
+        else if (useSkill[(int)enumUseSkill.PowerUp])
         {
             if (BattleManager.Instance.playerSP < needSkillPoint[1])
             {
@@ -83,11 +86,11 @@ public class SkillManager : Singleton<SkillManager>
             }
             else
             {
-                useSkill[1] = false;
+                useSkill[(int)enumUseSkill.PowerUp] = false;
                 yield return StartCoroutine(PowerUp());
             }
         }
-        else if (useSkill[2])
+        else if (useSkill[(int)enumUseSkill.Meditation])
         {
             if (BattleManager.Instance.playerSP < needSkillPoint[2])
             {
@@ -95,11 +98,11 @@ public class SkillManager : Singleton<SkillManager>
             }
             else
             {
-                useSkill[2] = false;
+                useSkill[(int)enumUseSkill.Meditation] = false;
                 yield return StartCoroutine(Meditation());
             }
         }
-        else if (useSkill[3])
+        else if (useSkill[(int)enumUseSkill.FireBall])
         {
             if (BattleManager.Instance.playerSP < needSkillPoint[3])
             {
@@ -107,11 +110,11 @@ public class SkillManager : Singleton<SkillManager>
             }
             else
             {
-                useSkill[3] = false;
+                useSkill[(int)enumUseSkill.FireBall] = false;
                 yield return StartCoroutine(FireBall());
             }
         }
-        else if (useSkill[4])
+        else if (useSkill[(int)enumUseSkill.IceLance])
         {
             if (BattleManager.Instance.playerSP < needSkillPoint[4])
             {
@@ -119,11 +122,11 @@ public class SkillManager : Singleton<SkillManager>
             }
             else
             {
-                useSkill[4] = false;
+                useSkill[(int)enumUseSkill.IceLance] = false;
                 yield return StartCoroutine(IiceLance());
             }
         }
-        else if (useSkill[5])
+        else if (useSkill[(int)enumUseSkill.HealMagic])
         {
             if (BattleManager.Instance.playerSP < needSkillPoint[5])
             {
@@ -131,7 +134,7 @@ public class SkillManager : Singleton<SkillManager>
             }
             else
             {
-                useSkill[5] = false;
+                useSkill[(int)enumUseSkill.HealMagic] = false;
                 yield return StartCoroutine(HealMagic());
             }
         }

@@ -9,51 +9,53 @@ public class ItemManager : Singleton<ItemManager>
     public TextMeshProUGUI mainText; // テキスト表示
     public bool haveItem; // アイテムを所持しているかどうか
     public bool[] getItem; // どのアイテムを手に入れたか
-    /*
-    0:HPポーション
-    1:SPポーション
-    2:攻撃ポーション
-    3:薬草
-    4:爆弾
-    5:攻撃の宝石
-    */
+    public enum enumGetItem
+    {
+        HPPotion, // HPポーション
+        SPPotion, // SPポーション
+        ATKPotion, // 攻撃ポーション
+        HealHerb, // 薬草
+        DamageBomb, // 爆弾
+        ATKJewel, // 攻撃の宝石
+        Num // どのアイテムを手に入れたかの要素数
+    }
     public int[] itemValue; // アイテム使用時の効果量
 
     private void Start()
     {
-
+        getItem = new bool[(int)enumGetItem.Num];
     }
 
     public IEnumerator HaveItem()
     {
-        if (getItem[0])
+        if (getItem[(int)enumGetItem.HPPotion])
         {
-            getItem[0] = false;
+            getItem[(int)enumGetItem.HPPotion] = false;
             yield return StartCoroutine(HPPotion());
         }
-        else if (getItem[1])
+        else if (getItem[(int)enumGetItem.SPPotion])
         {
-            getItem[1] = false;
+            getItem[(int)enumGetItem.SPPotion] = false;
             yield return StartCoroutine(SPPotion());
         }
-        else if (getItem[2])
+        else if (getItem[(int)enumGetItem.ATKPotion])
         {
-            getItem[2] = false;
+            getItem[(int)enumGetItem.ATKPotion] = false;
             yield return StartCoroutine(ATKPotion());
         }
-        else if (getItem[3])
+        else if (getItem[(int)enumGetItem.HealHerb])
         {
-            getItem[3] = false;
+            getItem[(int)enumGetItem.HealHerb] = false;
             yield return StartCoroutine(HealHerb());
         }
-        else if (getItem[4])
+        else if (getItem[(int)enumGetItem.DamageBomb])
         {
-            getItem[4] = false;
+            getItem[(int)enumGetItem.DamageBomb] = false;
             yield return StartCoroutine(DamageBomb());
         }
-        else if (getItem[5])
+        else if (getItem[(int)enumGetItem.ATKJewel])
         {
-            getItem[5] = false;
+            getItem[(int)enumGetItem.ATKJewel] = false;
             yield return StartCoroutine(ATKJewel());
         }
 

@@ -14,15 +14,22 @@ public class ShopManager : Singleton<ShopManager>
 
     public Image floorImage; // フロア背景
     public Sprite[] floorSprite; // 背景画像
-    /*
-    0:HPポーション
-    1:SPポーション
-    2:攻撃ポーション
-    */
+    public enum enumFloorSprite
+    {
+        HPPotion, // HPポーション
+        SPPotion, // SPポーション
+        ATKPotion, // 攻撃ポーション
+        Num // 背景数
+    }
+
+    public void Start()
+    {
+        floorSprite = new Sprite[(int)enumFloorSprite.Num];
+    }
 
     public IEnumerator HPShop()
     {
-        floorImage.sprite = floorSprite[0];
+        floorImage.sprite = floorSprite[(int)enumFloorSprite.HPPotion];
 
         mainText.text = "Welcome Shop";
 
@@ -139,7 +146,7 @@ public class ShopManager : Singleton<ShopManager>
 
     public IEnumerator SPShop()
     {
-        floorImage.sprite = floorSprite[1];
+        floorImage.sprite = floorSprite[(int)enumFloorSprite.SPPotion];
 
         mainText.text = "Welcome Shop";
 
@@ -248,7 +255,7 @@ public class ShopManager : Singleton<ShopManager>
 
     public IEnumerator ATKShop()
     {
-        floorImage.sprite = floorSprite[2];
+        floorImage.sprite = floorSprite[(int)enumFloorSprite.ATKPotion];
 
         mainText.text = "Welcome Shop";
 

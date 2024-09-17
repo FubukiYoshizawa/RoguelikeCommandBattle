@@ -36,49 +36,57 @@ public class BattleManager: Singleton<BattleManager>
     private Sprite[] nowEnemySprite; // 現在戦っている敵の画像
     public Sprite noneEnemy; // 敵がいないときの画像
     public TextMeshProUGUI[] playerStatusText; // 画面に表示するプレイヤーのステータス
-    /*
-    0:プレイヤー名
-    1:プレイヤーレベル
-    2:プレイヤーHP
-    3:プレイヤーSP
-    4:プレイヤー攻撃力
-    */
+    public enum enumPlayerStatusText
+    {
+        Name, // プレイヤー名.
+        Lv, // プレイヤーレベル.
+        HP, // プレイヤーHP.
+        SP, // プレイヤーSP.
+        ATK, // プレイヤー攻撃力.
+        Num // ステータス表示UIの個数.
+    }
     public TextMeshProUGUI[] enemyStatusText; // 画面に表示する敵のステータス
-    /*
-    0:敵名
-    1:敵レベル
-    2:敵HP
-    3:敵攻撃力
-    */
+    public enum enumEnemyStatusText
+    {
+        Name, // 敵名
+        Lv, // 敵レベル
+        HP, // 敵HP
+        ATK, // 敵攻撃力
+        Num // 敵のステータス数
+    }
     public TextMeshProUGUI battleText; // バトル時のテキスト
 
     public GameObject[] windows; // 各ウィンドウ
-    /*
-    0:敵ステータスウィンドウ
-    1:アイテムウィンドウ
-    2:コマンドウィンドウ
-    3:スキルウィンドウ
-    4:バトル時の選択ウィンドウ
-    */
-
-    public GameObject[] defaultButton; // 選択ウィンドウで最初に選択しているボタン
-    /*
-    0:攻撃ボタン
-    1:スキル１ボタン
-    2:アイテムの仕様選択はい
-    */
-
+    public enum enumWindows
+    {
+        EnemyStatus, // 敵のステータスウィンドウ
+        ItemWindow, // アイテムウィンドウ
+        ComandWindow, // コマンドウィンドウ
+        SkillWindow, // スキルウィンドウ
+        BattleSelectWindow, // バトル時選択ウィンドウ
+        Num // ウィンドウ数
+    }
+    public GameObject[] defaultButton; // 選択ウィンドウでの初期選択ボタン
+    public enum enumDefaultButton
+    {
+        AttackButton, // 攻撃ボタン
+        SkillBackButton, // スキルウィンドウでの初期選択ボタン
+        ItemUseBackButton, // アイテムの仕様確認での初期選択ボタン
+        Num // 初期選択ボタンの数
+    }
     public bool[] buttonOn; // バトル時に使用するボタンを押しているかどうか
-    /*
-    0:攻撃
-    1:スキル
-    2:アイテム
-    3:スキル１
-    4:スキル２
-    5:スキル３
-    6:アイテム使用
-    7:戻る
-    */
+    public enum enumButtonOn
+    {
+        Attack, // 攻撃コマンド
+        Skill, // スキルコマンド
+        Item, // アイテムコマンド
+        Skill1, // スキル１使用
+        Skill2, // スキル２使用
+        Skill3, // スキル３使用
+        ItemUse, // アイテム使用ボタン
+        Back, // 戻るボタン
+        Num // ボタンを押しているかどうかの数
+    }
     public bool skillUse; // スキルコマンドを表示
     public bool itemUse; // アイテムコマンドを表示
     public bool back; // 各表示から戻る
@@ -107,19 +115,25 @@ public class BattleManager: Singleton<BattleManager>
             playerATK = playerStatusManager.DataList[1].pATK;
         }
 
-        playerStatusText[0].text = playerName;
+        // 配列を準備
+        playerStatusText = new TextMeshProUGUI[(int)enumPlayerStatusText.Num];
+        enemyStatusText = new TextMeshProUGUI[(int)enumEnemyStatusText.Num];
+        windows = new GameObject[(int)enumWindows.Num];
+        defaultButton = new GameObject[(int)enumDefaultButton.Num];
+        buttonOn = new bool[(int)enumButtonOn.Num];
+        playerStatusText[(int)enumPlayerStatusText.Name].text = playerName;
     }
 
     void Update()
     {
-        playerStatusText[1].text = playerLv.ToString();
-        playerStatusText[2].text = playerHP.ToString();
-        playerStatusText[3].text = playerSP.ToString();
-        playerStatusText[4].text = playerATK.ToString();
+        playerStatusText[(int)enumPlayerStatusText.Lv].text = playerLv.ToString();
+        playerStatusText[(int)enumPlayerStatusText.HP].text = playerHP.ToString();
+        playerStatusText[(int)enumPlayerStatusText.SP].text = playerSP.ToString();
+        playerStatusText[(int)enumPlayerStatusText.ATK].text = playerATK.ToString();
 
-        enemyStatusText[1].text = enemyLv.ToString();
-        enemyStatusText[2].text = enemyHP.ToString();
-        enemyStatusText[3].text = enemyATK.ToString();
+        enemyStatusText[(int)enumEnemyStatusText.Lv].text = enemyLv.ToString();
+        enemyStatusText[(int)enumEnemyStatusText.HP].text = enemyHP.ToString();
+        enemyStatusText[(int)enumEnemyStatusText.ATK].text = enemyATK.ToString();
 
     }
 
@@ -147,7 +161,7 @@ public class BattleManager: Singleton<BattleManager>
             enemyHP = enemyStatusManager.DataList[randomNumber].eHP;
             enemyATK = enemyStatusManager.DataList[randomNumber].eATK;
             enemyEXP = enemyStatusManager.DataList[randomNumber].eEXP;
-            enemyStatusText[0].text = enemyName;
+            enemyStatusText[(int)enumEnemyStatusText.Name].text = enemyName;
         }
         else
         {
@@ -161,13 +175,13 @@ public class BattleManager: Singleton<BattleManager>
             enemyHP = enemyStatusManager.DataList[randomNumber].eHP;
             enemyATK = enemyStatusManager.DataList[randomNumber].eATK;
             enemyEXP = enemyStatusManager.DataList[randomNumber].eEXP;
-            enemyStatusText[0].text = enemyName;
+            enemyStatusText[(int)enumEnemyStatusText.Name].text = enemyName;
         }
 
         battleText.text = $"{enemyName} Appeared!";
 
-        windows[0].SetActive(true);
-        windows[1].SetActive(false);
+        windows[(int)enumWindows.EnemyStatus].SetActive(true);
+        windows[(int)enumWindows.ItemWindow].SetActive(false);
 
         yield return new WaitForSeconds(1.0f);
 
@@ -203,28 +217,28 @@ public class BattleManager: Singleton<BattleManager>
     public IEnumerator Battle()
     {
         battleText.text = "Command?";
-        windows[2].SetActive(true);
+        windows[(int)enumWindows.ComandWindow].SetActive(true);
         EventSystem.current.SetSelectedGameObject(defaultButton[0]);
 
         yield return new WaitForSeconds(1.0f);
 
-        while (!buttonOn[0] && !buttonOn[1] && !buttonOn[2])
+        while (!buttonOn[(int)enumButtonOn.Attack] && !buttonOn[(int)enumButtonOn.Skill] && !buttonOn[(int)enumButtonOn.Item])
         {
             yield return null;
         }
-        windows[2].SetActive(false);
+        windows[(int)enumWindows.ComandWindow].SetActive(false);
 
-        if (buttonOn[0])
+        if (buttonOn[(int)enumButtonOn.Attack])
         {
-            windows[2].SetActive(false);
-            buttonOn[0] = false;
+            windows[(int)enumWindows.ComandWindow].SetActive(false);
+            buttonOn[(int)enumButtonOn.Attack] = false;
             yield return StartCoroutine(Attack());
         }
-        else if (buttonOn[1])
+        else if (buttonOn[(int)enumButtonOn.Skill])
         {
-            windows[2].SetActive(false);
-            buttonOn[1] = false;
-            windows[3].SetActive(true);
+            windows[(int)enumWindows.ComandWindow].SetActive(false);
+            buttonOn[(int)enumButtonOn.Skill] = false;
+            windows[(int)enumWindows.SkillWindow].SetActive(true);
             EventSystem.current.SetSelectedGameObject(defaultButton[1]);
 
             while (!skillUse && !back)
@@ -234,23 +248,23 @@ public class BattleManager: Singleton<BattleManager>
 
             if(skillUse)
             {
-                windows[3].SetActive(false);
+                windows[(int)enumWindows.SkillWindow].SetActive(false);
                 skillUse = false;
                 yield return StartCoroutine(Skill());
             }
             else
             {
-                windows[3].SetActive(false);
+                windows[(int)enumWindows.SkillWindow].SetActive(false);
                 back = false;
                 yield return StartCoroutine(Battle());
 
             }
 
         }
-        else if (buttonOn[2])
+        else if (buttonOn[(int)enumButtonOn.Item])
         {
-            windows[2].SetActive(false);
-            buttonOn[2] = false;
+            windows[(int)enumWindows.ComandWindow].SetActive(false);
+            buttonOn[(int)enumButtonOn.Item] = false;
 
             yield return StartCoroutine(Item());
 
@@ -364,9 +378,9 @@ public class BattleManager: Singleton<BattleManager>
 
     public IEnumerator Skill()
     {
-        if (buttonOn[3])
+        if (buttonOn[(int)enumButtonOn.Skill1])
         {
-            buttonOn[3] = false;
+            buttonOn[(int)enumButtonOn.Skill1] = false;
             if (DebugScript.Instance.Fighter)
             {
                 SkillManager.Instance.useSkill[0] = true;
@@ -378,9 +392,9 @@ public class BattleManager: Singleton<BattleManager>
                 yield return StartCoroutine(SkillManager.Instance.UseSkill());
             }
         }
-        else if (buttonOn[4])
+        else if (buttonOn[(int)enumButtonOn.Skill2])
         {
-            buttonOn[4] = false;
+            buttonOn[(int)enumButtonOn.Skill2] = false;
             if (DebugScript.Instance.Fighter)
             {
                 SkillManager.Instance.useSkill[1] = true;
@@ -392,9 +406,9 @@ public class BattleManager: Singleton<BattleManager>
                 yield return StartCoroutine(SkillManager.Instance.UseSkill());
             }
         }
-        else if (buttonOn[5])
+        else if (buttonOn[(int)enumButtonOn.Skill3])
         {
-            buttonOn[5] = false;
+            buttonOn[(int)enumButtonOn.Skill3] = false;
             if (DebugScript.Instance.Fighter)
             {
                 SkillManager.Instance.useSkill[2] = true;
@@ -441,7 +455,7 @@ public class BattleManager: Singleton<BattleManager>
         }
         else
         {
-            windows[4].SetActive(true);
+            windows[(int)enumWindows.BattleSelectWindow].SetActive(true);
             EventSystem.current.SetSelectedGameObject(defaultButton[2]);
         }
 
@@ -470,21 +484,21 @@ public class BattleManager: Singleton<BattleManager>
             battleText.text = "ATKJewel : Triple the next power";
         }
 
-        while (!buttonOn[6] && !buttonOn[7])
+        while (!buttonOn[(int)enumButtonOn.ItemUse] && !buttonOn[(int)enumButtonOn.Back])
         {
             yield return null;
         }
 
-        if (buttonOn[6])
+        if (buttonOn[(int)enumButtonOn.ItemUse])
         {
-            buttonOn[6] = false;
-            windows[4].SetActive(false);
+            buttonOn[(int)enumButtonOn.ItemUse] = false;
+            windows[(int)enumWindows.BattleSelectWindow].SetActive(false);
             yield return StartCoroutine(ItemManager.Instance.HaveItem());
         }
-        else if (buttonOn[7])
+        else if (buttonOn[(int)enumButtonOn.Back])
         {
-            buttonOn[7] = false;
-            windows[4].SetActive(false);
+            buttonOn[(int)enumButtonOn.Back] = false;
+            windows[(int)enumWindows.BattleSelectWindow].SetActive(false);
             yield return StartCoroutine(Battle());
         }
 
@@ -579,52 +593,52 @@ public class BattleManager: Singleton<BattleManager>
             }
         }
 
-        windows[0].SetActive(false);
-        windows[1].SetActive(true);
+        windows[(int)enumWindows.EnemyStatus].SetActive(false);
+        windows[(int)enumWindows.ItemWindow].SetActive(true);
         yield return StartCoroutine(GameManager.Instance.NextFloor());
     }
 
     public void AttackComand()
     {
-        buttonOn[0] = true;
+        buttonOn[(int)enumButtonOn.Attack] = true;
     }
 
     public void SkillComand()
     {
-        buttonOn[1] = true;
+        buttonOn[(int)enumButtonOn.Skill] = true;
     }
 
     public void ItemComand()
     {
-        buttonOn[2] = true;
+        buttonOn[(int)enumButtonOn.Item] = true;
     }
 
     public void Skill1()
     {
         skillUse = true;
-        buttonOn[3] = true;
+        buttonOn[(int)enumButtonOn.Skill1] = true;
     }
 
     public void Skill2()
     {
         skillUse = true;
-        buttonOn[4] = true;
+        buttonOn[(int)enumButtonOn.Skill2] = true;
     }
 
     public void Skill3()
     {
         skillUse = true;
-        buttonOn[5] = true;
+        buttonOn[(int)enumButtonOn.Skill3] = true;
     }
 
     public void ItemUse()
     {
-        buttonOn[6] = true;
+        buttonOn[(int)enumButtonOn.ItemUse] = true;
     }
 
     public void ItemBack()
     {
-        buttonOn[7] = true;
+        buttonOn[(int)enumButtonOn.Back] = true;
     }
 
     public void Back()
