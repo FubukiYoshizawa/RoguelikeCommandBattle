@@ -16,8 +16,8 @@ public class TreasureManager : Singleton<TreasureManager>
     public Sprite[] floorSprite; // ƒtƒƒA”wŒi
     public enum enumFloorSprite
     {
-        NotOpenSprite, // •ó” –¢ŠJ••”wŒi
-        OpenSprite, // •ó” ŠJ••”wŒi
+        NotOpenTreasure, // •ó” –¢ŠJ••”wŒi
+        OpenTreasure, // •ó” ŠJ••”wŒi
         Num // ƒtƒƒA”wŒi”
     }
     /*
@@ -28,11 +28,17 @@ public class TreasureManager : Singleton<TreasureManager>
     private void Start()
     {
         floorSprite = new Sprite[(int)enumFloorSprite.Num];
+
+        floorSprite[(int)enumFloorSprite.NotOpenTreasure] = Resources.Load<Sprite>("Images/FloorBacks/NotOpenTreasure");
+        floorSprite[(int)enumFloorSprite.OpenTreasure] = Resources.Load<Sprite>("Images/FloorBacks/OpenTreasure");
+
+        selectWindow.SetActive(false);
+
     }
 
     public IEnumerator Item()
     {
-        floorImage.sprite = floorSprite[(int)enumFloorSprite.NotOpenSprite];
+        floorImage.sprite = floorSprite[(int)enumFloorSprite.NotOpenTreasure];
 
         mainText.text = "You found a treasure chest";
 
@@ -43,7 +49,7 @@ public class TreasureManager : Singleton<TreasureManager>
             yield return null;
         }
 
-        floorImage.sprite = floorSprite[(int)enumFloorSprite.OpenSprite];
+        floorImage.sprite = floorSprite[(int)enumFloorSprite.OpenTreasure];
 
         int randomValue = Random.Range(0, 5);
         if (randomValue == 0)

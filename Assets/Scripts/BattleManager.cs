@@ -41,7 +41,9 @@ public class BattleManager: Singleton<BattleManager>
         Name, // プレイヤー名.
         Lv, // プレイヤーレベル.
         HP, // プレイヤーHP.
+        MaxHP, // プレイヤー最大HP 
         SP, // プレイヤーSP.
+        MaxSP, // プレイヤー最大SP
         ATK, // プレイヤー攻撃力.
         Num // ステータス表示UIの個数.
     }
@@ -63,7 +65,7 @@ public class BattleManager: Singleton<BattleManager>
         ItemWindow, // アイテムウィンドウ
         ComandWindow, // コマンドウィンドウ
         SkillWindow, // スキルウィンドウ
-        BattleSelectWindow, // バトル時選択ウィンドウ
+        ItemUseSelect, // バトル時アイテム使用選択ウィンドウ
         Num // ウィンドウ数
     }
     public GameObject[] defaultButton; // 選択ウィンドウでの初期選択ボタン
@@ -93,6 +95,41 @@ public class BattleManager: Singleton<BattleManager>
 
     void Start()
     {
+        // 配列を準備
+        playerStatusText = new TextMeshProUGUI[(int)enumPlayerStatusText.Num];
+        enemyStatusText = new TextMeshProUGUI[(int)enumEnemyStatusText.Num];
+        windows = new GameObject[(int)enumWindows.Num];
+        defaultButton = new GameObject[(int)enumDefaultButton.Num];
+        buttonOn = new bool[(int)enumButtonOn.Num];
+
+        playerStatusText[(int)enumPlayerStatusText.Name] = GameObject.Find("PlayerNameText").GetComponent<TextMeshProUGUI>();
+        playerStatusText[(int)enumPlayerStatusText.Lv] = GameObject.Find("PlayerLvText").GetComponent<TextMeshProUGUI>();
+        playerStatusText[(int)enumPlayerStatusText.HP] = GameObject.Find("PlayerHPText").GetComponent<TextMeshProUGUI>();
+        playerStatusText[(int)enumPlayerStatusText.MaxHP] = GameObject.Find("PlayerMaxHPText").GetComponent<TextMeshProUGUI>();
+        playerStatusText[(int)enumPlayerStatusText.SP] = GameObject.Find("PlayerSPText").GetComponent<TextMeshProUGUI>();
+        playerStatusText[(int)enumPlayerStatusText.MaxSP] = GameObject.Find("PlayerMaxSPText").GetComponent<TextMeshProUGUI>();
+        playerStatusText[(int)enumPlayerStatusText.ATK] = GameObject.Find("PlayerATKText").GetComponent<TextMeshProUGUI>();
+
+        enemyStatusText[(int)enumEnemyStatusText.Name] = GameObject.Find("EnemyNameText").GetComponent<TextMeshProUGUI>();
+        enemyStatusText[(int)enumEnemyStatusText.Lv] = GameObject.Find("EnemyLvText").GetComponent<TextMeshProUGUI>();
+        enemyStatusText[(int)enumEnemyStatusText.HP] = GameObject.Find("EnemyHPText").GetComponent<TextMeshProUGUI>();
+        enemyStatusText[(int)enumEnemyStatusText.ATK] = GameObject.Find("EnemyATKText").GetComponent<TextMeshProUGUI>();
+
+        windows[(int)enumWindows.EnemyStatus] = GameObject.Find("enemyStatusWindow");
+        windows[(int)enumWindows.ItemWindow] = GameObject.Find("itemWindow");
+        windows[(int)enumWindows.ComandWindow] = GameObject.Find("comandWindow");
+        windows[(int)enumWindows.SkillWindow] = GameObject.Find("skillWindow");
+        windows[(int)enumWindows.ItemUseSelect] = GameObject.Find("ItemSelectWindow");
+
+        defaultButton[(int)enumDefaultButton.AttackButton] = GameObject.Find("attackButton");
+        defaultButton[(int)enumDefaultButton.SkillBackButton] = GameObject.Find("skillBackButton");
+        defaultButton[(int)enumDefaultButton.ItemUseBackButton] = GameObject.Find("itemUseBackButton");
+
+        windows[(int)enumWindows.EnemyStatus].SetActive(false);
+        windows[(int)enumWindows.ComandWindow].SetActive(false);
+        windows[(int)enumWindows.SkillWindow].SetActive(false);
+        windows[(int)enumWindows.ItemUseSelect].SetActive(false);
+
         if (DebugScript.Instance.Fighter)
         {
             playerName = playerStatusManager.DataList[0].pNAME;
@@ -115,20 +152,17 @@ public class BattleManager: Singleton<BattleManager>
             playerATK = playerStatusManager.DataList[1].pATK;
         }
 
-        // 配列を準備
-        playerStatusText = new TextMeshProUGUI[(int)enumPlayerStatusText.Num];
-        enemyStatusText = new TextMeshProUGUI[(int)enumEnemyStatusText.Num];
-        windows = new GameObject[(int)enumWindows.Num];
-        defaultButton = new GameObject[(int)enumDefaultButton.Num];
-        buttonOn = new bool[(int)enumButtonOn.Num];
         playerStatusText[(int)enumPlayerStatusText.Name].text = playerName;
+
     }
 
     void Update()
     {
         playerStatusText[(int)enumPlayerStatusText.Lv].text = playerLv.ToString();
         playerStatusText[(int)enumPlayerStatusText.HP].text = playerHP.ToString();
+        playerStatusText[(int)enumPlayerStatusText.MaxHP].text = playerHP.ToString();
         playerStatusText[(int)enumPlayerStatusText.SP].text = playerSP.ToString();
+        playerStatusText[(int)enumPlayerStatusText.MaxSP].text = playerSP.ToString();
         playerStatusText[(int)enumPlayerStatusText.ATK].text = playerATK.ToString();
 
         enemyStatusText[(int)enumEnemyStatusText.Lv].text = enemyLv.ToString();
@@ -455,7 +489,7 @@ public class BattleManager: Singleton<BattleManager>
         }
         else
         {
-            windows[(int)enumWindows.BattleSelectWindow].SetActive(true);
+            windows[(int)enumWindows.ItemUseSelect].SetActive(true);
             EventSystem.current.SetSelectedGameObject(defaultButton[2]);
         }
 
@@ -492,13 +526,13 @@ public class BattleManager: Singleton<BattleManager>
         if (buttonOn[(int)enumButtonOn.ItemUse])
         {
             buttonOn[(int)enumButtonOn.ItemUse] = false;
-            windows[(int)enumWindows.BattleSelectWindow].SetActive(false);
+            windows[(int)enumWindows.ItemUseSelect].SetActive(false);
             yield return StartCoroutine(ItemManager.Instance.HaveItem());
         }
         else if (buttonOn[(int)enumButtonOn.Back])
         {
             buttonOn[(int)enumButtonOn.Back] = false;
-            windows[(int)enumWindows.BattleSelectWindow].SetActive(false);
+            windows[(int)enumWindows.ItemUseSelect].SetActive(false);
             yield return StartCoroutine(Battle());
         }
 

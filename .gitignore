@@ -70,3 +70,8 @@ crashlytics-build.properties
 # Temporary auto-generated Android Assets
 /[Aa]ssets/[Ss]treamingAssets/aa.meta
 /[Aa]ssets/[Ss]treamingAssets/aa/*
+Assets/Fonts.meta
+Assets/Fonts/KH-Dot-Kodenmachou-12 SDF.asset
+Assets/Fonts/KH-Dot-Kodenmachou-12 SDF.asset.meta
+Assets/Fonts/KH-Dot-Kodenmachou-12.ttf
+Assets/Fonts/KH-Dot-Kodenmachou-12.ttf.meta

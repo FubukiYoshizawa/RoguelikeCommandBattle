@@ -20,12 +20,15 @@ public class SkillManager : Singleton<SkillManager>
         HealMagic, // ヒール
         Num // どのスキルを使うかの数
     }
-    public int[] needSkillPoint; // スキル使用に必要な
+    public int[] needSkillPoint; // スキル使用に必要なSP量
     public int[] skillValue; // スキルの効果量
 
     private void Start()
     {
         useSkill = new bool[(int)enumUseSkill.Num];
+
+
+
         if (DebugScript.Instance.Fighter)
         {
             useSkillButtonText[0].text = "PowerAttack";

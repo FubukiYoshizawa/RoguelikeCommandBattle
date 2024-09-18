@@ -25,6 +25,13 @@ public class ShopManager : Singleton<ShopManager>
     public void Start()
     {
         floorSprite = new Sprite[(int)enumFloorSprite.Num];
+
+        floorSprite[(int)enumFloorSprite.HPPotion] = Resources.Load<Sprite>("Images/FloorBacks/HPPotion");
+        floorSprite[(int)enumFloorSprite.SPPotion] = Resources.Load<Sprite>("Images/FloorBacks/SPPotion");
+        floorSprite[(int)enumFloorSprite.ATKPotion] = Resources.Load<Sprite>("Images/FloorBacks/ATKPotion");
+
+        selectWindow.SetActive(false);
+
     }
 
     public IEnumerator HPShop()
@@ -69,6 +76,7 @@ public class ShopManager : Singleton<ShopManager>
             yield return new WaitForSeconds(0.5f);
 
             selectWindow.SetActive(true);
+            EventSystem.current.SetSelectedGameObject(defaultButton);
 
             while (!yes && !no)
             {

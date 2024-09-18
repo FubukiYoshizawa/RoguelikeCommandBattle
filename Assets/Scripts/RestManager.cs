@@ -11,6 +11,11 @@ public class RestManager : Singleton<RestManager>
     public Image floorImage; // ƒtƒƒA”wŒi
     public Sprite floorSprite; // ”wŒi‰æ‘œ
 
+    private void Start()
+    {
+        floorSprite = Resources.Load<Sprite>("Images/FloorBacks/Rest");
+    }
+
     public IEnumerator Rest()
     {
         floorImage.sprite = floorSprite;

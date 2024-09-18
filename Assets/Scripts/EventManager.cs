@@ -12,20 +12,24 @@ public class EventManager : Singleton<EventManager>
     public Sprite[] floorSprite; // 背景画像
     public enum enumFloorSprite
     {
-        HPUpEvent, // 泉イベント
-        ATKUpEvent, // 筋肉イベント
-        SPUpEvent, // 魔法使いイベント
+        Fountain, // 泉イベント
+        Magic, // 魔法使いイベント
+        Muscle, // 筋肉イベント
         Num // 背景数
     }
 
     private void Start()
     {
         floorSprite = new Sprite[(int)enumFloorSprite.Num];
+
+        floorSprite[(int)enumFloorSprite.Fountain] = Resources.Load<Sprite>("Images/FloorBacks/Fountain");
+        floorSprite[(int)enumFloorSprite.Magic] = Resources.Load<Sprite>("Images/FloorBacks/Magic");
+        floorSprite[(int)enumFloorSprite.Muscle] = Resources.Load<Sprite>("Images/FloorBacks/Muscle");
     }
 
-    public IEnumerator HPUpEvent()
+    public IEnumerator Fountain()
     {
-        floorImage.sprite = floorSprite[(int)enumFloorSprite.HPUpEvent];
+        floorImage.sprite = floorSprite[(int)enumFloorSprite.Fountain];
 
         mainText.text = "You have found the fountain of miracles!";
 
@@ -105,96 +109,11 @@ public class EventManager : Singleton<EventManager>
 
     }
 
-    public IEnumerator ATKUpEvent()
+    public IEnumerator Magic()
     {
-        floorImage.sprite = floorSprite[(int)enumFloorSprite.ATKUpEvent];
+        floorImage.sprite = floorSprite[(int)enumFloorSprite.Magic];
 
-        mainText.text = "You Are Suddenly Surrounded By Muscle!";
-
-        yield return new WaitForSeconds(1.0f);
-
-        while (!Input.GetKeyDown(KeyCode.Space))
-        {
-            yield return null;
-        }
-
-        mainText.text = "You Too Can Build Muscle Through Training!";
-
-        yield return new WaitForSeconds(1.0f);
-
-        while (!Input.GetKeyDown(KeyCode.Space))
-        {
-            yield return null;
-        }
-
-        mainText.text = "You Participated In Training!";
-
-        yield return new WaitForSeconds(1.0f);
-
-        while (!Input.GetKeyDown(KeyCode.Space))
-        {
-            yield return null;
-        }
-
-        int randomValue = Random.Range(0, 2);
-        if (randomValue == 0)
-        {
-            mainText.text = "Your Muscles Have Been Sharpened!";
-
-            yield return new WaitForSeconds(1.0f);
-
-            while (!Input.GetKeyDown(KeyCode.Space))
-            {
-                yield return null;
-            }
-
-            mainText.text = "Attack power increased by three.";
-            BattleManager.Instance.playerATK += 3;
-
-            yield return new WaitForSeconds(1.0f);
-
-            while (!Input.GetKeyDown(KeyCode.Space))
-            {
-                yield return null;
-            }
-        }
-        else
-        {
-            mainText.text = "You Have Sore Muscles!";
-
-            yield return new WaitForSeconds(1.0f);
-
-            while (!Input.GetKeyDown(KeyCode.Space))
-            {
-                yield return null;
-            }
-
-            mainText.text = "Attack power reduced by one.";
-            BattleManager.Instance.playerATK -= 1;
-
-            yield return new WaitForSeconds(1.0f);
-
-            while (!Input.GetKeyDown(KeyCode.Space))
-            {
-                yield return null;
-            }
-        }
-
-        mainText.text = "The Muscles Left.";
-
-        yield return new WaitForSeconds(1.0f);
-
-        while (!Input.GetKeyDown(KeyCode.Space))
-        {
-            yield return null;
-        }
-    }
-
-    public IEnumerator SPUpEvent()
-    {
-        floorImage.sprite = floorSprite[(int)enumFloorSprite.SPUpEvent];
-
-        mainText.text = "You have met the magician!";
+        mainText.text = "You have met the Magic!";
 
         yield return new WaitForSeconds(1.0f);
 
@@ -285,5 +204,91 @@ public class EventManager : Singleton<EventManager>
             yield return null;
         }
     }
+
+    public IEnumerator Muscle()
+    {
+        floorImage.sprite = floorSprite[(int)enumFloorSprite.Muscle];
+
+        mainText.text = "You Are Suddenly Surrounded By Muscle!";
+
+        yield return new WaitForSeconds(1.0f);
+
+        while (!Input.GetKeyDown(KeyCode.Space))
+        {
+            yield return null;
+        }
+
+        mainText.text = "You Too Can Build Muscle Through Training!";
+
+        yield return new WaitForSeconds(1.0f);
+
+        while (!Input.GetKeyDown(KeyCode.Space))
+        {
+            yield return null;
+        }
+
+        mainText.text = "You Participated In Training!";
+
+        yield return new WaitForSeconds(1.0f);
+
+        while (!Input.GetKeyDown(KeyCode.Space))
+        {
+            yield return null;
+        }
+
+        int randomValue = Random.Range(0, 2);
+        if (randomValue == 0)
+        {
+            mainText.text = "Your Muscles Have Been Sharpened!";
+
+            yield return new WaitForSeconds(1.0f);
+
+            while (!Input.GetKeyDown(KeyCode.Space))
+            {
+                yield return null;
+            }
+
+            mainText.text = "Attack power increased by three.";
+            BattleManager.Instance.playerATK += 3;
+
+            yield return new WaitForSeconds(1.0f);
+
+            while (!Input.GetKeyDown(KeyCode.Space))
+            {
+                yield return null;
+            }
+        }
+        else
+        {
+            mainText.text = "You Have Sore Muscles!";
+
+            yield return new WaitForSeconds(1.0f);
+
+            while (!Input.GetKeyDown(KeyCode.Space))
+            {
+                yield return null;
+            }
+
+            mainText.text = "Attack power reduced by one.";
+            BattleManager.Instance.playerATK -= 1;
+
+            yield return new WaitForSeconds(1.0f);
+
+            while (!Input.GetKeyDown(KeyCode.Space))
+            {
+                yield return null;
+            }
+        }
+
+        mainText.text = "The Muscles Left.";
+
+        yield return new WaitForSeconds(1.0f);
+
+        while (!Input.GetKeyDown(KeyCode.Space))
+        {
+            yield return null;
+        }
+    }
+
 
 }

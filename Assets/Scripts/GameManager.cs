@@ -22,6 +22,7 @@ public class GameManager : Singleton<GameManager>
         StrongFloor, // 強敵フロアアイコン
         BossFloor, // ボスフロアアイコン
         ShopFloor, // ショップフロアアイコン
+        EventFloor, // イベントフロアアイコン
         ItemFloor, // アイテムフロアアイコン
         RestFloor, // 休憩フロアアイコン
         Num // フロアアイコン画像数
@@ -30,6 +31,16 @@ public class GameManager : Singleton<GameManager>
     void Start()
     {
         floorIconSprite = new Sprite[(int)enumFloorIconSprite.Num];
+
+        floorIconSprite[(int)enumFloorIconSprite.BattleFloor] = Resources.Load<Sprite>("Images/FloorIcons/BattleFloor");
+        floorIconSprite[(int)enumFloorIconSprite.StrongFloor] = Resources.Load<Sprite>("Images/FloorIcons/StrongFloor");
+        floorIconSprite[(int)enumFloorIconSprite.BossFloor] = Resources.Load<Sprite>("Images/FloorIcons/BossFloor");
+        floorIconSprite[(int)enumFloorIconSprite.ShopFloor] = Resources.Load<Sprite>("Images/FloorIcons/ShopFloor");
+        floorIconSprite[(int)enumFloorIconSprite.EventFloor] = Resources.Load<Sprite>("Images/FloorIcons/ShopFloor");
+        floorIconSprite[(int)enumFloorIconSprite.ItemFloor] = Resources.Load<Sprite>("Images/FloorIcons/ItemFloor");
+        floorIconSprite[(int)enumFloorIconSprite.RestFloor] = Resources.Load<Sprite>("Images/FloorIcons/RestFloor");
+
+
         floorNumberText.text = floorNumber.ToString();
         floorImage.sprite = floorSprite;
         StartCoroutine(StartAdventure());
@@ -119,7 +130,7 @@ public class GameManager : Singleton<GameManager>
 
     public IEnumerator EventFloor()
     {
-        floorIconImage.sprite = floorIconSprite[(int)enumFloorIconSprite.ItemFloor];
+        floorIconImage.sprite = floorIconSprite[(int)enumFloorIconSprite.EventFloor];
         mainText.text = "Event Floor";
 
         yield return new WaitForSeconds(1.0f);
@@ -131,9 +142,9 @@ public class GameManager : Singleton<GameManager>
 
         IEnumerator[] eventcoroutines = new IEnumerator[]
             {
-                EventManager.Instance.HPUpEvent(),
-                EventManager.Instance.SPUpEvent(),
-                EventManager.Instance.ATKUpEvent()
+                EventManager.Instance.Fountain(),
+                EventManager.Instance.Magic(),
+                EventManager.Instance.Muscle()
             };
 
         int random = UnityEngine.Random.Range(0, eventcoroutines.Length);
@@ -145,7 +156,7 @@ public class GameManager : Singleton<GameManager>
 
     public IEnumerator ItemFloor()
     {
-        floorIconImage.sprite = floorIconSprite[(int)enumFloorIconSprite.RestFloor];
+        floorIconImage.sprite = floorIconSprite[(int)enumFloorIconSprite.ItemFloor];
         mainText.text = "Item Floor";
 
         yield return new WaitForSeconds(1.0f);
@@ -163,7 +174,7 @@ public class GameManager : Singleton<GameManager>
 
     public IEnumerator RestFloor()
     {
-        floorIconImage.sprite = floorIconSprite[6];
+        floorIconImage.sprite = floorIconSprite[(int)enumFloorIconSprite.RestFloor];
         mainText.text = "Rest Floor";
 
         yield return new WaitForSeconds(1.0f);
