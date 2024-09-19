@@ -29,6 +29,10 @@ public class TreasureManager : Singleton<TreasureManager>
     {
         floorSprite = new Sprite[(int)enumFloorSprite.Num];
 
+        mainText = GameObject.Find("MainText").GetComponent<TextMeshProUGUI>();
+        selectWindow = GameObject.Find("ItemChangeWindow");
+        defaultButton = GameObject.Find("ItemChangeYes");
+        floorImage = GameObject.Find("FloorImage").GetComponent<Image>();
         floorSprite[(int)enumFloorSprite.NotOpenTreasure] = Resources.Load<Sprite>("Images/FloorBacks/NotOpenTreasure");
         floorSprite[(int)enumFloorSprite.OpenTreasure] = Resources.Load<Sprite>("Images/FloorBacks/OpenTreasure");
 

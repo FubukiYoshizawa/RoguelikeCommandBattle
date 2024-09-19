@@ -13,6 +13,8 @@ public class RestManager : Singleton<RestManager>
 
     private void Start()
     {
+        mainText = GameObject.Find("MainText").GetComponent<TextMeshProUGUI>();
+        floorImage = GameObject.Find("FloorImage").GetComponent<Image>();
         floorSprite = Resources.Load<Sprite>("Images/FloorBacks/Rest");
     }
 

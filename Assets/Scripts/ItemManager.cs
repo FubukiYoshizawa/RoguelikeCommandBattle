@@ -24,6 +24,8 @@ public class ItemManager : Singleton<ItemManager>
     private void Start()
     {
         getItem = new bool[(int)enumGetItem.Num];
+
+        mainText = GameObject.Find("MainText").GetComponent<TextMeshProUGUI>();
     }
 
     public IEnumerator HaveItem()

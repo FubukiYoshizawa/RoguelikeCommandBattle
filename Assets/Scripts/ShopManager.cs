@@ -26,6 +26,10 @@ public class ShopManager : Singleton<ShopManager>
     {
         floorSprite = new Sprite[(int)enumFloorSprite.Num];
 
+        mainText = GameObject.Find("MainText").GetComponent<TextMeshProUGUI>();
+        selectWindow = GameObject.Find("ShopSelectWindow");
+        defaultButton = GameObject.Find("ShopSelectYes");
+        floorImage = GameObject.Find("FloorImage").GetComponent<Image>();
         floorSprite[(int)enumFloorSprite.HPPotion] = Resources.Load<Sprite>("Images/FloorBacks/HPPotion");
         floorSprite[(int)enumFloorSprite.SPPotion] = Resources.Load<Sprite>("Images/FloorBacks/SPPotion");
         floorSprite[(int)enumFloorSprite.ATKPotion] = Resources.Load<Sprite>("Images/FloorBacks/ATKPotion");

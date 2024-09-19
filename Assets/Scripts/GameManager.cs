@@ -23,7 +23,7 @@ public class GameManager : Singleton<GameManager>
         BossFloor, // ボスフロアアイコン
         ShopFloor, // ショップフロアアイコン
         EventFloor, // イベントフロアアイコン
-        ItemFloor, // アイテムフロアアイコン
+        TreasureFloor, // 宝箱フロアアイコン
         RestFloor, // 休憩フロアアイコン
         Num // フロアアイコン画像数
     }
@@ -32,12 +32,18 @@ public class GameManager : Singleton<GameManager>
     {
         floorIconSprite = new Sprite[(int)enumFloorIconSprite.Num];
 
+        mainText = GameObject.Find("MainText").GetComponent<TextMeshProUGUI>();
+        floorNumberText = GameObject.Find("FloorNumber").GetComponent<TextMeshProUGUI>();
+        floorImage = GameObject.Find("FloorImage").GetComponent<Image>();
+        floorSprite = Resources.Load<Sprite>("Images/FloorBacks/DefaultBack");
+        floorIconImage = GameObject.Find("FloorIcon").GetComponent<Image>();
+
         floorIconSprite[(int)enumFloorIconSprite.BattleFloor] = Resources.Load<Sprite>("Images/FloorIcons/BattleFloor");
         floorIconSprite[(int)enumFloorIconSprite.StrongFloor] = Resources.Load<Sprite>("Images/FloorIcons/StrongFloor");
         floorIconSprite[(int)enumFloorIconSprite.BossFloor] = Resources.Load<Sprite>("Images/FloorIcons/BossFloor");
         floorIconSprite[(int)enumFloorIconSprite.ShopFloor] = Resources.Load<Sprite>("Images/FloorIcons/ShopFloor");
         floorIconSprite[(int)enumFloorIconSprite.EventFloor] = Resources.Load<Sprite>("Images/FloorIcons/ShopFloor");
-        floorIconSprite[(int)enumFloorIconSprite.ItemFloor] = Resources.Load<Sprite>("Images/FloorIcons/ItemFloor");
+        floorIconSprite[(int)enumFloorIconSprite.TreasureFloor] = Resources.Load<Sprite>("Images/FloorIcons/TreasureFloor");
         floorIconSprite[(int)enumFloorIconSprite.RestFloor] = Resources.Load<Sprite>("Images/FloorIcons/RestFloor");
 
 
@@ -48,7 +54,7 @@ public class GameManager : Singleton<GameManager>
 
     public IEnumerator StartAdventure()
     {
-        mainText.text = "Adventure Start!";
+        mainText.text = "探索スタート！";
 
         yield return new WaitForSeconds(1.0f);
 
@@ -63,7 +69,7 @@ public class GameManager : Singleton<GameManager>
 
     public IEnumerator NextFloor()
     {
-        mainText.text = "Next Floor";
+        mainText.text = "次のフロアへ";
 
         yield return new WaitForSeconds(1.0f);
 
@@ -91,7 +97,7 @@ public class GameManager : Singleton<GameManager>
             {
                 ShopFloor(),
                 EventFloor(),
-                ItemFloor(),
+                TreasureFloor(),
                 RestFloor(),
                 BattleManager.Instance.StrongStart()
             };
@@ -105,7 +111,7 @@ public class GameManager : Singleton<GameManager>
     public IEnumerator ShopFloor()
     {
         floorIconImage.sprite = floorIconSprite[(int)enumFloorIconSprite.ShopFloor];
-        mainText.text = "Shop Floor";
+        mainText.text = "ショップフロアだ！";
 
         yield return new WaitForSeconds(1.0f);
 
@@ -131,7 +137,7 @@ public class GameManager : Singleton<GameManager>
     public IEnumerator EventFloor()
     {
         floorIconImage.sprite = floorIconSprite[(int)enumFloorIconSprite.EventFloor];
-        mainText.text = "Event Floor";
+        mainText.text = "イベントフロアだ！";
 
         yield return new WaitForSeconds(1.0f);
 
@@ -154,10 +160,10 @@ public class GameManager : Singleton<GameManager>
 
     }
 
-    public IEnumerator ItemFloor()
+    public IEnumerator TreasureFloor()
     {
-        floorIconImage.sprite = floorIconSprite[(int)enumFloorIconSprite.ItemFloor];
-        mainText.text = "Item Floor";
+        floorIconImage.sprite = floorIconSprite[(int)enumFloorIconSprite.TreasureFloor];
+        mainText.text = "お宝フロアだ！";
 
         yield return new WaitForSeconds(1.0f);
 
@@ -175,7 +181,7 @@ public class GameManager : Singleton<GameManager>
     public IEnumerator RestFloor()
     {
         floorIconImage.sprite = floorIconSprite[(int)enumFloorIconSprite.RestFloor];
-        mainText.text = "Rest Floor";
+        mainText.text = "休憩フロアだ！";
 
         yield return new WaitForSeconds(1.0f);
 

@@ -22,6 +22,8 @@ public class EventManager : Singleton<EventManager>
     {
         floorSprite = new Sprite[(int)enumFloorSprite.Num];
 
+        mainText = GameObject.Find("MainText").GetComponent<TextMeshProUGUI>();
+        floorImage = GameObject.Find("FloorImage").GetComponent<Image>();
         floorSprite[(int)enumFloorSprite.Fountain] = Resources.Load<Sprite>("Images/FloorBacks/Fountain");
         floorSprite[(int)enumFloorSprite.Magic] = Resources.Load<Sprite>("Images/FloorBacks/Magic");
         floorSprite[(int)enumFloorSprite.Muscle] = Resources.Load<Sprite>("Images/FloorBacks/Muscle");

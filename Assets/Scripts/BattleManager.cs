@@ -35,6 +35,8 @@ public class BattleManager: Singleton<BattleManager>
     public Sprite[] enemySprite; // 敵の画像
     private Sprite[] nowEnemySprite; // 現在戦っている敵の画像
     public Sprite noneEnemy; // 敵がいないときの画像
+    public TextMeshProUGUI battleText; // バトル時のテキスト
+
     public TextMeshProUGUI[] playerStatusText; // 画面に表示するプレイヤーのステータス
     public enum enumPlayerStatusText
     {
@@ -47,6 +49,7 @@ public class BattleManager: Singleton<BattleManager>
         ATK, // プレイヤー攻撃力.
         Num // ステータス表示UIの個数.
     }
+
     public TextMeshProUGUI[] enemyStatusText; // 画面に表示する敵のステータス
     public enum enumEnemyStatusText
     {
@@ -56,7 +59,6 @@ public class BattleManager: Singleton<BattleManager>
         ATK, // 敵攻撃力
         Num // 敵のステータス数
     }
-    public TextMeshProUGUI battleText; // バトル時のテキスト
 
     public GameObject[] windows; // 各ウィンドウ
     public enum enumWindows
@@ -68,6 +70,7 @@ public class BattleManager: Singleton<BattleManager>
         ItemUseSelect, // バトル時アイテム使用選択ウィンドウ
         Num // ウィンドウ数
     }
+
     public GameObject[] defaultButton; // 選択ウィンドウでの初期選択ボタン
     public enum enumDefaultButton
     {
@@ -76,6 +79,7 @@ public class BattleManager: Singleton<BattleManager>
         ItemUseBackButton, // アイテムの仕様確認での初期選択ボタン
         Num // 初期選択ボタンの数
     }
+
     public bool[] buttonOn; // バトル時に使用するボタンを押しているかどうか
     public enum enumButtonOn
     {
@@ -101,6 +105,12 @@ public class BattleManager: Singleton<BattleManager>
         windows = new GameObject[(int)enumWindows.Num];
         defaultButton = new GameObject[(int)enumDefaultButton.Num];
         buttonOn = new bool[(int)enumButtonOn.Num];
+
+        floorBackImage = GameObject.Find("FloorImage").GetComponent<Image>();
+        floorBackSprite = Resources.Load<Sprite>("Images/FloorBacks/DefaultBack");
+        displayEnemyImage = GameObject.Find("EnemyImage").GetComponent<Image>();
+        noneEnemy = Resources.Load<Sprite>("Images/Enemys/Unknown");
+        battleText = GameObject.Find("MainText").GetComponent<TextMeshProUGUI>();
 
         playerStatusText[(int)enumPlayerStatusText.Name] = GameObject.Find("PlayerNameText").GetComponent<TextMeshProUGUI>();
         playerStatusText[(int)enumPlayerStatusText.Lv] = GameObject.Find("PlayerLvText").GetComponent<TextMeshProUGUI>();
@@ -173,7 +183,7 @@ public class BattleManager: Singleton<BattleManager>
 
     public IEnumerator BattleStart()
     {
-        battleText.text = "Battle Floor!";
+        battleText.text = "バトルフロアだ！";
         floorBackImage.sprite = floorBackSprite;
 
         yield return new WaitForSeconds(1.0f);
@@ -212,7 +222,7 @@ public class BattleManager: Singleton<BattleManager>
             enemyStatusText[(int)enumEnemyStatusText.Name].text = enemyName;
         }
 
-        battleText.text = $"{enemyName} Appeared!";
+        battleText.text = $"{enemyName}が現れた！";
 
         windows[(int)enumWindows.EnemyStatus].SetActive(true);
         windows[(int)enumWindows.ItemWindow].SetActive(false);
@@ -250,7 +260,7 @@ public class BattleManager: Singleton<BattleManager>
 
     public IEnumerator Battle()
     {
-        battleText.text = "Command?";
+        battleText.text = "コマンド？";
         windows[(int)enumWindows.ComandWindow].SetActive(true);
         EventSystem.current.SetSelectedGameObject(defaultButton[0]);
 
@@ -323,7 +333,7 @@ public class BattleManager: Singleton<BattleManager>
 
     public IEnumerator PlayerAttack()
     {
-        battleText.text = $"{playerName} Attack";
+        battleText.text = $"{playerName}の攻撃！";
 
         yield return new WaitForSeconds(1.0f);
 
@@ -332,7 +342,7 @@ public class BattleManager: Singleton<BattleManager>
             yield return null;
         }
 
-        battleText.text = $"{playerATK} Damage!";
+        battleText.text = $"{playerATK}のダメージ！";
 
         yield return new WaitForSeconds(0.5f);
 
@@ -376,7 +386,7 @@ public class BattleManager: Singleton<BattleManager>
         else
         {
 
-            battleText.text = $"{enemyName} Attack";
+            battleText.text = $"{enemyName}の攻撃！";
 
             yield return new WaitForSeconds(1.0f);
 
@@ -385,7 +395,7 @@ public class BattleManager: Singleton<BattleManager>
                 yield return null;
             }
 
-            battleText.text = $"{enemyATK} Damage!";
+            battleText.text = $"{enemyATK}のダメージ！";
 
             yield return new WaitForSeconds(0.5f);
 
@@ -476,7 +486,7 @@ public class BattleManager: Singleton<BattleManager>
     {
         if (!ItemManager.Instance.haveItem)
         {
-            battleText.text = "I don't have the item.";
+            battleText.text = "アイテムを持っていない！";
 
             yield return new WaitForSeconds(1.0f);
 
@@ -495,27 +505,27 @@ public class BattleManager: Singleton<BattleManager>
 
         if (ItemManager.Instance.getItem[0])
         {
-            battleText.text = "HPPotion : Recovers 30 HP";
+            battleText.text = "HPポーション : HPを30回復";
         }
         else if (ItemManager.Instance.getItem[1])
         {
-            battleText.text = "SPPotion : Recovers 30 SP";
+            battleText.text = "SPポーション : SPを30回復";
         }
         else if (ItemManager.Instance.getItem[2])
         {
-            battleText.text = "ATKPotion : Double the next power";
+            battleText.text = "攻撃ポーション : 次の物理攻撃力が2倍";
         }
         else if (ItemManager.Instance.getItem[3])
         {
-            battleText.text = "HealHerb : Recovers 50 HP";
+            battleText.text = "薬草 : HPを50回復";
         }
         else if (ItemManager.Instance.getItem[4])
         {
-            battleText.text = "DamageBomb : 30 damage to the enemy";
+            battleText.text = "ボム : 敵に30のダメージ";
         }
         else if (ItemManager.Instance.getItem[5])
         {
-            battleText.text = "ATKJewel : Triple the next power";
+            battleText.text = "攻撃ジュエル : 次の物理攻撃力が3倍";
         }
 
         while (!buttonOn[(int)enumButtonOn.ItemUse] && !buttonOn[(int)enumButtonOn.Back])
@@ -557,7 +567,7 @@ public class BattleManager: Singleton<BattleManager>
 
     public IEnumerator PlayerLose()
     {
-        battleText.text = $"{playerName} Lose";
+        battleText.text = $"{playerName}は負けた";
 
         yield return new WaitForSeconds(1.0f);
 
@@ -578,7 +588,7 @@ public class BattleManager: Singleton<BattleManager>
         }
 
         displayEnemyImage.sprite = noneEnemy;
-        battleText.text = $"{playerName} Win";
+        battleText.text = $"{playerName}の勝利！";
 
         yield return new WaitForSeconds(1.0f);
 
@@ -587,7 +597,7 @@ public class BattleManager: Singleton<BattleManager>
             yield return null;
         }
 
-        battleText.text = $"{enemyEXP} Experience gained.";
+        battleText.text = $"{enemyEXP}の経験値を獲得！";
         playerEXP += enemyEXP;
 
         yield return new WaitForSeconds(1.0f);
@@ -599,7 +609,7 @@ public class BattleManager: Singleton<BattleManager>
 
         if (playerEXP >= playerNextLvEXP)
         {
-            battleText.text = "Levels raised!\nYour Status Up.";
+            battleText.text = "レベルが上がった！\nステータスが上がった！";
             if (DebugScript.Instance.Fighter)
             {
                 playerLv += 1;

@@ -1234,6 +1234,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: beaba0dfb48b2034ca89318bf725b187, type: 3}
   - {fileID: 21300000, guid: 4e51543c14dfa6a42b79b344fd46b671, type: 3}
   noneEnemy: {fileID: 21300000, guid: 98722b3b4ac44714482477fe0595d89c, type: 3}
+  battleText: {fileID: 288444781}
   playerStatusText:
   - {fileID: 1759210541}
   - {fileID: 841621180}
@@ -1247,7 +1248,6 @@ MonoBehaviour:
   - {fileID: 1008936336}
   - {fileID: 1424621262}
   - {fileID: 1993258609}
-  battleText: {fileID: 288444781}
   windows:
   - {fileID: 2034287862}
   - {fileID: 468121124}
@@ -5063,7 +5063,7 @@ GameObject:
   - component: {fileID: 1133689604}
   - component: {fileID: 1133689603}
   m_Layer: 5
-  m_Name: enemy
+  m_Name: EnemyImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7282,7 +7282,7 @@ GameObject:
   - component: {fileID: 1652076034}
   - component: {fileID: 1652076033}
   m_Layer: 5
-  m_Name: No
+  m_Name: ShopSelectNo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7659,7 +7659,7 @@ GameObject:
   - component: {fileID: 1720045656}
   - component: {fileID: 1720045655}
   m_Layer: 5
-  m_Name: No
+  m_Name: ItemChangeNo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8722,7 +8722,7 @@ GameObject:
   - component: {fileID: 1970361056}
   - component: {fileID: 1970361055}
   m_Layer: 5
-  m_Name: area
+  m_Name: FloorImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10001,7 +10001,7 @@ GameObject:
   - component: {fileID: 2095935460}
   - component: {fileID: 2095935459}
   m_Layer: 5
-  m_Name: Yes
+  m_Name: ShopSelectYes
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10347,7 +10347,7 @@ GameObject:
   - component: {fileID: 1738787708833377662}
   - component: {fileID: 1688694736343012006}
   m_Layer: 5
-  m_Name: Yes
+  m_Name: ItemChangeYes
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

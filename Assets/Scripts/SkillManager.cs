@@ -8,7 +8,21 @@ public class SkillManager : Singleton<SkillManager>
 {
     public TextMeshProUGUI mainText; // テキスト表示
     public GameObject[] useSkillButton; // スキル使用時のボタン
+    public enum enumSkillButton
+    {
+        Skill1, // スキル１のボタン
+        Skill2, // スキル２のボタン
+        Skill3, // スキル３のボタン
+        Num // スキルボタンの数
+    }
     public TextMeshProUGUI[] useSkillButtonText; // 表示するスキル名
+    public enum enumUseSkillButtontext
+    {
+        Skill1, // スキル１の名前
+        Skill2, // スキル２の名前
+        Skill3, // スキル３の名前
+        Num // スキル名表示数
+    }
     public bool[] useSkill; // どのスキルを使用するか
     public enum enumUseSkill
     {
@@ -25,26 +39,31 @@ public class SkillManager : Singleton<SkillManager>
 
     private void Start()
     {
+        useSkillButton = new GameObject[(int)enumSkillButton.Num];
+        useSkillButtonText = new TextMeshProUGUI[(int)enumUseSkillButtontext.Num];
         useSkill = new bool[(int)enumUseSkill.Num];
 
-
+        mainText = GameObject.Find("MainText").GetComponent<TextMeshProUGUI>();
+        useSkillButton[(int)enumSkillButton.Skill1] = GameObject.Find("Skill1");
+        useSkillButton[(int)enumSkillButton.Skill2] = GameObject.Find("Skill2");
+        useSkillButton[(int)enumSkillButton.Skill3] = GameObject.Find("Skill3");
 
         if (DebugScript.Instance.Fighter)
         {
-            useSkillButtonText[0].text = "PowerAttack";
-            useSkillButtonText[1].text = "PowerUp";
-            useSkillButtonText[2].text = "Meditation";
+            useSkillButtonText[(int)enumUseSkillButtontext.Skill1].text = "パワーアタック";
+            useSkillButtonText[(int)enumUseSkillButtontext.Skill2].text = "パワーチャージ";
+            useSkillButtonText[(int)enumUseSkillButtontext.Skill3].text = "瞑想";
         }
         else if (DebugScript.Instance.Magician)
         {
-            useSkillButtonText[0].text = "FireBall";
-            useSkillButtonText[1].text = "IiceLance";
-            useSkillButtonText[2].text = "HealMagic";
+            useSkillButtonText[(int)enumUseSkillButtontext.Skill1].text = "ファイアボール";
+            useSkillButtonText[(int)enumUseSkillButtontext.Skill2].text = "アイスランス";
+            useSkillButtonText[(int)enumUseSkillButtontext.Skill3].text = "ヒール";
         }
 
-        useSkillButton[0].SetActive(false);
-        useSkillButton[1].SetActive(false);
-        useSkillButton[2].SetActive(false);
+        useSkillButton[(int)enumSkillButton.Skill1].SetActive(false);
+        useSkillButton[(int)enumSkillButton.Skill2].SetActive(false);
+        useSkillButton[(int)enumSkillButton.Skill3].SetActive(false);
 
     }
 
@@ -52,17 +71,17 @@ public class SkillManager : Singleton<SkillManager>
     {
         if (BattleManager.Instance.playerLv >= 2)
         {
-            useSkillButton[0].SetActive(true);
+            useSkillButton[(int)enumSkillButton.Skill1].SetActive(true);
         }
         
         if (BattleManager.Instance.playerLv >= 5)
         {
-            useSkillButton[1].SetActive(true);
+            useSkillButton[(int)enumSkillButton.Skill2].SetActive(true);
         }
 
         if (BattleManager.Instance.playerLv >= 7)
         {
-            useSkillButton[2].SetActive(true);
+            useSkillButton[(int)enumSkillButton.Skill3].SetActive(true);
         }
 
     }
@@ -146,7 +165,7 @@ public class SkillManager : Singleton<SkillManager>
 
     public IEnumerator NotEnoughSP()
     {
-        mainText.text = "Not enough SP.";
+        mainText.text = "SPが足りない！";
 
         yield return new WaitForSeconds(1.0f);
 
