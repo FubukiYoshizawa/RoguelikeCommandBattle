@@ -6,47 +6,49 @@ using TMPro;
 
 public class EnemyActionManager : Singleton<EnemyActionManager>
 {
+    public EnemyStatusManager enemyStatusManager; // スキルの各値管理用のスクリプト
+
     public TextMeshProUGUI battleText; // テキスト表示
 
     public IEnumerator EnemyAction()
     {
-        if (BattleManager.Instance.enemyName == "Slime")
+        if (BattleManager.Instance.enemyName == enemyStatusManager.DataList[0].eNAME)
         {
             yield return StartCoroutine(Slime());
         }
-        else if (BattleManager.Instance.enemyName == "IkeBat")
+        else if (BattleManager.Instance.enemyName == enemyStatusManager.DataList[1].eNAME)
         {
             yield return StartCoroutine(IkeBat());
         }
-        else if (BattleManager.Instance.enemyName == "HatGhost")
+        else if (BattleManager.Instance.enemyName == enemyStatusManager.DataList[2].eNAME)
         {
             yield return StartCoroutine(HatGhost());
         }
-        else if (BattleManager.Instance.enemyName == "GodADeath")
+        else if (BattleManager.Instance.enemyName == enemyStatusManager.DataList[3].eNAME)
         {
             yield return StartCoroutine(GodADeath());
         }
-        else if (BattleManager.Instance.enemyName == "TornadoMan")
+        else if (BattleManager.Instance.enemyName == enemyStatusManager.DataList[4].eNAME)
         {
             yield return StartCoroutine(TornadoMan());
         }
-        else if (BattleManager.Instance.enemyName == "ThunderOni")
+        else if (BattleManager.Instance.enemyName == enemyStatusManager.DataList[5].eNAME)
         {
             yield return StartCoroutine(ThunderOni());
         }
-        else if (BattleManager.Instance.enemyName == "InfernoButterfly")
+        else if (BattleManager.Instance.enemyName == enemyStatusManager.DataList[6].eNAME)
         {
             yield return StartCoroutine(InfernoButterfly());
         }
-        else if (BattleManager.Instance.enemyName == "DarkDragon")
+        else if (BattleManager.Instance.enemyName == enemyStatusManager.DataList[7].eNAME)
         {
             yield return StartCoroutine(DarkDragon());
         }
-        else if (BattleManager.Instance.enemyName == "IceDragon")
+        else if (BattleManager.Instance.enemyName == enemyStatusManager.DataList[8].eNAME)
         {
             yield return StartCoroutine(IceDragon());
         }
-        else if (BattleManager.Instance.enemyName == "LightDragon")
+        else if (BattleManager.Instance.enemyName == enemyStatusManager.DataList[9].eNAME)
         {
             yield return StartCoroutine(LightDragon());
         }
@@ -55,7 +57,7 @@ public class EnemyActionManager : Singleton<EnemyActionManager>
 
     public IEnumerator Slime()
     {
-        battleText.text = $"{BattleManager.Instance.enemyName} Slime Shoot!";
+        battleText.text = $"{BattleManager.Instance.enemyName}は\nスライムショットを放った！";
 
         yield return new WaitForSeconds(1.0f);
 
@@ -64,13 +66,11 @@ public class EnemyActionManager : Singleton<EnemyActionManager>
             yield return null;
         }
 
-        int damage = (int)(BattleManager.Instance.enemyATK * 1.5);
-
-        battleText.text = $"{damage} Damage!";
+        battleText.text = $"{enemyStatusManager.DataList[0].skillValue1}のダメージ！";
 
         yield return new WaitForSeconds(0.5f);
 
-        BattleManager.Instance.playerHP -= damage;
+        BattleManager.Instance.playerHP -= enemyStatusManager.DataList[0].skillValue1;
         if (BattleManager.Instance.playerHP < 0)
         {
             BattleManager.Instance.playerHP = 0;
@@ -92,7 +92,7 @@ public class EnemyActionManager : Singleton<EnemyActionManager>
 
     public IEnumerator IkeBat()
     {
-        battleText.text = $"{BattleManager.Instance.enemyName} Flying attack!";
+        battleText.text = $"{BattleManager.Instance.enemyName}は\nフライングアタックを放った！";
 
         yield return new WaitForSeconds(1.0f);
 
@@ -101,13 +101,11 @@ public class EnemyActionManager : Singleton<EnemyActionManager>
             yield return null;
         }
 
-        int damage = (int)(BattleManager.Instance.enemyATK * 1.5);
-
-        battleText.text = $"{damage} Damage!";
+        battleText.text = $"{enemyStatusManager.DataList[1].skillValue1}のダメージ！";
 
         yield return new WaitForSeconds(0.5f);
 
-        BattleManager.Instance.playerHP -= damage;
+        BattleManager.Instance.playerHP -= enemyStatusManager.DataList[1].skillValue1;
         if (BattleManager.Instance.playerHP < 0)
         {
             BattleManager.Instance.playerHP = 0;
@@ -129,7 +127,7 @@ public class EnemyActionManager : Singleton<EnemyActionManager>
 
     public IEnumerator HatGhost()
     {
-        battleText.text = $"{BattleManager.Instance.enemyName} Fire Ball!";
+        battleText.text = $"{BattleManager.Instance.enemyName}は\nファイアボールを放った！";
 
         yield return new WaitForSeconds(1.0f);
 
@@ -138,11 +136,11 @@ public class EnemyActionManager : Singleton<EnemyActionManager>
             yield return null;
         }
 
-        battleText.text = $"{BattleManager.Instance.enemyATK * 4} Damage!";
+        battleText.text = $"{enemyStatusManager.DataList[2].skillValue1}のダメージ！";
 
         yield return new WaitForSeconds(0.5f);
 
-        BattleManager.Instance.playerHP = BattleManager.Instance.playerHP - (BattleManager.Instance.enemyATK * 2);
+        BattleManager.Instance.playerHP -= enemyStatusManager.DataList[2].skillValue1;
         if (BattleManager.Instance.playerHP < 0)
         {
             BattleManager.Instance.playerHP = 0;
@@ -164,7 +162,7 @@ public class EnemyActionManager : Singleton<EnemyActionManager>
 
     public IEnumerator GodADeath()
     {
-        battleText.text = $"{BattleManager.Instance.enemyName} swung his sickle!";
+        battleText.text = $"{BattleManager.Instance.enemyName}は\n鎌を振りかぶった！";
 
         yield return new WaitForSeconds(1.0f);
 
@@ -173,13 +171,11 @@ public class EnemyActionManager : Singleton<EnemyActionManager>
             yield return null;
         }
 
-        int damage = (int)(BattleManager.Instance.enemyATK * 1.5);
-
-        battleText.text = $"{damage} Damage!";
+        battleText.text = $"{enemyStatusManager.DataList[3].skillValue1}のダメージ！";
 
         yield return new WaitForSeconds(0.5f);
 
-        BattleManager.Instance.playerHP -= damage;
+        BattleManager.Instance.playerHP -= enemyStatusManager.DataList[3].skillValue1;
         if (BattleManager.Instance.playerHP < 0)
         {
             BattleManager.Instance.playerHP = 0;
@@ -201,7 +197,7 @@ public class EnemyActionManager : Singleton<EnemyActionManager>
 
     public IEnumerator TornadoMan()
     {
-        battleText.text = $"{BattleManager.Instance.enemyName} created a tremendous tornado!";
+        battleText.text = $"{BattleManager.Instance.enemyName}は\n竜巻を巻き起こした！";
 
         yield return new WaitForSeconds(1.0f);
 
@@ -210,13 +206,11 @@ public class EnemyActionManager : Singleton<EnemyActionManager>
             yield return null;
         }
 
-        int damage = (int)(BattleManager.Instance.enemyATK * 1.5);
-
-        battleText.text = $"{damage} Damage!";
+        battleText.text = $"{enemyStatusManager.DataList[4].skillValue1}のダメージ！";
 
         yield return new WaitForSeconds(0.5f);
 
-        BattleManager.Instance.playerHP -= damage;
+        BattleManager.Instance.playerHP -= enemyStatusManager.DataList[4].skillValue1;
         if (BattleManager.Instance.playerHP < 0)
         {
             BattleManager.Instance.playerHP = 0;
@@ -238,7 +232,7 @@ public class EnemyActionManager : Singleton<EnemyActionManager>
 
     public IEnumerator ThunderOni()
     {
-        battleText.text = $"{BattleManager.Instance.enemyName} called down the thunder!";
+        battleText.text = $"{BattleManager.Instance.enemyName}は\n雷雲を呼んだ！";
 
         yield return new WaitForSeconds(1.0f);
 
@@ -247,13 +241,11 @@ public class EnemyActionManager : Singleton<EnemyActionManager>
             yield return null;
         }
 
-        int damage = (int)(BattleManager.Instance.enemyATK * 1.5);
-
-        battleText.text = $"{damage} Damage!";
+        battleText.text = $"{enemyStatusManager.DataList[5].skillValue1}のダメージ！";
 
         yield return new WaitForSeconds(0.5f);
 
-        BattleManager.Instance.playerHP -= damage;
+        BattleManager.Instance.playerHP -= enemyStatusManager.DataList[5].skillValue1;
         if (BattleManager.Instance.playerHP < 0)
         {
             BattleManager.Instance.playerHP = 0;
@@ -278,7 +270,7 @@ public class EnemyActionManager : Singleton<EnemyActionManager>
         int randomValue = Random.Range(0, 5);
         if (randomValue <= 3)
         {
-            battleText.text = $"{BattleManager.Instance.enemyName} was a firebrand!";
+            battleText.text = $"{BattleManager.Instance.enemyName}は\nファイアボールを唱えた！";
 
             yield return new WaitForSeconds(1.0f);
 
@@ -287,13 +279,11 @@ public class EnemyActionManager : Singleton<EnemyActionManager>
                 yield return null;
             }
 
-            int damage = (int)(BattleManager.Instance.enemyATK * 1.5);
-
-            battleText.text = $"{damage} Damage!";
+            battleText.text = $"{enemyStatusManager.DataList[6].skillValue1}のダメージ！";
 
             yield return new WaitForSeconds(0.5f);
 
-            BattleManager.Instance.playerHP -= damage;
+            BattleManager.Instance.playerHP -= enemyStatusManager.DataList[6].skillValue1;
             if (BattleManager.Instance.playerHP < 0)
             {
                 BattleManager.Instance.playerHP = 0;
@@ -301,7 +291,7 @@ public class EnemyActionManager : Singleton<EnemyActionManager>
         }
         else
         {
-            battleText.text = $"{BattleManager.Instance.enemyName} collected firebombs!";
+            battleText.text = $"{BattleManager.Instance.enemyName}は\n火の粉を集めた！";
 
             yield return new WaitForSeconds(1.0f);
 
@@ -310,13 +300,15 @@ public class EnemyActionManager : Singleton<EnemyActionManager>
                 yield return null;
             }
 
-            int damage = (int)(BattleManager.Instance.enemyATK);
-
-            battleText.text = $"{BattleManager.Instance.enemyName} recovered {damage} HP!";
+            battleText.text = $"{BattleManager.Instance.enemyName}は\nHPを{enemyStatusManager.DataList[7].skillValue1}回復した！";
 
             yield return new WaitForSeconds(0.5f);
 
-            BattleManager.Instance.enemyHP += damage;
+            BattleManager.Instance.enemyHP += enemyStatusManager.DataList[7].skillValue1;
+            if (BattleManager.Instance.enemyHP > BattleManager.Instance.enemyMaxHP)
+            {
+                BattleManager.Instance.enemyHP = BattleManager.Instance.enemyMaxHP;
+            }
 
         }
 
@@ -339,7 +331,7 @@ public class EnemyActionManager : Singleton<EnemyActionManager>
         int randomValue = Random.Range(0, 5);
         if (randomValue <= 2)
         {
-            battleText.text = $"{BattleManager.Instance.enemyName} breathed a dark breath!";
+            battleText.text = $"{BattleManager.Instance.enemyName}は\nダークブレスを放った！";
 
             yield return new WaitForSeconds(1.0f);
 
@@ -348,13 +340,11 @@ public class EnemyActionManager : Singleton<EnemyActionManager>
                 yield return null;
             }
 
-            int damage = (int)(BattleManager.Instance.enemyATK * 1.5);
-
-            battleText.text = $"{damage} Damage!";
+            battleText.text = $"{enemyStatusManager.DataList[7].skillValue1}のダメージ";
 
             yield return new WaitForSeconds(0.5f);
 
-            BattleManager.Instance.playerHP -= damage;
+            BattleManager.Instance.playerHP -= enemyStatusManager.DataList[7].skillValue1;
             if (BattleManager.Instance.playerHP < 0)
             {
                 BattleManager.Instance.playerHP = 0;
@@ -362,7 +352,7 @@ public class EnemyActionManager : Singleton<EnemyActionManager>
         }
         else
         {
-            battleText.text = $"{BattleManager.Instance.enemyName} cast dark magic!";
+            battleText.text = $"{BattleManager.Instance.enemyName}は\nダークオーラを放った！";
 
             yield return new WaitForSeconds(1.0f);
 
@@ -371,13 +361,11 @@ public class EnemyActionManager : Singleton<EnemyActionManager>
                 yield return null;
             }
 
-            int damage = (int)(BattleManager.Instance.enemyATK * 2);
-
-            battleText.text = $"{damage} Damage!";
+            battleText.text = $"{enemyStatusManager.DataList[7].skillValue2}のダメージ！";
 
             yield return new WaitForSeconds(0.5f);
 
-            BattleManager.Instance.playerHP -= damage;
+            BattleManager.Instance.playerHP -= enemyStatusManager.DataList[7].skillValue2;
             if (BattleManager.Instance.playerHP < 0)
             {
                 BattleManager.Instance.playerHP = 0;
@@ -404,7 +392,7 @@ public class EnemyActionManager : Singleton<EnemyActionManager>
         int randomValue = Random.Range(0, 5);
         if (randomValue <= 2)
         {
-            battleText.text = $"{BattleManager.Instance.enemyName} breathed a Ice breath!";
+            battleText.text = $"{BattleManager.Instance.enemyName}は\nアイスブレスを放った！";
 
             yield return new WaitForSeconds(1.0f);
 
@@ -413,13 +401,11 @@ public class EnemyActionManager : Singleton<EnemyActionManager>
                 yield return null;
             }
 
-            int damage = (int)(BattleManager.Instance.enemyATK * 1.5);
-
-            battleText.text = $"{damage} Damage!";
+            battleText.text = $"{enemyStatusManager.DataList[8].skillValue1}のダメージ！";
 
             yield return new WaitForSeconds(0.5f);
 
-            BattleManager.Instance.playerHP -= damage;
+            BattleManager.Instance.playerHP -= enemyStatusManager.DataList[8].skillValue1;
             if (BattleManager.Instance.playerHP < 0)
             {
                 BattleManager.Instance.playerHP = 0;
@@ -427,7 +413,7 @@ public class EnemyActionManager : Singleton<EnemyActionManager>
         }
         else
         {
-            battleText.text = $"{BattleManager.Instance.enemyName} cast Ice magic!";
+            battleText.text = $"{BattleManager.Instance.enemyName}は\nアイスレインを放った！";
 
             yield return new WaitForSeconds(1.0f);
 
@@ -436,13 +422,11 @@ public class EnemyActionManager : Singleton<EnemyActionManager>
                 yield return null;
             }
 
-            int damage = (int)(BattleManager.Instance.enemyATK * 2);
-
-            battleText.text = $"{damage} Damage!";
+            battleText.text = $"{enemyStatusManager.DataList[8].skillValue2}のダメージ！";
 
             yield return new WaitForSeconds(0.5f);
 
-            BattleManager.Instance.playerHP -= damage;
+            BattleManager.Instance.playerHP -= enemyStatusManager.DataList[8].skillValue2;
             if (BattleManager.Instance.playerHP < 0)
             {
                 BattleManager.Instance.playerHP = 0;
@@ -469,7 +453,7 @@ public class EnemyActionManager : Singleton<EnemyActionManager>
         int randomValue = Random.Range(0, 8);
         if (randomValue <= 4)
         {
-            battleText.text = $"{BattleManager.Instance.enemyName} breathed a Light breath!";
+            battleText.text = $"{BattleManager.Instance.enemyName}は\nライトニングブレスを放った！";
 
             yield return new WaitForSeconds(1.0f);
 
@@ -478,13 +462,11 @@ public class EnemyActionManager : Singleton<EnemyActionManager>
                 yield return null;
             }
 
-            int damage = (int)(BattleManager.Instance.enemyATK * 1.5);
-
-            battleText.text = $"{damage} Damage!";
+            battleText.text = $"{enemyStatusManager.DataList[9].skillValue1}のダメージ！";
 
             yield return new WaitForSeconds(0.5f);
 
-            BattleManager.Instance.playerHP -= damage;
+            BattleManager.Instance.playerHP -= enemyStatusManager.DataList[9].skillValue1;
             if (BattleManager.Instance.playerHP < 0)
             {
                 BattleManager.Instance.playerHP = 0;
@@ -492,7 +474,7 @@ public class EnemyActionManager : Singleton<EnemyActionManager>
         }
         else if (randomValue <= 6)
         {
-            battleText.text = $"{BattleManager.Instance.enemyName} cast Light magic!";
+            battleText.text = $"{BattleManager.Instance.enemyName}は\nライトニングショットを放った！";
 
             yield return new WaitForSeconds(1.0f);
 
@@ -501,13 +483,11 @@ public class EnemyActionManager : Singleton<EnemyActionManager>
                 yield return null;
             }
 
-            int damage = (int)(BattleManager.Instance.enemyATK * 2);
-
-            battleText.text = $"{damage} Damage!";
+            battleText.text = $"{enemyStatusManager.DataList[9].skillValue2}のダメージ！";
 
             yield return new WaitForSeconds(0.5f);
 
-            BattleManager.Instance.playerHP -= damage;
+            BattleManager.Instance.playerHP -= enemyStatusManager.DataList[9].skillValue2;
             if (BattleManager.Instance.playerHP < 0)
             {
                 BattleManager.Instance.playerHP = 0;
@@ -516,7 +496,7 @@ public class EnemyActionManager : Singleton<EnemyActionManager>
         }
         else
         {
-            battleText.text = $"{BattleManager.Instance.enemyName} collected firebombs!";
+            battleText.text = $"{BattleManager.Instance.enemyName}は\n光を集めた！";
 
             yield return new WaitForSeconds(1.0f);
 
@@ -525,13 +505,11 @@ public class EnemyActionManager : Singleton<EnemyActionManager>
                 yield return null;
             }
 
-            int damage = (int)(BattleManager.Instance.enemyATK);
-
-            battleText.text = $"{BattleManager.Instance.enemyName} recovered {damage} HP!";
+            battleText.text = $"{BattleManager.Instance.enemyName}は\nHPを{enemyStatusManager.DataList[9].skillValue3}回復した！";
 
             yield return new WaitForSeconds(0.5f);
 
-            BattleManager.Instance.enemyHP += damage;
+            BattleManager.Instance.enemyHP += enemyStatusManager.DataList[9].skillValue3;
 
         }
 

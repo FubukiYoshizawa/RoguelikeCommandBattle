@@ -10,6 +10,9 @@ public class EnemyData
     public int eHP; // “GHP
     public int eATK; // “GUŒ‚—Í
     public int eEXP; // “GŒoŒ±’l
+    public int skillValue1; // Še“GƒXƒLƒ‹‚ÌŒø‰Ê—Ê
+    public int skillValue2;
+    public int skillValue3; 
 }
 
 [CreateAssetMenu(menuName = "ScriptableObject/Enemy Status Manager", fileName = "EnemyStatusManager")]

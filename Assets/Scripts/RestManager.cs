@@ -22,7 +22,7 @@ public class RestManager : Singleton<RestManager>
     {
         floorImage.sprite = floorSprite;
 
-        mainText.text = "You've Found A Place Where You Can Take A Break";
+        mainText.text = "‹xŒe‚Å‚«‚»‚¤‚ÈêŠ‚ğŒ©‚Â‚¯‚½I";
 
         yield return new WaitForSeconds(1.0f);
 
@@ -31,7 +31,7 @@ public class RestManager : Singleton<RestManager>
             yield return null;
         }
 
-        mainText.text = "You Decided To Take Some Time Off";
+        mainText.text = "‚ ‚È‚½‚Í‚±‚±‚Å\n­‚µ‹xŒe‚·‚é‚±‚Æ‚É‚µ‚½";
 
         yield return new WaitForSeconds(1.0f);
 
@@ -40,7 +40,7 @@ public class RestManager : Singleton<RestManager>
             yield return null;
         }
 
-        mainText.text = "Your Strength Has Been Restored";
+        mainText.text = "‚ ‚È‚½‚Ì‘Ì—Í‚Í‰ñ•œ‚µ‚½I";
         BattleManager.Instance.playerHP = BattleManager.Instance.playerMaxHP;
         BattleManager.Instance.playerSP = BattleManager.Instance.playerMaxSP;
 

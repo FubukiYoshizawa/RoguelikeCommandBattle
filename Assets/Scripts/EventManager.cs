@@ -33,7 +33,7 @@ public class EventManager : Singleton<EventManager>
     {
         floorImage.sprite = floorSprite[(int)enumFloorSprite.Fountain];
 
-        mainText.text = "You have found the fountain of miracles!";
+        mainText.text = "あなたは奇跡の泉を見つけた！";
 
         yield return new WaitForSeconds(1.0f);
 
@@ -42,7 +42,7 @@ public class EventManager : Singleton<EventManager>
             yield return null;
         }
 
-        mainText.text = "You drank from the fountain as if you were being sucked in!";
+        mainText.text = "あなたは吸い込まれるように\n泉の水を飲んだ！";
 
         yield return new WaitForSeconds(1.0f);
 
@@ -54,7 +54,7 @@ public class EventManager : Singleton<EventManager>
         int randomValue = Random.Range(0, 2);
         if (randomValue == 0)
         {
-            mainText.text = "You felt your strength recovering quickly!";
+            mainText.text = "体力がみるみるうちに回復した！";
 
             yield return new WaitForSeconds(1.0f);
 
@@ -63,7 +63,7 @@ public class EventManager : Singleton<EventManager>
                 yield return null;
             }
 
-            mainText.text = "Your physical strength has been restored 50 times.";
+            mainText.text = "HPが50回復した！";
             BattleManager.Instance.playerHP += 50;
             if (BattleManager.Instance.playerMaxHP < BattleManager.Instance.playerHP)
             {
@@ -80,7 +80,7 @@ public class EventManager : Singleton<EventManager>
         }
         else
         {
-            mainText.text = "Your body was gradually losing its strength!";
+            mainText.text = "体が重くなるのを感じた";
 
             yield return new WaitForSeconds(1.0f);
 
@@ -89,7 +89,7 @@ public class EventManager : Singleton<EventManager>
                 yield return null;
             }
 
-            mainText.text = "Attack power reduced by one.";
+            mainText.text = "攻撃力が１下がった";
             BattleManager.Instance.playerATK -= 1;
 
             yield return new WaitForSeconds(1.0f);
@@ -100,7 +100,7 @@ public class EventManager : Singleton<EventManager>
             }
         }
 
-        mainText.text = "You left the Fountain..";
+        mainText.text = "あなたは泉を後にした";
 
         yield return new WaitForSeconds(1.0f);
 
@@ -115,7 +115,7 @@ public class EventManager : Singleton<EventManager>
     {
         floorImage.sprite = floorSprite[(int)enumFloorSprite.Magic];
 
-        mainText.text = "You have met the Magic!";
+        mainText.text = "あなたは魔法使いと出会った！";
 
         yield return new WaitForSeconds(1.0f);
 
@@ -124,7 +124,7 @@ public class EventManager : Singleton<EventManager>
             yield return null;
         }
 
-        mainText.text = "You! I was just in the right place!";
+        mainText.text = "あなた！\nちょうどいいところにいた！";
 
         yield return new WaitForSeconds(1.0f);
 
@@ -133,7 +133,7 @@ public class EventManager : Singleton<EventManager>
             yield return null;
         }
 
-        mainText.text = "Be in the middle of practicing my enhancement magic!Ei!";
+        mainText.text = "強化魔法の練習中なの\n練習させて！\nえい！";
 
         yield return new WaitForSeconds(1.0f);
 
@@ -145,7 +145,7 @@ public class EventManager : Singleton<EventManager>
         int randomValue = Random.Range(0, 2);
         if (randomValue == 0)
         {
-            mainText.text = "You felt the magic surge through you.";
+            mainText.text = "魔力があふれてくるのを感じた";
 
             yield return new WaitForSeconds(1.0f);
 
@@ -154,7 +154,7 @@ public class EventManager : Singleton<EventManager>
                 yield return null;
             }
 
-            mainText.text = "SP increased by 10.";
+            mainText.text = "最大SPが10増えた！";
             BattleManager.Instance.playerMaxSP += 10;
             BattleManager.Instance.playerSP += 10;
 
@@ -167,7 +167,7 @@ public class EventManager : Singleton<EventManager>
         }
         else
         {
-            mainText.text = "You felt the magic drain out of you.";
+            mainText.text = "魔力が吸われるのように感じた";
 
             yield return new WaitForSeconds(1.0f);
 
@@ -176,7 +176,7 @@ public class EventManager : Singleton<EventManager>
                 yield return null;
             }
 
-            mainText.text = "SP reduced by five.";
+            mainText.text = "最大SPが5減った！";
             BattleManager.Instance.playerMaxSP -= 5;
             BattleManager.Instance.playerSP -= 5;
 
@@ -188,7 +188,7 @@ public class EventManager : Singleton<EventManager>
             }
         }
 
-        mainText.text = "Thanks for your cooperation!";
+        mainText.text = "ご協力ありがとう！\nお礼は今度でいいよ！";
 
         yield return new WaitForSeconds(1.0f);
 
@@ -197,7 +197,7 @@ public class EventManager : Singleton<EventManager>
             yield return null;
         }
 
-        mainText.text = "The sorcerer vanished like a mist.";
+        mainText.text = "魔法使いは霧のように消えた";
 
         yield return new WaitForSeconds(1.0f);
 
@@ -211,7 +211,7 @@ public class EventManager : Singleton<EventManager>
     {
         floorImage.sprite = floorSprite[(int)enumFloorSprite.Muscle];
 
-        mainText.text = "You Are Suddenly Surrounded By Muscle!";
+        mainText.text = "突然筋肉に囲まれた！";
 
         yield return new WaitForSeconds(1.0f);
 
@@ -220,7 +220,7 @@ public class EventManager : Singleton<EventManager>
             yield return null;
         }
 
-        mainText.text = "You Too Can Build Muscle Through Training!";
+        mainText.text = "一緒に筋肉を鍛えよう！";
 
         yield return new WaitForSeconds(1.0f);
 
@@ -229,7 +229,7 @@ public class EventManager : Singleton<EventManager>
             yield return null;
         }
 
-        mainText.text = "You Participated In Training!";
+        mainText.text = "あなたはトレーニングに参加した！";
 
         yield return new WaitForSeconds(1.0f);
 
@@ -241,7 +241,7 @@ public class EventManager : Singleton<EventManager>
         int randomValue = Random.Range(0, 2);
         if (randomValue == 0)
         {
-            mainText.text = "Your Muscles Have Been Sharpened!";
+            mainText.text = "筋肉が研ぎ澄まされた！";
 
             yield return new WaitForSeconds(1.0f);
 
@@ -250,7 +250,7 @@ public class EventManager : Singleton<EventManager>
                 yield return null;
             }
 
-            mainText.text = "Attack power increased by three.";
+            mainText.text = "攻撃力が3上がった！";
             BattleManager.Instance.playerATK += 3;
 
             yield return new WaitForSeconds(1.0f);
@@ -262,7 +262,7 @@ public class EventManager : Singleton<EventManager>
         }
         else
         {
-            mainText.text = "You Have Sore Muscles!";
+            mainText.text = "筋肉痛になった！";
 
             yield return new WaitForSeconds(1.0f);
 
@@ -271,7 +271,7 @@ public class EventManager : Singleton<EventManager>
                 yield return null;
             }
 
-            mainText.text = "Attack power reduced by one.";
+            mainText.text = "攻撃力が1下がった！";
             BattleManager.Instance.playerATK -= 1;
 
             yield return new WaitForSeconds(1.0f);
@@ -282,7 +282,7 @@ public class EventManager : Singleton<EventManager>
             }
         }
 
-        mainText.text = "The Muscles Left.";
+        mainText.text = "筋肉は去っていった";
 
         yield return new WaitForSeconds(1.0f);
 

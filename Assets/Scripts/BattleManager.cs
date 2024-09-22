@@ -23,6 +23,7 @@ public class BattleManager: Singleton<BattleManager>
     public string enemyName; // ìGñº
     public int enemyLv; // ìGÉåÉxÉã
     public int enemyHP; // ìGHP
+    public int enemyMaxHP; // ìGç≈ëÂHP
     public int enemyATK; // ìGçUåÇóÕ
     public int enemyEXP; // ìGåoå±íl
 
@@ -56,6 +57,7 @@ public class BattleManager: Singleton<BattleManager>
         Name, // ìGñº
         Lv, // ìGÉåÉxÉã
         HP, // ìGHP
+        MaxHP, // ìGç≈ëÂHP
         ATK, // ìGçUåÇóÕ
         Num // ìGÇÃÉXÉeÅ[É^ÉXêî
     }
@@ -123,6 +125,7 @@ public class BattleManager: Singleton<BattleManager>
         enemyStatusText[(int)enumEnemyStatusText.Name] = GameObject.Find("EnemyNameText").GetComponent<TextMeshProUGUI>();
         enemyStatusText[(int)enumEnemyStatusText.Lv] = GameObject.Find("EnemyLvText").GetComponent<TextMeshProUGUI>();
         enemyStatusText[(int)enumEnemyStatusText.HP] = GameObject.Find("EnemyHPText").GetComponent<TextMeshProUGUI>();
+        enemyStatusText[(int)enumEnemyStatusText.MaxHP] = GameObject.Find("EnemyMaxHPText").GetComponent<TextMeshProUGUI>();
         enemyStatusText[(int)enumEnemyStatusText.ATK] = GameObject.Find("EnemyATKText").GetComponent<TextMeshProUGUI>();
 
         windows[(int)enumWindows.EnemyStatus] = GameObject.Find("enemyStatusWindow");
@@ -137,7 +140,6 @@ public class BattleManager: Singleton<BattleManager>
 
         windows[(int)enumWindows.EnemyStatus].SetActive(false);
         windows[(int)enumWindows.ComandWindow].SetActive(false);
-        windows[(int)enumWindows.SkillWindow].SetActive(false);
         windows[(int)enumWindows.ItemUseSelect].SetActive(false);
 
         if (DebugScript.Instance.Fighter)
@@ -170,13 +172,14 @@ public class BattleManager: Singleton<BattleManager>
     {
         playerStatusText[(int)enumPlayerStatusText.Lv].text = playerLv.ToString();
         playerStatusText[(int)enumPlayerStatusText.HP].text = playerHP.ToString();
-        playerStatusText[(int)enumPlayerStatusText.MaxHP].text = playerHP.ToString();
+        playerStatusText[(int)enumPlayerStatusText.MaxHP].text = playerMaxHP.ToString();
         playerStatusText[(int)enumPlayerStatusText.SP].text = playerSP.ToString();
-        playerStatusText[(int)enumPlayerStatusText.MaxSP].text = playerSP.ToString();
+        playerStatusText[(int)enumPlayerStatusText.MaxSP].text = playerMaxSP.ToString();
         playerStatusText[(int)enumPlayerStatusText.ATK].text = playerATK.ToString();
 
         enemyStatusText[(int)enumEnemyStatusText.Lv].text = enemyLv.ToString();
         enemyStatusText[(int)enumEnemyStatusText.HP].text = enemyHP.ToString();
+        enemyStatusText[(int)enumEnemyStatusText.MaxHP].text = enemyMaxHP.ToString();
         enemyStatusText[(int)enumEnemyStatusText.ATK].text = enemyATK.ToString();
 
     }
@@ -203,6 +206,7 @@ public class BattleManager: Singleton<BattleManager>
             enemyName = enemyStatusManager.DataList[randomNumber].eNAME;
             enemyLv = enemyStatusManager.DataList[randomNumber].eLv;
             enemyHP = enemyStatusManager.DataList[randomNumber].eHP;
+            enemyMaxHP = enemyStatusManager.DataList[randomNumber].eHP;
             enemyATK = enemyStatusManager.DataList[randomNumber].eATK;
             enemyEXP = enemyStatusManager.DataList[randomNumber].eEXP;
             enemyStatusText[(int)enumEnemyStatusText.Name].text = enemyName;
@@ -217,6 +221,7 @@ public class BattleManager: Singleton<BattleManager>
             enemyName = enemyStatusManager.DataList[randomNumber].eNAME;
             enemyLv = enemyStatusManager.DataList[randomNumber].eLv;
             enemyHP = enemyStatusManager.DataList[randomNumber].eHP;
+            enemyMaxHP = enemyStatusManager.DataList[randomNumber].eHP;
             enemyATK = enemyStatusManager.DataList[randomNumber].eATK;
             enemyEXP = enemyStatusManager.DataList[randomNumber].eEXP;
             enemyStatusText[(int)enumEnemyStatusText.Name].text = enemyName;
@@ -240,22 +245,89 @@ public class BattleManager: Singleton<BattleManager>
 
     public IEnumerator StrongStart()
     {
+        battleText.text = "ã≠ìGÉtÉçÉAÇæÅI";
+        floorBackImage.sprite = floorBackSprite;
+
         yield return new WaitForSeconds(1.0f);
 
         while (!Input.GetKeyDown(KeyCode.Space))
         {
             yield return null;
         }
+
+        nowEnemySprite = new Sprite[] { enemySprite[6], enemySprite[7], enemySprite[8] };
+        int randomNumber = Random.Range(0, nowEnemySprite.Length);
+        Sprite selectedSprite = nowEnemySprite[randomNumber];
+        displayEnemyImage.sprite = selectedSprite;
+
+        enemyName = enemyStatusManager.DataList[randomNumber].eNAME;
+        enemyLv = enemyStatusManager.DataList[randomNumber].eLv;
+        enemyHP = enemyStatusManager.DataList[randomNumber].eHP;
+        enemyMaxHP = enemyStatusManager.DataList[randomNumber].eHP;
+        enemyATK = enemyStatusManager.DataList[randomNumber].eATK;
+        enemyEXP = enemyStatusManager.DataList[randomNumber].eEXP;
+        enemyStatusText[(int)enumEnemyStatusText.Name].text = enemyName;
+
+        battleText.text = $"{enemyName}Ç™åªÇÍÇΩÅI";
+
+        windows[(int)enumWindows.EnemyStatus].SetActive(true);
+        windows[(int)enumWindows.ItemWindow].SetActive(false);
+
+        yield return new WaitForSeconds(1.0f);
+
+        while (!Input.GetKeyDown(KeyCode.Space))
+        {
+            yield return null;
+        }
+
+        yield return StartCoroutine(Battle());
+
     }
 
     public IEnumerator BossStart()
     {
+        battleText.text = "É{ÉXÉtÉçÉAÇæÅI";
+        floorBackImage.sprite = floorBackSprite;
+
         yield return new WaitForSeconds(1.0f);
 
         while (!Input.GetKeyDown(KeyCode.Space))
         {
             yield return null;
         }
+
+        yield return new WaitForSeconds(1.0f);
+
+        while (!Input.GetKeyDown(KeyCode.Space))
+        {
+            yield return null;
+        }
+
+        Sprite selectedSprite = nowEnemySprite[9];
+        displayEnemyImage.sprite = selectedSprite;
+
+        enemyName = enemyStatusManager.DataList[9].eNAME;
+        enemyLv = enemyStatusManager.DataList[9].eLv;
+        enemyHP = enemyStatusManager.DataList[9].eHP;
+        enemyMaxHP = enemyStatusManager.DataList[9].eHP;
+        enemyATK = enemyStatusManager.DataList[9].eATK;
+        enemyEXP = enemyStatusManager.DataList[9].eEXP;
+        enemyStatusText[(int)enumEnemyStatusText.Name].text = enemyName;
+
+        battleText.text = $"{enemyName}Ç™åªÇÍÇΩÅI";
+
+        windows[(int)enumWindows.EnemyStatus].SetActive(true);
+        windows[(int)enumWindows.ItemWindow].SetActive(false);
+
+        yield return new WaitForSeconds(1.0f);
+
+        while (!Input.GetKeyDown(KeyCode.Space))
+        {
+            yield return null;
+        }
+
+        yield return StartCoroutine(Battle());
+
     }
 
     public IEnumerator Battle()

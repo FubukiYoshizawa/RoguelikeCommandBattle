@@ -42,7 +42,7 @@ public class ShopManager : Singleton<ShopManager>
     {
         floorImage.sprite = floorSprite[(int)enumFloorSprite.HPPotion];
 
-        mainText.text = "Welcome Shop";
+        mainText.text = "いらっしゃい！\nここはポーションショップだよ";
 
         yield return new WaitForSeconds(1.0f);
 
@@ -51,16 +51,7 @@ public class ShopManager : Singleton<ShopManager>
             yield return null;
         }
 
-        mainText.text = "If You Pay Your Health\nYou Can Get Potion!";
-
-        yield return new WaitForSeconds(1.0f);
-
-        while (!Input.GetKeyDown(KeyCode.Space))
-        {
-            yield return null;
-        }
-
-        mainText.text = "Do You Need Health Potion?";
+        mainText.text = "血を分けてくれたら\nポーションを売ってあげよう";
 
         yield return new WaitForSeconds(1.0f);
 
@@ -71,11 +62,11 @@ public class ShopManager : Singleton<ShopManager>
 
         if (BattleManager.Instance.playerHP <= 10)
         {
-            mainText.text = "Oops, looks like you don't have anything to pay for.\nCome back in.";
+            mainText.text = "おっと、HPが足りないね\nまた来ておくれ";
         }
         else
         {
-            mainText.text = "Do You Need HP Potion?";
+            mainText.text = "HPポーションが必要かい？";
 
             yield return new WaitForSeconds(0.5f);
 
@@ -95,7 +86,7 @@ public class ShopManager : Singleton<ShopManager>
 
                 if (ItemManager.Instance.haveItem)
                 {
-                    mainText.text = "I already have the item, do you want to buy it?";
+                    mainText.text = "もうアイテムを持ってるね\nアイテムを交換するかい？";
 
                     yield return new WaitForSeconds(0.5f);
 
@@ -112,7 +103,7 @@ public class ShopManager : Singleton<ShopManager>
                     if (yes)
                     {
                         yes = false;
-                        mainText.text = "Fine, You're A Good Customer.";
+                        mainText.text = "交換成立だ\nまた会えるといいね";
                         BattleManager.Instance.playerHP -= 10;
                         for (int i = 0; i < ItemManager.Instance.getItem.Length; i++)
                         {
@@ -123,13 +114,13 @@ public class ShopManager : Singleton<ShopManager>
                     else
                     {
                         no = false;
-                        mainText.text = "I hope you don't regret it.";
+                        mainText.text = "後悔しないことを願うよ";
                     }
 
                 }
                 else
                 {
-                    mainText.text = "Fine, You're A Good Customer.";
+                    mainText.text = "交換成立だ\nまた会えるといいね";
                     BattleManager.Instance.playerHP -= 10;
                     ItemManager.Instance.getItem[0] = true;
                 }
@@ -144,7 +135,7 @@ public class ShopManager : Singleton<ShopManager>
             else
             {
                 no = false;
-                mainText.text = "I hope you don't regret it.";
+                mainText.text = "後悔しないことを願うよ";
             }
         }
 
@@ -160,7 +151,7 @@ public class ShopManager : Singleton<ShopManager>
     {
         floorImage.sprite = floorSprite[(int)enumFloorSprite.SPPotion];
 
-        mainText.text = "Welcome Shop";
+        mainText.text = "いらっしゃい！\nここはポーションショップだよ";
 
         yield return new WaitForSeconds(1.0f);
 
@@ -169,7 +160,7 @@ public class ShopManager : Singleton<ShopManager>
             yield return null;
         }
 
-        mainText.text = "If You Pay Your Health\nYou Can Get Potion!";
+        mainText.text = "血を分けてくれたら\nポーションを売ってあげよう";
 
         yield return new WaitForSeconds(1.0f);
 
@@ -180,11 +171,11 @@ public class ShopManager : Singleton<ShopManager>
 
         if (BattleManager.Instance.playerHP <= 10)
         {
-            mainText.text = "Oops, looks like you don't have anything to pay for.\nCome back in.";
+            mainText.text = "おっと、HPが足りないね\nまた来ておくれ";
         }
         else
         {
-            mainText.text = "Do You Need SP Potion?";
+            mainText.text = "SPポーションが必要かい？";
 
             yield return new WaitForSeconds(0.5f);
 
@@ -204,7 +195,7 @@ public class ShopManager : Singleton<ShopManager>
 
                 if (ItemManager.Instance.haveItem)
                 {
-                    mainText.text = "I already have the item, do you want to buy it?";
+                    mainText.text = "もうアイテムを持ってるね\nアイテムを交換するかい？";
 
                     yield return new WaitForSeconds(0.5f);
 
@@ -220,7 +211,7 @@ public class ShopManager : Singleton<ShopManager>
                     if (yes)
                     {
                         yes = false;
-                        mainText.text = "Fine, You're A Good Customer.";
+                        mainText.text = "交換成立だ\nまた会えるといいね";
                         BattleManager.Instance.playerHP -= 10;
                         for (int i = 0; i < ItemManager.Instance.getItem.Length; i++)
                         {
@@ -231,13 +222,13 @@ public class ShopManager : Singleton<ShopManager>
                     else
                     {
                         no = false;
-                        mainText.text = "I hope you don't regret it.";
+                        mainText.text = "後悔しないことを願うよ";
                     }
 
                 }
                 else
                 {
-                    mainText.text = "Fine, You're A Good Customer.";
+                    mainText.text = "交換成立だ\nまた会えるといいね";
                     BattleManager.Instance.playerHP -= 10;
                     ItemManager.Instance.getItem[1] = true;
                 }
@@ -252,7 +243,7 @@ public class ShopManager : Singleton<ShopManager>
             else
             {
                 no = false;
-                mainText.text = "I hope you don't regret it.";
+                mainText.text = "後悔しないことを願うよ";
             }
         }
 
@@ -269,7 +260,7 @@ public class ShopManager : Singleton<ShopManager>
     {
         floorImage.sprite = floorSprite[(int)enumFloorSprite.ATKPotion];
 
-        mainText.text = "Welcome Shop";
+        mainText.text = "いらっしゃい！\nここはポーションショップだよ";
 
         yield return new WaitForSeconds(1.0f);
 
@@ -278,7 +269,7 @@ public class ShopManager : Singleton<ShopManager>
             yield return null;
         }
 
-        mainText.text = "If You Pay Your Health\nYou Can Get Potion!";
+        mainText.text = "血を分けてくれたら\nポーションを売ってあげよう";
 
         yield return new WaitForSeconds(1.0f);
 
@@ -289,11 +280,11 @@ public class ShopManager : Singleton<ShopManager>
 
         if (BattleManager.Instance.playerHP <= 10)
         {
-            mainText.text = "Oops, looks like you don't have anything to pay for.\nCome back in.";
+            mainText.text = "おっと、HPが足りないね\nまた来ておくれ";
         }
         else
         {
-            mainText.text = "Do You Need ATK Potion?";
+            mainText.text = "SPポーションが必要かい？";
 
             yield return new WaitForSeconds(0.5f);
 
@@ -313,7 +304,7 @@ public class ShopManager : Singleton<ShopManager>
 
                 if (ItemManager.Instance.haveItem)
                 {
-                    mainText.text = "I already have the item, do you want to buy it?";
+                    mainText.text = "もうアイテムを持ってるね\nアイテムを交換するかい？";
 
                     yield return new WaitForSeconds(0.5f);
 
@@ -329,7 +320,7 @@ public class ShopManager : Singleton<ShopManager>
                     if (yes)
                     {
                         yes = false;
-                        mainText.text = "Fine, You're A Good Customer.";
+                        mainText.text = "交換成立だ\nまた会えるといいね";
                         BattleManager.Instance.playerHP -= 10;
                         for (int i = 0; i < ItemManager.Instance.getItem.Length; i++)
                         {
@@ -340,13 +331,13 @@ public class ShopManager : Singleton<ShopManager>
                     else
                     {
                         no = false;
-                        mainText.text = "I hope you don't regret it.";
+                        mainText.text = "後悔しないことを願うよ";
                     }
 
                 }
                 else
                 {
-                    mainText.text = "Fine, You're A Good Customer.";
+                    mainText.text = "交換成立だ\nまた会えるといいね";
                     BattleManager.Instance.playerHP -= 10;
                     ItemManager.Instance.getItem[2] = true;
                 }
@@ -361,7 +352,7 @@ public class ShopManager : Singleton<ShopManager>
             else
             {
                 no = false;
-                mainText.text = "I hope you don't regret it.";
+                mainText.text = "後悔しないことを願うよ";
             }
         }
 

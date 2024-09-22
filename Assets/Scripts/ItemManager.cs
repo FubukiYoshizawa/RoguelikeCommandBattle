@@ -65,7 +65,7 @@ public class ItemManager : Singleton<ItemManager>
 
     public IEnumerator HPPotion()
     {
-        mainText.text = "Using HP potion";
+        mainText.text = "HPポーションを使った！";
 
         yield return new WaitForSeconds(1.0f);
 
@@ -74,7 +74,7 @@ public class ItemManager : Singleton<ItemManager>
             yield return null;
         }
 
-        mainText.text = $"{itemValue[0]} recovered";
+        mainText.text = $"HPが{itemValue[0]}回復した！";
 
         BattleManager.Instance.playerHP += itemValue[0];
         if (BattleManager.Instance.playerHP > BattleManager.Instance.playerMaxHP)
@@ -93,7 +93,7 @@ public class ItemManager : Singleton<ItemManager>
 
     public IEnumerator SPPotion()
     {
-        mainText.text = "Using SP potion";
+        mainText.text = "SPポーションを使った！";
 
         yield return new WaitForSeconds(1.0f);
 
@@ -102,7 +102,7 @@ public class ItemManager : Singleton<ItemManager>
             yield return null;
         }
 
-        mainText.text = $"{itemValue[1]} SP recovered";
+        mainText.text = $"SPが{itemValue[1]}回復した！";
 
         BattleManager.Instance.playerSP += itemValue[1];
         if (BattleManager.Instance.playerSP > BattleManager.Instance.playerMaxSP)
@@ -121,7 +121,7 @@ public class ItemManager : Singleton<ItemManager>
 
     public IEnumerator ATKPotion()
     {
-        mainText.text = "Using ATK potion";
+        mainText.text = "攻撃ポーションを使った！";
 
         yield return new WaitForSeconds(1.0f);
 
@@ -130,7 +130,7 @@ public class ItemManager : Singleton<ItemManager>
             yield return null;
         }
 
-        mainText.text = "Double the power of the next attack";
+        mainText.text = "攻撃力が２倍になった！";
         BattleManager.Instance.powerUp2 = true;
         BattleManager.Instance.playerATK *= 2;
         haveItem = false;
@@ -145,7 +145,7 @@ public class ItemManager : Singleton<ItemManager>
 
     public IEnumerator HealHerb()
     {
-        mainText.text = "Using medicinal herbs.";
+        mainText.text = "薬草を使った！";
 
         yield return new WaitForSeconds(1.0f);
 
@@ -154,7 +154,7 @@ public class ItemManager : Singleton<ItemManager>
             yield return null;
         }
 
-        mainText.text = $"{itemValue[2]} recovered";
+        mainText.text = $"HPが{itemValue[2]}回復した！";
 
         BattleManager.Instance.playerHP += itemValue[2];
         if (BattleManager.Instance.playerHP > BattleManager.Instance.playerMaxHP)
@@ -174,7 +174,7 @@ public class ItemManager : Singleton<ItemManager>
 
     public IEnumerator DamageBomb()
     {
-        mainText.text = "Using a bomb.";
+        mainText.text = "爆弾を使った！";
 
         yield return new WaitForSeconds(1.0f);
 
@@ -183,7 +183,7 @@ public class ItemManager : Singleton<ItemManager>
             yield return null;
         }
 
-        mainText.text = $"{itemValue[3]} damage to the enemy.";
+        mainText.text = $"{itemValue[3]}のダメージ！";
 
         BattleManager.Instance.enemyHP -= itemValue[3];
         if (BattleManager.Instance.enemyHP < 0)
@@ -203,7 +203,7 @@ public class ItemManager : Singleton<ItemManager>
 
     public IEnumerator ATKJewel()
     {
-        mainText.text = "Using ATK Jewel";
+        mainText.text = "攻撃ジュエルを使った！";
 
         yield return new WaitForSeconds(1.0f);
 
@@ -212,7 +212,7 @@ public class ItemManager : Singleton<ItemManager>
             yield return null;
         }
 
-        mainText.text = "Double the power of the next attack";
+        mainText.text = "攻撃力が3倍になった！";
         BattleManager.Instance.powerUp3 = true;
         BattleManager.Instance.playerATK *= 3;
         haveItem = false;

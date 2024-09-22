@@ -91,7 +91,7 @@ public class GameManager : Singleton<GameManager>
             floorIconImage.sprite = floorIconSprite[(int)enumFloorIconSprite.BattleFloor];
             yield return StartCoroutine(BattleManager.Instance.BattleStart());
         }
-        else
+        else if (floorNumber < maxFloorNumber&& floorNumber > maxFloorNumber/2 && floorNumber % 2 == 0)
         {
             IEnumerator[] coroutines = new IEnumerator[]
             {
@@ -100,6 +100,19 @@ public class GameManager : Singleton<GameManager>
                 TreasureFloor(),
                 RestFloor(),
                 BattleManager.Instance.StrongStart()
+            };
+
+            int random = UnityEngine.Random.Range(0, coroutines.Length);
+            yield return StartCoroutine(coroutines[random]);
+        }
+        else
+        {
+            IEnumerator[] coroutines = new IEnumerator[]
+            {
+                ShopFloor(),
+                EventFloor(),
+                TreasureFloor(),
+                RestFloor(),
             };
 
             int random = UnityEngine.Random.Range(0, coroutines.Length);
