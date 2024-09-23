@@ -100,6 +100,7 @@ public class TreasureManager : Singleton<TreasureManager>
             else
             {
                 ItemManager.Instance.getItem[4] = true;
+                ItemManager.Instance.haveItem = true;
                 mainText.text = "爆弾を手に入れた！";
             }
 
@@ -148,12 +149,13 @@ public class TreasureManager : Singleton<TreasureManager>
             else
             {
                 ItemManager.Instance.getItem[5] = true;
+                ItemManager.Instance.haveItem = true;
                 mainText.text = "攻撃ジュエルを手に入れた！";
             }
         }
         else
         {
-            mainText.text = "宝箱には\n薬草が入っていた！";
+            mainText.text = "宝箱には\n癒し草が入っていた！";
 
             yield return new WaitForSeconds(1.0f);
 
@@ -185,7 +187,7 @@ public class TreasureManager : Singleton<TreasureManager>
                         ItemManager.Instance.getItem[i] = false;
                     }
                     ItemManager.Instance.getItem[3] = true;
-                    mainText.text = "薬草を手に入れた！";
+                    mainText.text = "癒し草を手に入れた！";
                 }
                 else if (no)
                 {
@@ -195,7 +197,8 @@ public class TreasureManager : Singleton<TreasureManager>
             else
             {
                 ItemManager.Instance.getItem[3] = true;
-                mainText.text = "薬草を手に入れた！";
+                ItemManager.Instance.haveItem = true;
+                mainText.text = "癒しを手に入れた！";
             }
         }
 

@@ -214,10 +214,11 @@ public class BattleManager: Singleton<BattleManager>
         else
         {
             nowEnemySprite = new Sprite[] { enemySprite[3], enemySprite[4], enemySprite[5] };
-            int randomNumber = Random.Range(3, nowEnemySprite.Length);
+            int randomNumber = Random.Range(0, nowEnemySprite.Length);
             Sprite selectedSprite = nowEnemySprite[randomNumber];
             displayEnemyImage.sprite = selectedSprite;
 
+            randomNumber += 3;
             enemyName = enemyStatusManager.DataList[randomNumber].eNAME;
             enemyLv = enemyStatusManager.DataList[randomNumber].eLv;
             enemyHP = enemyStatusManager.DataList[randomNumber].eHP;
@@ -260,6 +261,7 @@ public class BattleManager: Singleton<BattleManager>
         Sprite selectedSprite = nowEnemySprite[randomNumber];
         displayEnemyImage.sprite = selectedSprite;
 
+        randomNumber += 6;
         enemyName = enemyStatusManager.DataList[randomNumber].eNAME;
         enemyLv = enemyStatusManager.DataList[randomNumber].eLv;
         enemyHP = enemyStatusManager.DataList[randomNumber].eHP;
@@ -296,15 +298,7 @@ public class BattleManager: Singleton<BattleManager>
             yield return null;
         }
 
-        yield return new WaitForSeconds(1.0f);
-
-        while (!Input.GetKeyDown(KeyCode.Space))
-        {
-            yield return null;
-        }
-
-        Sprite selectedSprite = nowEnemySprite[9];
-        displayEnemyImage.sprite = selectedSprite;
+        displayEnemyImage.sprite = enemySprite[9];
 
         enemyName = enemyStatusManager.DataList[9].eNAME;
         enemyLv = enemyStatusManager.DataList[9].eLv;

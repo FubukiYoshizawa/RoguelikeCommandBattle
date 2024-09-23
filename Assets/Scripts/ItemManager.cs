@@ -6,6 +6,8 @@ using TMPro;
 
 public class ItemManager : Singleton<ItemManager>
 {
+    public ItemValueManager itemValueManager; // アイテムの各値管理用のスクリプト
+
     public TextMeshProUGUI mainText; // テキスト表示
     public bool haveItem; // アイテムを所持しているかどうか
     public bool[] getItem; // どのアイテムを手に入れたか
@@ -20,12 +22,45 @@ public class ItemManager : Singleton<ItemManager>
         Num // どのアイテムを手に入れたかの要素数
     }
     public int[] itemValue; // アイテム使用時の効果量
+    public TextMeshProUGUI itemText; // アイテム名表示用テキスト
 
     private void Start()
     {
-        getItem = new bool[(int)enumGetItem.Num];
-
         mainText = GameObject.Find("MainText").GetComponent<TextMeshProUGUI>();
+        itemText = GameObject.Find("ItemText").GetComponent<TextMeshProUGUI>();
+        getItem = new bool[(int)enumGetItem.Num];
+    }
+
+    private void Update()
+    {
+        if (getItem[(int)enumGetItem.HPPotion])
+        {
+            itemText.text = itemValueManager.DataList[0].itemName;
+        }
+        else if (getItem[(int)enumGetItem.SPPotion])
+        {
+            itemText.text = itemValueManager.DataList[1].itemName;
+        }
+        else if (getItem[(int)enumGetItem.ATKPotion])
+        {
+            itemText.text = itemValueManager.DataList[2].itemName;
+        }
+        else if (getItem[(int)enumGetItem.HealHerb])
+        {
+            itemText.text = itemValueManager.DataList[3].itemName;
+        }
+        else if (getItem[(int)enumGetItem.DamageBomb])
+        {
+            itemText.text = itemValueManager.DataList[4].itemName;
+        }
+        else if (getItem[(int)enumGetItem.ATKJewel])
+        {
+            itemText.text = itemValueManager.DataList[5].itemName;
+        }
+        else
+        {
+            itemText.text = itemValueManager.DataList[6].itemName;
+        }
     }
 
     public IEnumerator HaveItem()
@@ -74,9 +109,9 @@ public class ItemManager : Singleton<ItemManager>
             yield return null;
         }
 
-        mainText.text = $"HPが{itemValue[0]}回復した！";
+        mainText.text = $"HPが{itemValueManager.DataList[0].itemValue}回復した！";
 
-        BattleManager.Instance.playerHP += itemValue[0];
+        BattleManager.Instance.playerHP += itemValueManager.DataList[0].itemValue;
         if (BattleManager.Instance.playerHP > BattleManager.Instance.playerMaxHP)
         {
             BattleManager.Instance.playerHP = BattleManager.Instance.playerMaxHP;
@@ -102,9 +137,9 @@ public class ItemManager : Singleton<ItemManager>
             yield return null;
         }
 
-        mainText.text = $"SPが{itemValue[1]}回復した！";
+        mainText.text = $"SPが{itemValueManager.DataList[1].itemValue}回復した！";
 
-        BattleManager.Instance.playerSP += itemValue[1];
+        BattleManager.Instance.playerSP += itemValueManager.DataList[1].itemValue;
         if (BattleManager.Instance.playerSP > BattleManager.Instance.playerMaxSP)
         {
             BattleManager.Instance.playerSP = BattleManager.Instance.playerMaxSP;
@@ -132,7 +167,7 @@ public class ItemManager : Singleton<ItemManager>
 
         mainText.text = "攻撃力が２倍になった！";
         BattleManager.Instance.powerUp2 = true;
-        BattleManager.Instance.playerATK *= 2;
+        BattleManager.Instance.playerATK *= itemValueManager.DataList[2].itemValue;
         haveItem = false;
 
         yield return new WaitForSeconds(1.0f);
@@ -154,9 +189,9 @@ public class ItemManager : Singleton<ItemManager>
             yield return null;
         }
 
-        mainText.text = $"HPが{itemValue[2]}回復した！";
+        mainText.text = $"HPが{itemValueManager.DataList[3].itemValue}回復した！";
 
-        BattleManager.Instance.playerHP += itemValue[2];
+        BattleManager.Instance.playerHP += itemValueManager.DataList[3].itemValue;
         if (BattleManager.Instance.playerHP > BattleManager.Instance.playerMaxHP)
         {
             BattleManager.Instance.playerHP = BattleManager.Instance.playerMaxHP;
@@ -183,9 +218,9 @@ public class ItemManager : Singleton<ItemManager>
             yield return null;
         }
 
-        mainText.text = $"{itemValue[3]}のダメージ！";
+        mainText.text = $"{itemValueManager.DataList[4].itemValue}のダメージ！";
 
-        BattleManager.Instance.enemyHP -= itemValue[3];
+        BattleManager.Instance.enemyHP -= itemValueManager.DataList[4].itemValue;
         if (BattleManager.Instance.enemyHP < 0)
         {
             BattleManager.Instance.enemyHP = 0;
@@ -214,7 +249,7 @@ public class ItemManager : Singleton<ItemManager>
 
         mainText.text = "攻撃力が3倍になった！";
         BattleManager.Instance.powerUp3 = true;
-        BattleManager.Instance.playerATK *= 3;
+        BattleManager.Instance.playerATK *= itemValueManager.DataList[5].itemValue;
         haveItem = false;
 
         yield return new WaitForSeconds(1.0f);

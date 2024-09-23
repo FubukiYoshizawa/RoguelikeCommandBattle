@@ -123,6 +123,7 @@ public class ShopManager : Singleton<ShopManager>
                     mainText.text = "ŒğŠ·¬—§‚¾\n‚Ü‚½‰ï‚¦‚é‚Æ‚¢‚¢‚Ë";
                     BattleManager.Instance.playerHP -= 10;
                     ItemManager.Instance.getItem[0] = true;
+                    ItemManager.Instance.haveItem = true;
                 }
 
                 yield return new WaitForSeconds(1.0f);
@@ -231,6 +232,7 @@ public class ShopManager : Singleton<ShopManager>
                     mainText.text = "ŒğŠ·¬—§‚¾\n‚Ü‚½‰ï‚¦‚é‚Æ‚¢‚¢‚Ë";
                     BattleManager.Instance.playerHP -= 10;
                     ItemManager.Instance.getItem[1] = true;
+                    ItemManager.Instance.haveItem = true;
                 }
 
                 yield return new WaitForSeconds(1.0f);
@@ -340,6 +342,7 @@ public class ShopManager : Singleton<ShopManager>
                     mainText.text = "ŒğŠ·¬—§‚¾\n‚Ü‚½‰ï‚¦‚é‚Æ‚¢‚¢‚Ë";
                     BattleManager.Instance.playerHP -= 10;
                     ItemManager.Instance.getItem[2] = true;
+                    ItemManager.Instance.haveItem = true;
                 }
 
                 yield return new WaitForSeconds(1.0f);
