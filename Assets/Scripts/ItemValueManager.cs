@@ -6,6 +6,7 @@ using UnityEngine;
 public class ItemValue
 {
     public string itemName; // アイテム名
+    public int itemID; // アイテムのID
     public int itemValue; // アイテムの効果量
 }
 

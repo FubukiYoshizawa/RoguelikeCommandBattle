@@ -7,6 +7,8 @@ using UnityEngine.EventSystems;
 
 public class ShopManager : Singleton<ShopManager>
 {
+    public ItemValueManager itemValueManager; // アイテムの各値管理用のスクリプト
+
     public TextMeshProUGUI mainText; // テキスト表示
     public GameObject selectWindow; // 選択ウィンドウ
     public bool yes, no; // 選択肢
@@ -21,10 +23,20 @@ public class ShopManager : Singleton<ShopManager>
         ATKPotion, // 攻撃ポーション
         Num // 背景数
     }
+    public int[] getItemNumber;
+    public enum enumGetItemNumber
+    {
+        HPPotion,
+        SPPotion,
+        ATKPotion,
+        Num
+    }
+    public int getItem;
 
     public void Start()
     {
         floorSprite = new Sprite[(int)enumFloorSprite.Num];
+        getItemNumber = new int[(int)enumGetItemNumber.Num];
 
         mainText = GameObject.Find("MainText").GetComponent<TextMeshProUGUI>();
         selectWindow = GameObject.Find("ShopSelectWindow");
@@ -34,6 +46,10 @@ public class ShopManager : Singleton<ShopManager>
         floorSprite[(int)enumFloorSprite.SPPotion] = Resources.Load<Sprite>("Images/FloorBacks/SPPotion");
         floorSprite[(int)enumFloorSprite.ATKPotion] = Resources.Load<Sprite>("Images/FloorBacks/ATKPotion");
 
+        getItemNumber[(int)enumGetItemNumber.HPPotion] = itemValueManager.DataList[0].itemID;
+        getItemNumber[(int)enumGetItemNumber.SPPotion] = itemValueManager.DataList[1].itemID;
+        getItemNumber[(int)enumGetItemNumber.ATKPotion] = itemValueManager.DataList[2].itemID;
+
         selectWindow.SetActive(false);
 
     }
@@ -41,7 +57,26 @@ public class ShopManager : Singleton<ShopManager>
     public IEnumerator HPShop()
     {
         floorImage.sprite = floorSprite[(int)enumFloorSprite.HPPotion];
+        getItem = getItemNumber[(int)enumGetItemNumber.HPPotion];
+        yield return StartCoroutine(PotionShop());
+    }
 
+    public IEnumerator SPShop()
+    {
+        floorImage.sprite = floorSprite[(int)enumFloorSprite.SPPotion];
+        getItem = getItemNumber[(int)enumGetItemNumber.SPPotion];
+        yield return StartCoroutine(PotionShop());
+    }
+
+    public IEnumerator ATKShop()
+    {
+        floorImage.sprite = floorSprite[(int)enumFloorSprite.ATKPotion];
+        getItem = getItemNumber[(int)enumGetItemNumber.ATKPotion];
+        yield return StartCoroutine(PotionShop());
+    }
+
+    public IEnumerator PotionShop()
+    {
         mainText.text = "いらっしゃい！\nここはポーションショップだよ";
 
         yield return new WaitForSeconds(1.0f);
@@ -66,7 +101,7 @@ public class ShopManager : Singleton<ShopManager>
         }
         else
         {
-            mainText.text = "HPポーションが必要かい？";
+            mainText.text = $"{itemValueManager.DataList[getItem].itemName}が必要かい？";
 
             yield return new WaitForSeconds(0.5f);
 
@@ -109,7 +144,8 @@ public class ShopManager : Singleton<ShopManager>
                         {
                             ItemManager.Instance.getItem[i] = false;
                         }
-                        ItemManager.Instance.getItem[0] = true;
+                        ItemManager.Instance.getItem[getItem] = true;
+                        ItemManager.Instance.itemText.text = itemValueManager.DataList[getItem].itemName;
                     }
                     else
                     {
@@ -122,227 +158,9 @@ public class ShopManager : Singleton<ShopManager>
                 {
                     mainText.text = "交換成立だ\nまた会えるといいね";
                     BattleManager.Instance.playerHP -= 10;
-                    ItemManager.Instance.getItem[0] = true;
+                    ItemManager.Instance.getItem[getItem] = true;
                     ItemManager.Instance.haveItem = true;
-                }
-
-                yield return new WaitForSeconds(1.0f);
-
-                while (!Input.GetKeyDown(KeyCode.Space))
-                {
-                    yield return null;
-                }
-            }
-            else
-            {
-                no = false;
-                mainText.text = "後悔しないことを願うよ";
-            }
-        }
-
-        yield return new WaitForSeconds(1.0f);
-
-        while (!Input.GetKeyDown(KeyCode.Space))
-        {
-            yield return null;
-        }
-    }
-
-    public IEnumerator SPShop()
-    {
-        floorImage.sprite = floorSprite[(int)enumFloorSprite.SPPotion];
-
-        mainText.text = "いらっしゃい！\nここはポーションショップだよ";
-
-        yield return new WaitForSeconds(1.0f);
-
-        while (!Input.GetKeyDown(KeyCode.Space))
-        {
-            yield return null;
-        }
-
-        mainText.text = "血を分けてくれたら\nポーションを売ってあげよう";
-
-        yield return new WaitForSeconds(1.0f);
-
-        while (!Input.GetKeyDown(KeyCode.Space))
-        {
-            yield return null;
-        }
-
-        if (BattleManager.Instance.playerHP <= 10)
-        {
-            mainText.text = "おっと、HPが足りないね\nまた来ておくれ";
-        }
-        else
-        {
-            mainText.text = "SPポーションが必要かい？";
-
-            yield return new WaitForSeconds(0.5f);
-
-            selectWindow.SetActive(true);
-            EventSystem.current.SetSelectedGameObject(defaultButton);
-
-            while (!yes && !no)
-            {
-                yield return null;
-            }
-
-            selectWindow.SetActive(false);
-
-            if (yes)
-            {
-                yes = false;
-
-                if (ItemManager.Instance.haveItem)
-                {
-                    mainText.text = "もうアイテムを持ってるね\nアイテムを交換するかい？";
-
-                    yield return new WaitForSeconds(0.5f);
-
-                    selectWindow.SetActive(true);
-
-                    while (!yes && !no)
-                    {
-                        yield return null;
-                    }
-
-                    selectWindow.SetActive(false);
-
-                    if (yes)
-                    {
-                        yes = false;
-                        mainText.text = "交換成立だ\nまた会えるといいね";
-                        BattleManager.Instance.playerHP -= 10;
-                        for (int i = 0; i < ItemManager.Instance.getItem.Length; i++)
-                        {
-                            ItemManager.Instance.getItem[i] = false;
-                        }
-                        ItemManager.Instance.getItem[1] = true;
-                    }
-                    else
-                    {
-                        no = false;
-                        mainText.text = "後悔しないことを願うよ";
-                    }
-
-                }
-                else
-                {
-                    mainText.text = "交換成立だ\nまた会えるといいね";
-                    BattleManager.Instance.playerHP -= 10;
-                    ItemManager.Instance.getItem[1] = true;
-                    ItemManager.Instance.haveItem = true;
-                }
-
-                yield return new WaitForSeconds(1.0f);
-
-                while (!Input.GetKeyDown(KeyCode.Space))
-                {
-                    yield return null;
-                }
-            }
-            else
-            {
-                no = false;
-                mainText.text = "後悔しないことを願うよ";
-            }
-        }
-
-        yield return new WaitForSeconds(1.0f);
-
-        while (!Input.GetKeyDown(KeyCode.Space))
-        {
-            yield return null;
-        }
-
-    }
-
-    public IEnumerator ATKShop()
-    {
-        floorImage.sprite = floorSprite[(int)enumFloorSprite.ATKPotion];
-
-        mainText.text = "いらっしゃい！\nここはポーションショップだよ";
-
-        yield return new WaitForSeconds(1.0f);
-
-        while (!Input.GetKeyDown(KeyCode.Space))
-        {
-            yield return null;
-        }
-
-        mainText.text = "血を分けてくれたら\nポーションを売ってあげよう";
-
-        yield return new WaitForSeconds(1.0f);
-
-        while (!Input.GetKeyDown(KeyCode.Space))
-        {
-            yield return null;
-        }
-
-        if (BattleManager.Instance.playerHP <= 10)
-        {
-            mainText.text = "おっと、HPが足りないね\nまた来ておくれ";
-        }
-        else
-        {
-            mainText.text = "SPポーションが必要かい？";
-
-            yield return new WaitForSeconds(0.5f);
-
-            selectWindow.SetActive(true);
-            EventSystem.current.SetSelectedGameObject(defaultButton);
-
-            while (!yes && !no)
-            {
-                yield return null;
-            }
-
-            selectWindow.SetActive(false);
-
-            if (yes)
-            {
-                yes = false;
-
-                if (ItemManager.Instance.haveItem)
-                {
-                    mainText.text = "もうアイテムを持ってるね\nアイテムを交換するかい？";
-
-                    yield return new WaitForSeconds(0.5f);
-
-                    selectWindow.SetActive(true);
-
-                    while (!yes && !no)
-                    {
-                        yield return null;
-                    }
-
-                    selectWindow.SetActive(false);
-
-                    if (yes)
-                    {
-                        yes = false;
-                        mainText.text = "交換成立だ\nまた会えるといいね";
-                        BattleManager.Instance.playerHP -= 10;
-                        for (int i = 0; i < ItemManager.Instance.getItem.Length; i++)
-                        {
-                            ItemManager.Instance.getItem[i] = false;
-                        }
-                        ItemManager.Instance.getItem[2] = true;
-                    }
-                    else
-                    {
-                        no = false;
-                        mainText.text = "後悔しないことを願うよ";
-                    }
-
-                }
-                else
-                {
-                    mainText.text = "交換成立だ\nまた会えるといいね";
-                    BattleManager.Instance.playerHP -= 10;
-                    ItemManager.Instance.getItem[2] = true;
-                    ItemManager.Instance.haveItem = true;
+                    ItemManager.Instance.itemText.text = itemValueManager.DataList[getItem].itemName;
                 }
 
                 yield return new WaitForSeconds(1.0f);

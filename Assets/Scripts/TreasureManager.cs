@@ -7,6 +7,8 @@ using UnityEngine.EventSystems;
 
 public class TreasureManager : Singleton<TreasureManager>
 {
+    public ItemValueManager itemValueManager; // アイテムの各値管理用のスクリプト
+
     public TextMeshProUGUI mainText; // テキスト表示
     public GameObject selectWindow; // 選択ウィンドウ
     public bool yes, no; // 選択肢
@@ -20,6 +22,15 @@ public class TreasureManager : Singleton<TreasureManager>
         OpenTreasure, // 宝箱開封背景
         Num // フロア背景数
     }
+    public int[] getItemNumber;
+    public enum enumGetItemNumber
+    {
+        Healherb,
+        DamageBomb,
+        ATKJewel,
+        Num
+    }
+    public int itemNumber;
     /*
     0:宝背景未開封
     1:宝背景開封
@@ -28,6 +39,7 @@ public class TreasureManager : Singleton<TreasureManager>
     private void Start()
     {
         floorSprite = new Sprite[(int)enumFloorSprite.Num];
+        getItemNumber = new int[(int)enumGetItemNumber.Num];
 
         mainText = GameObject.Find("MainText").GetComponent<TextMeshProUGUI>();
         selectWindow = GameObject.Find("ItemChangeWindow");
@@ -36,7 +48,32 @@ public class TreasureManager : Singleton<TreasureManager>
         floorSprite[(int)enumFloorSprite.NotOpenTreasure] = Resources.Load<Sprite>("Images/FloorBacks/NotOpenTreasure");
         floorSprite[(int)enumFloorSprite.OpenTreasure] = Resources.Load<Sprite>("Images/FloorBacks/OpenTreasure");
 
+        getItemNumber[(int)enumGetItemNumber.Healherb] = itemValueManager.DataList[3].itemID;
+        getItemNumber[(int)enumGetItemNumber.DamageBomb] = itemValueManager.DataList[4].itemID;
+        getItemNumber[(int)enumGetItemNumber.ATKJewel] = itemValueManager.DataList[5].itemID;
+
         selectWindow.SetActive(false);
+
+    }
+
+    public IEnumerator RandomItem()
+    {
+        int randomValue = Random.Range(0, 10);
+        if (randomValue == 0)
+        {
+            itemNumber = getItemNumber[(int)enumGetItemNumber.Healherb];
+            yield return StartCoroutine(Item());
+        }
+        else if (randomValue < 2)
+        {
+            itemNumber = getItemNumber[(int)enumGetItemNumber.DamageBomb];
+            yield return StartCoroutine(Item());
+        }
+        else
+        {
+            itemNumber = getItemNumber[(int)enumGetItemNumber.ATKJewel];
+            yield return StartCoroutine(Item());
+        }
 
     }
 
@@ -55,153 +92,53 @@ public class TreasureManager : Singleton<TreasureManager>
 
         floorImage.sprite = floorSprite[(int)enumFloorSprite.OpenTreasure];
 
-        int randomValue = Random.Range(0, 10);
-        if (randomValue == 0)
+        mainText.text = $"宝箱には\n{itemValueManager.DataList[itemNumber].itemName}が入っていた！";
+
+        yield return new WaitForSeconds(1.0f);
+
+        while (!Input.GetKeyDown(KeyCode.Space))
         {
-            mainText.text = "宝箱には\n爆弾が入っていた！";
-
-            yield return new WaitForSeconds(1.0f);
-
-            while (!Input.GetKeyDown(KeyCode.Space))
-            {
-                yield return null;
-            }
-
-            if (ItemManager.Instance.haveItem)
-            {
-                mainText.text = "アイテムを交換しますか？";
-
-                yield return new WaitForSeconds(0.5f);
-
-                selectWindow.SetActive(true);
-                EventSystem.current.SetSelectedGameObject(defaultButton);
-
-                while (!yes && !no)
-                {
-                    yield return null;
-                }
-
-                selectWindow.SetActive(false);
-
-                if (yes)
-                {
-                    for (int i = 0; i < ItemManager.Instance.getItem.Length; i++)
-                    {
-                        ItemManager.Instance.getItem[i] = false;
-                    }
-                    ItemManager.Instance.getItem[4] = true;
-                    mainText.text = "爆弾を手に入れた！";
-                }
-                else if (no)
-                {
-                    mainText.text = "あなたは宝箱をあきらめた";
-                }
-            }
-            else
-            {
-                ItemManager.Instance.getItem[4] = true;
-                ItemManager.Instance.haveItem = true;
-                mainText.text = "爆弾を手に入れた！";
-            }
-
+            yield return null;
         }
-        else if (randomValue < 2)
+
+        if (ItemManager.Instance.haveItem)
         {
-            mainText.text = "宝箱には\n攻撃ジュエルが入っていた！";
+            mainText.text = "アイテムを交換しますか？";
 
-            yield return new WaitForSeconds(1.0f);
+            yield return new WaitForSeconds(0.5f);
 
-            while (!Input.GetKeyDown(KeyCode.Space))
+            selectWindow.SetActive(true);
+            EventSystem.current.SetSelectedGameObject(defaultButton);
+
+            while (!yes && !no)
             {
                 yield return null;
             }
 
-            if (ItemManager.Instance.haveItem)
+            selectWindow.SetActive(false);
+
+            if (yes)
             {
-                mainText.text = "アイテムを交換しますか？";
-
-                yield return new WaitForSeconds(0.5f);
-
-                selectWindow.SetActive(true);
-                EventSystem.current.SetSelectedGameObject(defaultButton);
-
-                while (!yes && !no)
+                for (int i = 0; i < ItemManager.Instance.getItem.Length; i++)
                 {
-                    yield return null;
+                    ItemManager.Instance.getItem[i] = false;
                 }
-
-                selectWindow.SetActive(false);
-
-                if (yes)
-                {
-                    for (int i = 0; i < ItemManager.Instance.getItem.Length; i++)
-                    {
-                        ItemManager.Instance.getItem[i] = false;
-                    }
-                    ItemManager.Instance.getItem[5] = true;
-                    mainText.text = "攻撃ジュエルを手に入れた！";
-                }
-                else if (no)
-                {
-                    mainText.text = "あなたは宝箱をあきらめた";
-                }
+                ItemManager.Instance.getItem[itemNumber] = true;
+                ItemManager.Instance.itemText.text = itemValueManager.DataList[itemNumber].itemName;
+                mainText.text = $"{itemValueManager.DataList[itemNumber].itemName}を手に入れた！";
             }
-            else
+            else if (no)
             {
-                ItemManager.Instance.getItem[5] = true;
-                ItemManager.Instance.haveItem = true;
-                mainText.text = "攻撃ジュエルを手に入れた！";
+                mainText.text = "あなたは宝箱をあきらめた";
             }
         }
         else
         {
-            mainText.text = "宝箱には\n癒し草が入っていた！";
-
-            yield return new WaitForSeconds(1.0f);
-
-            while (!Input.GetKeyDown(KeyCode.Space))
-            {
-                yield return null;
-            }
-
-            if (ItemManager.Instance.haveItem)
-            {
-                mainText.text = "アイテムを交換しますか？";
-
-                yield return new WaitForSeconds(0.5f);
-
-                selectWindow.SetActive(true);
-                EventSystem.current.SetSelectedGameObject(defaultButton);
-
-                while (!yes && !no)
-                {
-                    yield return null;
-                }
-
-                selectWindow.SetActive(false);
-
-                if (yes)
-                {
-                    for (int i = 0; i < ItemManager.Instance.getItem.Length; i++)
-                    {
-                        ItemManager.Instance.getItem[i] = false;
-                    }
-                    ItemManager.Instance.getItem[3] = true;
-                    mainText.text = "癒し草を手に入れた！";
-                }
-                else if (no)
-                {
-                    mainText.text = "あなたは宝箱をあきらめた";
-                }
-            }
-            else
-            {
-                ItemManager.Instance.getItem[3] = true;
-                ItemManager.Instance.haveItem = true;
-                mainText.text = "癒しを手に入れた！";
-            }
+            ItemManager.Instance.getItem[itemNumber] = true;
+            ItemManager.Instance.haveItem = true;
+            ItemManager.Instance.itemText.text = itemValueManager.DataList[itemNumber].itemName;
+            mainText.text = $"{itemValueManager.DataList[itemNumber].itemName}を手に入れた！";
         }
-
 
         yield return new WaitForSeconds(1.0f);
 

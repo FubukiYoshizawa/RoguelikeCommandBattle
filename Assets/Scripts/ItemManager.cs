@@ -29,38 +29,12 @@ public class ItemManager : Singleton<ItemManager>
         mainText = GameObject.Find("MainText").GetComponent<TextMeshProUGUI>();
         itemText = GameObject.Find("ItemText").GetComponent<TextMeshProUGUI>();
         getItem = new bool[(int)enumGetItem.Num];
+        itemText.text = itemValueManager.DataList[(int)enumGetItem.Num].itemName;
     }
 
     private void Update()
     {
-        if (getItem[(int)enumGetItem.HPPotion])
-        {
-            itemText.text = itemValueManager.DataList[0].itemName;
-        }
-        else if (getItem[(int)enumGetItem.SPPotion])
-        {
-            itemText.text = itemValueManager.DataList[1].itemName;
-        }
-        else if (getItem[(int)enumGetItem.ATKPotion])
-        {
-            itemText.text = itemValueManager.DataList[2].itemName;
-        }
-        else if (getItem[(int)enumGetItem.HealHerb])
-        {
-            itemText.text = itemValueManager.DataList[3].itemName;
-        }
-        else if (getItem[(int)enumGetItem.DamageBomb])
-        {
-            itemText.text = itemValueManager.DataList[4].itemName;
-        }
-        else if (getItem[(int)enumGetItem.ATKJewel])
-        {
-            itemText.text = itemValueManager.DataList[5].itemName;
-        }
-        else
-        {
-            itemText.text = itemValueManager.DataList[6].itemName;
-        }
+        
     }
 
     public IEnumerator HaveItem()
@@ -100,7 +74,7 @@ public class ItemManager : Singleton<ItemManager>
 
     public IEnumerator HPPotion()
     {
-        mainText.text = "HPポーションを使った！";
+        mainText.text = $"{itemValueManager.DataList[0].itemName}を使った！";
 
         yield return new WaitForSeconds(1.0f);
 
@@ -128,7 +102,7 @@ public class ItemManager : Singleton<ItemManager>
 
     public IEnumerator SPPotion()
     {
-        mainText.text = "SPポーションを使った！";
+        mainText.text = $"{itemValueManager.DataList[1].itemName}を使った！";
 
         yield return new WaitForSeconds(1.0f);
 
@@ -156,7 +130,7 @@ public class ItemManager : Singleton<ItemManager>
 
     public IEnumerator ATKPotion()
     {
-        mainText.text = "攻撃ポーションを使った！";
+        mainText.text = $"{itemValueManager.DataList[2].itemName}を使った！";
 
         yield return new WaitForSeconds(1.0f);
 
@@ -180,7 +154,7 @@ public class ItemManager : Singleton<ItemManager>
 
     public IEnumerator HealHerb()
     {
-        mainText.text = "薬草を使った！";
+        mainText.text = $"{itemValueManager.DataList[3].itemName}を使った！";
 
         yield return new WaitForSeconds(1.0f);
 
@@ -209,7 +183,7 @@ public class ItemManager : Singleton<ItemManager>
 
     public IEnumerator DamageBomb()
     {
-        mainText.text = "爆弾を使った！";
+        mainText.text = $"{itemValueManager.DataList[4].itemName}を使った！";
 
         yield return new WaitForSeconds(1.0f);
 
@@ -238,7 +212,7 @@ public class ItemManager : Singleton<ItemManager>
 
     public IEnumerator ATKJewel()
     {
-        mainText.text = "攻撃ジュエルを使った！";
+        mainText.text = $"{itemValueManager.DataList[5].itemName}を使った！";
 
         yield return new WaitForSeconds(1.0f);
 

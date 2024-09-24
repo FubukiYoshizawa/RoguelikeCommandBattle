@@ -2389,6 +2389,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d29f639fa7db1d469478134b2ac5232, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  itemValueManager: {fileID: 11400000, guid: 79dedb72d80db50489daf8eb8ccb576e, type: 2}
   mainText: {fileID: 288444781}
   selectWindow: {fileID: 1516700057}
   yes: 0
@@ -2399,6 +2400,8 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 08878b03ab97e0e498745ec6d156bdec, type: 3}
   - {fileID: 21300000, guid: 87fa445634651524daff02a4cada1b17, type: 3}
   - {fileID: 21300000, guid: 54db1ad1b9981be49a5ac2b81ed027e5, type: 3}
+  getItemNumber: 
+  getItem: 0
 --- !u!114 &528179723
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2429,6 +2432,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c56fbf0534c1cc4598d6a6d7dfc4078, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  itemValueManager: {fileID: 11400000, guid: 79dedb72d80db50489daf8eb8ccb576e, type: 2}
   mainText: {fileID: 288444781}
   selectWindow: {fileID: 284257623}
   yes: 0
@@ -2438,6 +2442,8 @@ MonoBehaviour:
   floorSprite:
   - {fileID: 21300000, guid: 93e2eef4b9c9a5243b10012c9a082a5b, type: 3}
   - {fileID: 21300000, guid: 2dbe676f2c2c2254a95b302c32213c4b, type: 3}
+  getItemNumber: 
+  itemNumber: 0
 --- !u!1 &544133912
 GameObject:
   m_ObjectHideFlags: 0

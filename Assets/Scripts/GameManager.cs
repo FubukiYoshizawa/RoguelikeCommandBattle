@@ -185,7 +185,7 @@ public class GameManager : Singleton<GameManager>
             yield return null;
         }
 
-        yield return StartCoroutine(TreasureManager.Instance.Item());
+        yield return StartCoroutine(TreasureManager.Instance.RandomItem());
 
         yield return StartCoroutine(NextFloor());
 
