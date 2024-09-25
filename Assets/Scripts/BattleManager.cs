@@ -34,6 +34,20 @@ public class BattleManager: Singleton<BattleManager>
     public Sprite floorBackSprite; // フロア画像
     public Image displayEnemyImage; // 敵を当てはめるImageオブジェクト
     public Sprite[] enemySprite; // 敵の画像
+    public enum enumEnemySprite
+    {
+        Slime,
+        IkeBat,
+        HatGhost,
+        GodADeath,
+        Tornado,
+        ThunderOni,
+        InfernoButterfly,
+        DarkDragon,
+        IceDragon,
+        LightDragon,
+        Num
+    }
     private Sprite[] nowEnemySprite; // 現在戦っている敵の画像
     public Sprite noneEnemy; // 敵がいないときの画像
     public TextMeshProUGUI battleText; // バトル時のテキスト
@@ -101,7 +115,7 @@ public class BattleManager: Singleton<BattleManager>
 
     void Start()
     {
-        // 配列を準備
+        enemySprite = new Sprite[(int)enumEnemySprite.Num];
         playerStatusText = new TextMeshProUGUI[(int)enumPlayerStatusText.Num];
         enemyStatusText = new TextMeshProUGUI[(int)enumEnemyStatusText.Num];
         windows = new GameObject[(int)enumWindows.Num];
@@ -113,6 +127,17 @@ public class BattleManager: Singleton<BattleManager>
         displayEnemyImage = GameObject.Find("EnemyImage").GetComponent<Image>();
         noneEnemy = Resources.Load<Sprite>("Images/Enemys/Unknown");
         battleText = GameObject.Find("MainText").GetComponent<TextMeshProUGUI>();
+
+        enemySprite[(int)enumEnemySprite.Slime] = Resources.Load<Sprite>("Images/Enemys/Slime");
+        enemySprite[(int)enumEnemySprite.IkeBat] = Resources.Load<Sprite>("Images/Enemys/IkeBat");
+        enemySprite[(int)enumEnemySprite.HatGhost] = Resources.Load<Sprite>("Images/Enemys/HatGhost");
+        enemySprite[(int)enumEnemySprite.GodADeath] = Resources.Load<Sprite>("Images/Enemys/GodADeath");
+        enemySprite[(int)enumEnemySprite.Tornado] = Resources.Load<Sprite>("Images/Enemys/Tornado");
+        enemySprite[(int)enumEnemySprite.ThunderOni] = Resources.Load<Sprite>("Images/Enemys/ThunderOni");
+        enemySprite[(int)enumEnemySprite.InfernoButterfly] = Resources.Load<Sprite>("Images/Enemys/InfernoButterfly");
+        enemySprite[(int)enumEnemySprite.DarkDragon] = Resources.Load<Sprite>("Images/Enemys/DarkDragon");
+        enemySprite[(int)enumEnemySprite.IceDragon] = Resources.Load<Sprite>("Images/Enemys/IceDragon");
+        enemySprite[(int)enumEnemySprite.LightDragon] = Resources.Load<Sprite>("Images/Enemys/LightDragon");
 
         playerStatusText[(int)enumPlayerStatusText.Name] = GameObject.Find("PlayerNameText").GetComponent<TextMeshProUGUI>();
         playerStatusText[(int)enumPlayerStatusText.Lv] = GameObject.Find("PlayerLvText").GetComponent<TextMeshProUGUI>();
@@ -198,7 +223,7 @@ public class BattleManager: Singleton<BattleManager>
 
         if (GameManager.Instance.floorNumber <= GameManager.Instance.maxFloorNumber / 2)
         {
-            nowEnemySprite = new Sprite[] { enemySprite[0], enemySprite[1], enemySprite[2] };
+            nowEnemySprite = new Sprite[] { enemySprite[(int)enumEnemySprite.Slime], enemySprite[(int)enumEnemySprite.IkeBat], enemySprite[(int)enumEnemySprite.HatGhost] };
             int randomNumber = Random.Range(0, nowEnemySprite.Length);
             Sprite selectedSprite = nowEnemySprite[randomNumber];
             displayEnemyImage.sprite = selectedSprite;
@@ -213,7 +238,7 @@ public class BattleManager: Singleton<BattleManager>
         }
         else
         {
-            nowEnemySprite = new Sprite[] { enemySprite[3], enemySprite[4], enemySprite[5] };
+            nowEnemySprite = new Sprite[] { enemySprite[(int)enumEnemySprite.GodADeath], enemySprite[(int)enumEnemySprite.Tornado], enemySprite[(int)enumEnemySprite.ThunderOni] };
             int randomNumber = Random.Range(0, nowEnemySprite.Length);
             Sprite selectedSprite = nowEnemySprite[randomNumber];
             displayEnemyImage.sprite = selectedSprite;
@@ -256,7 +281,7 @@ public class BattleManager: Singleton<BattleManager>
             yield return null;
         }
 
-        nowEnemySprite = new Sprite[] { enemySprite[6], enemySprite[7], enemySprite[8] };
+        nowEnemySprite = new Sprite[] { enemySprite[(int)enumEnemySprite.InfernoButterfly], enemySprite[(int)enumEnemySprite.DarkDragon], enemySprite[(int)enumEnemySprite.IceDragon] };
         int randomNumber = Random.Range(0, nowEnemySprite.Length);
         Sprite selectedSprite = nowEnemySprite[randomNumber];
         displayEnemyImage.sprite = selectedSprite;
@@ -298,7 +323,7 @@ public class BattleManager: Singleton<BattleManager>
             yield return null;
         }
 
-        displayEnemyImage.sprite = enemySprite[9];
+        displayEnemyImage.sprite = enemySprite[(int)enumEnemySprite.LightDragon];
 
         enemyName = enemyStatusManager.DataList[9].eNAME;
         enemyLv = enemyStatusManager.DataList[9].eLv;
@@ -571,27 +596,27 @@ public class BattleManager: Singleton<BattleManager>
 
         if (ItemManager.Instance.getItem[0])
         {
-            battleText.text = "HPポーション : HPを30回復";
+            battleText.text = "HPポーション:HPを30回復";
         }
         else if (ItemManager.Instance.getItem[1])
         {
-            battleText.text = "SPポーション : SPを30回復";
+            battleText.text = "SPポーション:SPを30回復";
         }
         else if (ItemManager.Instance.getItem[2])
         {
-            battleText.text = "攻撃ポーション : 次の物理攻撃力が2倍";
+            battleText.text = "攻撃ポーション:次の攻撃力が2倍";
         }
         else if (ItemManager.Instance.getItem[3])
         {
-            battleText.text = "薬草 : HPを50回復";
+            battleText.text = "薬草:HPを50回復";
         }
         else if (ItemManager.Instance.getItem[4])
         {
-            battleText.text = "ボム : 敵に30のダメージ";
+            battleText.text = "ボム:敵に30のダメージ";
         }
         else if (ItemManager.Instance.getItem[5])
         {
-            battleText.text = "攻撃ジュエル : 次の物理攻撃力が3倍";
+            battleText.text = "攻撃ジュエル:次の攻撃力が3倍";
         }
 
         while (!buttonOn[(int)enumButtonOn.ItemUse] && !buttonOn[(int)enumButtonOn.Back])
@@ -680,7 +705,7 @@ public class BattleManager: Singleton<BattleManager>
             {
                 playerLv += 1;
                 playerMaxHP += 10;
-                playerMaxSP += 2;
+                playerMaxSP += 5;
                 playerATK += 2;
                 playerEXP = 0;
                 playerNextLvEXP *= 2;
