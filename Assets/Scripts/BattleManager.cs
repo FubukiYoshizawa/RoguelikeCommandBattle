@@ -29,6 +29,7 @@ public class BattleManager: Singleton<BattleManager>
 
     public bool powerUp2 = false; // 攻撃力2倍状態を表す
     public bool powerUp3 = false; // 攻撃力3倍状態を表す
+    public bool bossBattle;
 
     public Image floorBackImage; // フロアの背景を当てはめるImageオブジェクト
     public Sprite floorBackSprite; // フロア画像
@@ -45,6 +46,7 @@ public class BattleManager: Singleton<BattleManager>
         InfernoButterfly,
         DarkDragon,
         IceDragon,
+        BabyDragon,
         LightDragon,
         Num
     }
@@ -137,6 +139,7 @@ public class BattleManager: Singleton<BattleManager>
         enemySprite[(int)enumEnemySprite.InfernoButterfly] = Resources.Load<Sprite>("Images/Enemys/InfernoButterfly");
         enemySprite[(int)enumEnemySprite.DarkDragon] = Resources.Load<Sprite>("Images/Enemys/DarkDragon");
         enemySprite[(int)enumEnemySprite.IceDragon] = Resources.Load<Sprite>("Images/Enemys/IceDragon");
+        enemySprite[(int)enumEnemySprite.BabyDragon] = Resources.Load<Sprite>("Images/Enemys/BabyDragon");
         enemySprite[(int)enumEnemySprite.LightDragon] = Resources.Load<Sprite>("Images/Enemys/LightDragon");
 
         playerStatusText[(int)enumPlayerStatusText.Name] = GameObject.Find("PlayerNameText").GetComponent<TextMeshProUGUI>();
@@ -221,7 +224,7 @@ public class BattleManager: Singleton<BattleManager>
             yield return null;
         }
 
-        if (GameManager.Instance.floorNumber <= GameManager.Instance.maxFloorNumber / 2)
+        if (GameManager.Instance.floorNumber <= GameManager.Instance.maxFloorNumber / 2 || PlayerPrefs.GetInt("Difficulty") == 0)
         {
             nowEnemySprite = new Sprite[] { enemySprite[(int)enumEnemySprite.Slime], enemySprite[(int)enumEnemySprite.IkeBat], enemySprite[(int)enumEnemySprite.HatGhost] };
             int randomNumber = Random.Range(0, nowEnemySprite.Length);
@@ -236,7 +239,7 @@ public class BattleManager: Singleton<BattleManager>
             enemyEXP = enemyStatusManager.DataList[randomNumber].eEXP;
             enemyStatusText[(int)enumEnemyStatusText.Name].text = enemyName;
         }
-        else
+        else if (PlayerPrefs.GetInt("Difficulty") >= 1)
         {
             nowEnemySprite = new Sprite[] { enemySprite[(int)enumEnemySprite.GodADeath], enemySprite[(int)enumEnemySprite.Tornado], enemySprite[(int)enumEnemySprite.ThunderOni] };
             int randomNumber = Random.Range(0, nowEnemySprite.Length);
@@ -273,6 +276,7 @@ public class BattleManager: Singleton<BattleManager>
     {
         battleText.text = "強敵フロアだ！";
         floorBackImage.sprite = floorBackSprite;
+        GameManager.Instance.floorIconImage.sprite = GameManager.Instance.floorIconSprite[(int)GameManager.enumFloorIconSprite.StrongFloor];
 
         yield return new WaitForSeconds(1.0f);
 
@@ -315,6 +319,8 @@ public class BattleManager: Singleton<BattleManager>
     {
         battleText.text = "ボスフロアだ！";
         floorBackImage.sprite = floorBackSprite;
+        GameManager.Instance.floorIconImage.sprite = GameManager.Instance.floorIconSprite[(int)GameManager.enumFloorIconSprite.BossFloor];
+        bossBattle = true;
 
         yield return new WaitForSeconds(1.0f);
 
@@ -323,15 +329,30 @@ public class BattleManager: Singleton<BattleManager>
             yield return null;
         }
 
-        displayEnemyImage.sprite = enemySprite[(int)enumEnemySprite.LightDragon];
+        if (PlayerPrefs.GetInt("Difficulty") == 0)
+        {
+            displayEnemyImage.sprite = enemySprite[(int)enumEnemySprite.BabyDragon];
 
-        enemyName = enemyStatusManager.DataList[9].eNAME;
-        enemyLv = enemyStatusManager.DataList[9].eLv;
-        enemyHP = enemyStatusManager.DataList[9].eHP;
-        enemyMaxHP = enemyStatusManager.DataList[9].eHP;
-        enemyATK = enemyStatusManager.DataList[9].eATK;
-        enemyEXP = enemyStatusManager.DataList[9].eEXP;
-        enemyStatusText[(int)enumEnemyStatusText.Name].text = enemyName;
+            enemyName = enemyStatusManager.DataList[9].eNAME;
+            enemyLv = enemyStatusManager.DataList[9].eLv;
+            enemyHP = enemyStatusManager.DataList[9].eHP;
+            enemyMaxHP = enemyStatusManager.DataList[9].eHP;
+            enemyATK = enemyStatusManager.DataList[9].eATK;
+            enemyEXP = enemyStatusManager.DataList[9].eEXP;
+            enemyStatusText[(int)enumEnemyStatusText.Name].text = enemyName;
+        }
+        else if (PlayerPrefs.GetInt("Difficulty") == 1)
+        {
+            displayEnemyImage.sprite = enemySprite[(int)enumEnemySprite.LightDragon];
+
+            enemyName = enemyStatusManager.DataList[10].eNAME;
+            enemyLv = enemyStatusManager.DataList[10].eLv;
+            enemyHP = enemyStatusManager.DataList[10].eHP;
+            enemyMaxHP = enemyStatusManager.DataList[10].eHP;
+            enemyATK = enemyStatusManager.DataList[10].eATK;
+            enemyEXP = enemyStatusManager.DataList[10].eEXP;
+            enemyStatusText[(int)enumEnemyStatusText.Name].text = enemyName;
+        }
 
         battleText.text = $"{enemyName}が現れた！";
 
@@ -659,10 +680,29 @@ public class BattleManager: Singleton<BattleManager>
     public IEnumerator PlayerLose()
     {
         battleText.text = $"{playerName}は負けた";
+        if (PlayerPrefs.GetInt("Difficulty") == 0)
+        {
+            if (PlayerPrefs.GetInt("EasyClearFloor") < GameManager.Instance.floorNumber)
+            {
+                PlayerPrefs.SetInt("EasyClearFloor", (int)GameManager.Instance.floorNumber);
+            }
+        }
+        else if (PlayerPrefs.GetInt("Difficulty") == 1)
+        {
+            if (PlayerPrefs.GetInt("NormalClearFloor") < GameManager.Instance.floorNumber)
+            {
+                PlayerPrefs.SetInt("NormalClearFloor", (int)GameManager.Instance.floorNumber);
+            }
+        }
 
         yield return new WaitForSeconds(1.0f);
 
-        StopAllCoroutines();
+        while (!Input.GetKeyDown(KeyCode.Space))
+        {
+            yield return null;
+        }
+
+        Initiate.Fade("GameOverScene", Color.black, 1.0f);
     }
 
     public IEnumerator PlayerWin()
@@ -726,6 +766,20 @@ public class BattleManager: Singleton<BattleManager>
             {
                 yield return null;
             }
+        }
+
+        if (bossBattle)
+        {
+            battleText.text = "ダンジョンを制覇した！";
+
+            yield return new WaitForSeconds(1.0f);
+
+            while (!Input.GetKeyDown(KeyCode.Space))
+            {
+                yield return null;
+            }
+
+            Initiate.Fade("GameClearScene", Color.black, 1.0f);
         }
 
         windows[(int)enumWindows.EnemyStatus].SetActive(false);

@@ -85,6 +85,14 @@ MonoBehaviour:
     skillValue1: 10
     skillValue2: 15
     skillValue3: 0
+  - eNAME: "\u30D9\u30D3\u30FC\u30C9\u30E9\u30B4\u30F3"
+    eLv: 3
+    eHP: 30
+    eATK: 5
+    eEXP: 30
+    skillValue1: 10
+    skillValue2: 5
+    skillValue3: 0
   - eNAME: "\u30E9\u30A4\u30C8\u30C9\u30E9\u30B4\u30F3"
     eLv: 10
     eHP: 120

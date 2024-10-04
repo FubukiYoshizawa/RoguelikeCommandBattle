@@ -50,6 +50,10 @@ public class EnemyActionManager : Singleton<EnemyActionManager>
         }
         else if (BattleManager.Instance.enemyName == enemyStatusManager.DataList[9].eNAME)
         {
+            yield return StartCoroutine(BabyDragon());
+        }
+        else if (BattleManager.Instance.enemyName == enemyStatusManager.DataList[10].eNAME)
+        {
             yield return StartCoroutine(LightDragon());
         }
 
@@ -448,12 +452,12 @@ public class EnemyActionManager : Singleton<EnemyActionManager>
 
     }
 
-    public IEnumerator LightDragon()
+    public IEnumerator BabyDragon()
     {
-        int randomValue = Random.Range(0, 8);
-        if (randomValue <= 4)
+        int randomValue = Random.Range(0, 3);
+        if (randomValue <= 1)
         {
-            battleText.text = $"{BattleManager.Instance.enemyName}は\nライトニングブレスを放った！";
+            battleText.text = $"{BattleManager.Instance.enemyName}は\nプチブレスを放った！";
 
             yield return new WaitForSeconds(1.0f);
 
@@ -472,6 +476,63 @@ public class EnemyActionManager : Singleton<EnemyActionManager>
                 BattleManager.Instance.playerHP = 0;
             }
         }
+        else
+        {
+            battleText.text = $"{BattleManager.Instance.enemyName}は\n光を集めた！";
+
+            yield return new WaitForSeconds(1.0f);
+
+            while (!Input.GetKeyDown(KeyCode.Space))
+            {
+                yield return null;
+            }
+
+            battleText.text = $"{BattleManager.Instance.enemyName}は\nHPを{enemyStatusManager.DataList[9].skillValue3}回復した！";
+
+            yield return new WaitForSeconds(0.5f);
+
+            BattleManager.Instance.enemyHP += enemyStatusManager.DataList[9].skillValue3;
+
+        }
+
+        yield return new WaitForSeconds(1.0f);
+
+        while (!Input.GetKeyDown(KeyCode.Space))
+        {
+            yield return null;
+        }
+
+        if (BattleManager.Instance.playerHP == 0)
+        {
+            yield return StartCoroutine(BattleManager.Instance.PlayerLose());
+        }
+
+    }
+
+    public IEnumerator LightDragon()
+    {
+        int randomValue = Random.Range(0, 8);
+        if (randomValue <= 4)
+        {
+            battleText.text = $"{BattleManager.Instance.enemyName}は\nライトニングブレスを放った！";
+
+            yield return new WaitForSeconds(1.0f);
+
+            while (!Input.GetKeyDown(KeyCode.Space))
+            {
+                yield return null;
+            }
+
+            battleText.text = $"{enemyStatusManager.DataList[10].skillValue1}のダメージ！";
+
+            yield return new WaitForSeconds(0.5f);
+
+            BattleManager.Instance.playerHP -= enemyStatusManager.DataList[10].skillValue1;
+            if (BattleManager.Instance.playerHP < 0)
+            {
+                BattleManager.Instance.playerHP = 0;
+            }
+        }
         else if (randomValue <= 6)
         {
             battleText.text = $"{BattleManager.Instance.enemyName}は\nライトニングショットを放った！";
@@ -483,11 +544,11 @@ public class EnemyActionManager : Singleton<EnemyActionManager>
                 yield return null;
             }
 
-            battleText.text = $"{enemyStatusManager.DataList[9].skillValue2}のダメージ！";
+            battleText.text = $"{enemyStatusManager.DataList[10].skillValue2}のダメージ！";
 
             yield return new WaitForSeconds(0.5f);
 
-            BattleManager.Instance.playerHP -= enemyStatusManager.DataList[9].skillValue2;
+            BattleManager.Instance.playerHP -= enemyStatusManager.DataList[10].skillValue2;
             if (BattleManager.Instance.playerHP < 0)
             {
                 BattleManager.Instance.playerHP = 0;
@@ -505,11 +566,11 @@ public class EnemyActionManager : Singleton<EnemyActionManager>
                 yield return null;
             }
 
-            battleText.text = $"{BattleManager.Instance.enemyName}は\nHPを{enemyStatusManager.DataList[9].skillValue3}回復した！";
+            battleText.text = $"{BattleManager.Instance.enemyName}は\nHPを{enemyStatusManager.DataList[10].skillValue3}回復した！";
 
             yield return new WaitForSeconds(0.5f);
 
-            BattleManager.Instance.enemyHP += enemyStatusManager.DataList[9].skillValue3;
+            BattleManager.Instance.enemyHP += enemyStatusManager.DataList[10].skillValue3;
 
         }
 

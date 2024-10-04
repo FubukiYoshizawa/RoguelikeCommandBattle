@@ -91,7 +91,7 @@ public class GameManager : Singleton<GameManager>
             floorIconImage.sprite = floorIconSprite[(int)enumFloorIconSprite.BattleFloor];
             yield return StartCoroutine(BattleManager.Instance.BattleStart());
         }
-        else if (floorNumber < maxFloorNumber&& floorNumber > maxFloorNumber/2 && floorNumber % 2 == 0)
+        else if (floorNumber < maxFloorNumber&& floorNumber > maxFloorNumber/2 && floorNumber % 2 == 0 || PlayerPrefs.GetInt("Difficulty") != 0)
         {
             IEnumerator[] coroutines = new IEnumerator[]
             {
@@ -207,18 +207,6 @@ public class GameManager : Singleton<GameManager>
 
         yield return StartCoroutine(NextFloor());
 
-    }
-
-    public IEnumerator Goal()
-    {
-        mainText.text = "Goal";
-
-        yield return new WaitForSeconds(1.0f);
-
-        while (!Input.GetKeyDown(KeyCode.Space))
-        {
-            yield return null;
-        }
     }
 
 }
