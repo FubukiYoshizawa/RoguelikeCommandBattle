@@ -7,7 +7,7 @@ public class SkillValue
 {
     public string skillName; // スキル名
     public int needSkillValue; // 必要SP
-    public int skillValue; // スキル量
+    public float skillValue; // スキル量
 }
 
 [CreateAssetMenu(menuName = "ScriptableObject/SkillValueManager", fileName = "SkillValueManager")]

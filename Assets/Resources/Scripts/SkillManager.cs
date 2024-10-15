@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 using TMPro;
 
 public class SkillManager : Singleton<SkillManager>
@@ -25,6 +26,7 @@ public class SkillManager : Singleton<SkillManager>
         Skill3, // スキル３の名前
         Num // スキル名表示数
     }
+    public bool skillDescriptionDisplay; // スキル説明を表示するかどうか
     public bool[] useSkill; // どのスキルを使用するか
     public enum enumUseSkill
     {
@@ -89,6 +91,50 @@ public class SkillManager : Singleton<SkillManager>
         if (BattleManager.Instance.playerLv >= 7)
         {
             useSkillButton[(int)enumSkillButton.Skill3].SetActive(true);
+        }
+
+        if (skillDescriptionDisplay)
+        {
+            if (DebugScript.Instance.Fighter)
+            {
+                GameObject selectedObject = EventSystem.current.currentSelectedGameObject;
+                if (selectedObject != null && selectedObject == useSkillButton[(int)enumSkillButton.Skill1].gameObject)
+                {
+                    mainText.text = "パワーアタック\n強い力を込めて相手に\n攻撃力の1.5倍のダメージ";
+                }
+                else if (selectedObject != null && selectedObject == useSkillButton[(int)enumSkillButton.Skill2].gameObject)
+                {
+                    mainText.text = "パワーチャージ\n力をためて次の攻撃が２倍";
+                }
+                else if (selectedObject != null && selectedObject == useSkillButton[(int)enumSkillButton.Skill3].gameObject)
+                {
+                    mainText.text = "瞑想\n心を静めて瞑想する\nHPを50回復";
+                }
+                else if (BattleManager.Instance.defaultButton[(int)BattleManager.enumDefaultButton.SkillBackButton])
+                {
+                    mainText.text = "";
+                }
+            }
+            else if (DebugScript.Instance.Magician)
+            {
+                GameObject selectedObject = EventSystem.current.currentSelectedGameObject;
+                if (selectedObject != null && selectedObject == useSkillButton[(int)enumSkillButton.Skill1].gameObject)
+                {
+                    mainText.text = "ファイアボール\n炎の球を相手に放つ\n15の固定ダメージ";
+                }
+                else if (selectedObject != null && selectedObject == useSkillButton[(int)enumSkillButton.Skill2].gameObject)
+                {
+                    mainText.text = "アイスランス\n氷の槍を相手に放つ\n30の固定ダメージ";
+                }
+                else if (selectedObject != null && selectedObject == useSkillButton[(int)enumSkillButton.Skill3].gameObject)
+                {
+                    mainText.text = "ヒール\n癒しの呪文を唱える\nHPを30回復";
+                }
+                else if (BattleManager.Instance.defaultButton[(int)BattleManager.enumDefaultButton.SkillBackButton])
+                {
+                    mainText.text = "";
+                }
+            }
         }
 
     }
@@ -195,10 +241,10 @@ public class SkillManager : Singleton<SkillManager>
             yield return null;
         }
 
-        mainText.text = $"{skillValueManager.DataList[0].skillValue}のダメージ！";
+        mainText.text = $"{BattleManager.Instance.playerATK*skillValueManager.DataList[0].skillValue}のダメージ！";
 
         BattleManager.Instance.playerSP -= skillValueManager.DataList[0].needSkillValue;
-        BattleManager.Instance.enemyHP -= skillValueManager.DataList[0].skillValue;
+        BattleManager.Instance.enemyHP -= (int)(BattleManager.Instance.playerATK * skillValueManager.DataList[0].skillValue);
         if (BattleManager.Instance.enemyHP < 0)
         {
             BattleManager.Instance.enemyHP = 0;
@@ -268,7 +314,7 @@ public class SkillManager : Singleton<SkillManager>
         mainText.text = $"HPを{skillValueManager.DataList[2].skillValue}回復した！";
 
         BattleManager.Instance.playerSP -= skillValueManager.DataList[2].needSkillValue;
-        BattleManager.Instance.playerHP += skillValueManager.DataList[2].skillValue;
+        BattleManager.Instance.playerHP += (int)skillValueManager.DataList[2].skillValue;
         if (BattleManager.Instance.playerHP > BattleManager.Instance.playerMaxHP)
         {
             BattleManager.Instance.playerHP = BattleManager.Instance.playerMaxHP;
@@ -297,7 +343,7 @@ public class SkillManager : Singleton<SkillManager>
         mainText.text = $"{skillValueManager.DataList[3].skillValue}のダメージ！";
 
         BattleManager.Instance.playerSP -= skillValueManager.DataList[3].needSkillValue;
-        BattleManager.Instance.enemyHP -= skillValueManager.DataList[3].skillValue;
+        BattleManager.Instance.enemyHP -= (int)skillValueManager.DataList[3].skillValue;
         if (BattleManager.Instance.enemyHP < 0)
         {
             BattleManager.Instance.enemyHP = 0;
@@ -330,7 +376,7 @@ public class SkillManager : Singleton<SkillManager>
         mainText.text = $"{skillValueManager.DataList[4].skillValue}のダメージ！";
 
         BattleManager.Instance.playerSP -= skillValueManager.DataList[4].needSkillValue;
-        BattleManager.Instance.enemyHP -= skillValueManager.DataList[4].skillValue;
+        BattleManager.Instance.enemyHP -= (int)skillValueManager.DataList[4].skillValue;
         if (BattleManager.Instance.enemyHP < 0)
         {
             BattleManager.Instance.enemyHP = 0;
@@ -363,7 +409,7 @@ public class SkillManager : Singleton<SkillManager>
         mainText.text = $"HPが{skillValueManager.DataList[5].skillValue}回復した！";
 
         BattleManager.Instance.playerSP -= skillValueManager.DataList[5].needSkillValue;
-        BattleManager.Instance.playerHP += skillValueManager.DataList[5].skillValue;
+        BattleManager.Instance.playerHP += (int)skillValueManager.DataList[5].skillValue;
         if (BattleManager.Instance.playerHP > BattleManager.Instance.playerMaxHP)
         {
             BattleManager.Instance.playerHP = BattleManager.Instance.playerMaxHP;

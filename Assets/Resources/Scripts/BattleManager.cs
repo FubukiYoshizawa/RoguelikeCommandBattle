@@ -163,7 +163,7 @@ public class BattleManager: Singleton<BattleManager>
         windows[(int)enumWindows.ItemUseSelect] = GameObject.Find("ItemSelectWindow");
 
         defaultButton[(int)enumDefaultButton.AttackButton] = GameObject.Find("attackButton");
-        defaultButton[(int)enumDefaultButton.SkillBackButton] = GameObject.Find("skillBackButton");
+        defaultButton[(int)enumDefaultButton.SkillBackButton] = GameObject.Find("SkillBackButton");
         defaultButton[(int)enumDefaultButton.ItemUseBackButton] = GameObject.Find("itemUseBackButton");
 
         windows[(int)enumWindows.EnemyStatus].SetActive(false);
@@ -395,6 +395,7 @@ public class BattleManager: Singleton<BattleManager>
             windows[(int)enumWindows.ComandWindow].SetActive(false);
             buttonOn[(int)enumButtonOn.Skill] = false;
             windows[(int)enumWindows.SkillWindow].SetActive(true);
+            SkillManager.Instance.skillDescriptionDisplay = true;
             EventSystem.current.SetSelectedGameObject(defaultButton[1]);
 
             while (!skillUse && !back)
@@ -406,12 +407,14 @@ public class BattleManager: Singleton<BattleManager>
             {
                 windows[(int)enumWindows.SkillWindow].SetActive(false);
                 skillUse = false;
+                SkillManager.Instance.skillDescriptionDisplay = false;
                 yield return StartCoroutine(Skill());
             }
             else
             {
                 windows[(int)enumWindows.SkillWindow].SetActive(false);
                 back = false;
+                SkillManager.Instance.skillDescriptionDisplay = false;
                 yield return StartCoroutine(Battle());
 
             }
