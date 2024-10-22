@@ -170,7 +170,7 @@ public class BattleManager: Singleton<BattleManager>
         windows[(int)enumWindows.ComandWindow].SetActive(false);
         windows[(int)enumWindows.ItemUseSelect].SetActive(false);
 
-        if (DebugScript.Instance.Fighter)
+        if (PlayerPrefs.GetInt("Character") == 0)
         {
             playerName = playerStatusManager.DataList[0].pNAME;
             playerLv = playerStatusManager.DataList[0].pLv;
@@ -181,7 +181,7 @@ public class BattleManager: Singleton<BattleManager>
             playerATK = playerStatusManager.DataList[0].pATK;
 
         }
-        else if (DebugScript.Instance.Magician)
+        else if (PlayerPrefs.GetInt("Character") == 1)
         {
             playerName = playerStatusManager.DataList[1].pNAME;
             playerLv = playerStatusManager.DataList[1].pLv;
@@ -224,6 +224,8 @@ public class BattleManager: Singleton<BattleManager>
             yield return null;
         }
 
+        SoundManager.Instance.PlayBGM("Battle");
+        SoundManager.Instance.PlaySE("Select");
         if (GameManager.Instance.floorNumber <= GameManager.Instance.maxFloorNumber / 2 || PlayerPrefs.GetInt("Difficulty") == 0)
         {
             nowEnemySprite = new Sprite[] { enemySprite[(int)enumEnemySprite.Slime], enemySprite[(int)enumEnemySprite.IkeBat], enemySprite[(int)enumEnemySprite.HatGhost] };
@@ -268,6 +270,7 @@ public class BattleManager: Singleton<BattleManager>
             yield return null;
         }
 
+        SoundManager.Instance.PlaySE("Select");
         yield return StartCoroutine(Battle());
 
     }
@@ -285,6 +288,8 @@ public class BattleManager: Singleton<BattleManager>
             yield return null;
         }
 
+        SoundManager.Instance.PlayBGM("StrongBattle");
+        SoundManager.Instance.PlaySE("Select");
         nowEnemySprite = new Sprite[] { enemySprite[(int)enumEnemySprite.InfernoButterfly], enemySprite[(int)enumEnemySprite.DarkDragon], enemySprite[(int)enumEnemySprite.IceDragon] };
         int randomNumber = Random.Range(0, nowEnemySprite.Length);
         Sprite selectedSprite = nowEnemySprite[randomNumber];
@@ -311,6 +316,7 @@ public class BattleManager: Singleton<BattleManager>
             yield return null;
         }
 
+        SoundManager.Instance.PlaySE("Select");
         yield return StartCoroutine(Battle());
 
     }
@@ -329,6 +335,8 @@ public class BattleManager: Singleton<BattleManager>
             yield return null;
         }
 
+        SoundManager.Instance.PlayBGM("BossBattle");
+        SoundManager.Instance.PlaySE("Select");
         if (PlayerPrefs.GetInt("Difficulty") == 0)
         {
             displayEnemyImage.sprite = enemySprite[(int)enumEnemySprite.BabyDragon];
@@ -366,6 +374,7 @@ public class BattleManager: Singleton<BattleManager>
             yield return null;
         }
 
+        SoundManager.Instance.PlaySE("Select");
         yield return StartCoroutine(Battle());
 
     }
@@ -382,6 +391,8 @@ public class BattleManager: Singleton<BattleManager>
         {
             yield return null;
         }
+
+        SoundManager.Instance.PlaySE("Select");
         windows[(int)enumWindows.ComandWindow].SetActive(false);
 
         if (buttonOn[(int)enumButtonOn.Attack])
@@ -403,8 +414,9 @@ public class BattleManager: Singleton<BattleManager>
                 yield return null;
             }
 
-            if(skillUse)
+            if (skillUse)
             {
+                SoundManager.Instance.PlaySE("Select");
                 windows[(int)enumWindows.SkillWindow].SetActive(false);
                 skillUse = false;
                 SkillManager.Instance.skillDescriptionDisplay = false;
@@ -412,6 +424,7 @@ public class BattleManager: Singleton<BattleManager>
             }
             else
             {
+                SoundManager.Instance.PlaySE("Back");
                 windows[(int)enumWindows.SkillWindow].SetActive(false);
                 back = false;
                 SkillManager.Instance.skillDescriptionDisplay = false;
@@ -443,6 +456,7 @@ public class BattleManager: Singleton<BattleManager>
             yield return null;
         }
 
+        SoundManager.Instance.PlaySE("Select");
         yield return StartCoroutine(Battle());
     }
 
@@ -457,6 +471,7 @@ public class BattleManager: Singleton<BattleManager>
             yield return null;
         }
 
+        SoundManager.Instance.PlaySE("Attack");
         battleText.text = $"{playerATK}のダメージ！";
 
         yield return new WaitForSeconds(0.5f);
@@ -489,6 +504,10 @@ public class BattleManager: Singleton<BattleManager>
         {
             yield return StartCoroutine(PlayerWin());
         }
+        else
+        {
+            SoundManager.Instance.PlaySE("Select");
+        }
 
     }
 
@@ -510,6 +529,7 @@ public class BattleManager: Singleton<BattleManager>
                 yield return null;
             }
 
+            SoundManager.Instance.PlaySE("Damage");
             battleText.text = $"{enemyATK}のダメージ！";
 
             yield return new WaitForSeconds(0.5f);
@@ -527,6 +547,7 @@ public class BattleManager: Singleton<BattleManager>
                 yield return null;
             }
 
+            SoundManager.Instance.PlaySE("Select");
             if (playerHP == 0)
             {
                 yield return StartCoroutine(PlayerLose());
@@ -540,12 +561,12 @@ public class BattleManager: Singleton<BattleManager>
         if (buttonOn[(int)enumButtonOn.Skill1])
         {
             buttonOn[(int)enumButtonOn.Skill1] = false;
-            if (DebugScript.Instance.Fighter)
+            if (PlayerPrefs.GetInt("Character") == 0)
             {
                 SkillManager.Instance.useSkill[0] = true;
                 yield return StartCoroutine(SkillManager.Instance.UseSkill());
             }
-            else if (DebugScript.Instance.Magician)
+            else if (PlayerPrefs.GetInt("Character") == 1)
             {
                 SkillManager.Instance.useSkill[3] = true;
                 yield return StartCoroutine(SkillManager.Instance.UseSkill());
@@ -554,12 +575,12 @@ public class BattleManager: Singleton<BattleManager>
         else if (buttonOn[(int)enumButtonOn.Skill2])
         {
             buttonOn[(int)enumButtonOn.Skill2] = false;
-            if (DebugScript.Instance.Fighter)
+            if (PlayerPrefs.GetInt("Character") == 0)
             {
                 SkillManager.Instance.useSkill[1] = true;
                 yield return StartCoroutine(SkillManager.Instance.UseSkill());
             }
-            else if (DebugScript.Instance.Magician)
+            else if (PlayerPrefs.GetInt("Character") == 1)
             {
                 SkillManager.Instance.useSkill[4] = true;
                 yield return StartCoroutine(SkillManager.Instance.UseSkill());
@@ -568,12 +589,12 @@ public class BattleManager: Singleton<BattleManager>
         else if (buttonOn[(int)enumButtonOn.Skill3])
         {
             buttonOn[(int)enumButtonOn.Skill3] = false;
-            if (DebugScript.Instance.Fighter)
+            if (PlayerPrefs.GetInt("Character") == 0)
             {
                 SkillManager.Instance.useSkill[2] = true;
                 yield return StartCoroutine(SkillManager.Instance.UseSkill());
             }
-            else if (DebugScript.Instance.Magician)
+            else if (PlayerPrefs.GetInt("Character") == 1)
             {
                 SkillManager.Instance.useSkill[5] = true;
                 yield return StartCoroutine(SkillManager.Instance.UseSkill());
@@ -587,6 +608,7 @@ public class BattleManager: Singleton<BattleManager>
             yield return null;
         }
 
+        SoundManager.Instance.PlaySE("Select");
         yield return StartCoroutine(EnemyAttack());
 
         while (!Input.GetKeyDown(KeyCode.Space))
@@ -594,6 +616,7 @@ public class BattleManager: Singleton<BattleManager>
             yield return null;
         }
 
+        SoundManager.Instance.PlaySE("Select");
         yield return StartCoroutine(Battle());
     }
 
@@ -610,6 +633,7 @@ public class BattleManager: Singleton<BattleManager>
                 yield return null;
             }
 
+            SoundManager.Instance.PlaySE("Select");
             yield return StartCoroutine(Battle());
         }
         else
@@ -648,6 +672,7 @@ public class BattleManager: Singleton<BattleManager>
             yield return null;
         }
 
+        SoundManager.Instance.PlaySE("Select");
         if (buttonOn[(int)enumButtonOn.ItemUse])
         {
             buttonOn[(int)enumButtonOn.ItemUse] = false;
@@ -668,6 +693,7 @@ public class BattleManager: Singleton<BattleManager>
             yield return null;
         }
 
+        SoundManager.Instance.PlaySE("Select");
         yield return StartCoroutine(EnemyAttack());
 
         while (!Input.GetKeyDown(KeyCode.Space))
@@ -675,6 +701,7 @@ public class BattleManager: Singleton<BattleManager>
             yield return null;
         }
 
+        SoundManager.Instance.PlaySE("Select");
         yield return StartCoroutine(Battle());
 
 
@@ -705,11 +732,15 @@ public class BattleManager: Singleton<BattleManager>
             yield return null;
         }
 
+        SoundManager.Instance.PlaySE("Select");
         Initiate.Fade("GameOverScene", Color.black, 1.0f);
+        StopAllCoroutines();
     }
 
     public IEnumerator PlayerWin()
     {
+        SoundManager.Instance.PlaySE("Win");
+        SoundManager.Instance.StopBGM();
         if (powerUp2)
         {
             powerUp2 = false;
@@ -731,6 +762,7 @@ public class BattleManager: Singleton<BattleManager>
             yield return null;
         }
 
+        SoundManager.Instance.PlaySE("Select");
         battleText.text = $"{enemyEXP}の経験値を獲得！";
         playerEXP += enemyEXP;
 
@@ -743,8 +775,9 @@ public class BattleManager: Singleton<BattleManager>
 
         if (playerEXP >= playerNextLvEXP)
         {
+            SoundManager.Instance.PlaySE("LvUp");
             battleText.text = "レベルが上がった！\nステータスが上がった！";
-            if (DebugScript.Instance.Fighter)
+            if (PlayerPrefs.GetInt("Character") == 0)
             {
                 playerLv += 1;
                 playerMaxHP += 10;
@@ -753,7 +786,7 @@ public class BattleManager: Singleton<BattleManager>
                 playerEXP = 0;
                 playerNextLvEXP *= 2;
             }
-            else if (DebugScript.Instance.Magician)
+            else if (PlayerPrefs.GetInt("Character") == 1)
             {
                 playerLv += 1;
                 playerMaxHP += 5;
@@ -771,8 +804,10 @@ public class BattleManager: Singleton<BattleManager>
             }
         }
 
+
         if (bossBattle)
         {
+            SoundManager.Instance.PlaySE("Win");
             battleText.text = "ダンジョンを制覇した！";
 
             yield return new WaitForSeconds(1.0f);
@@ -782,7 +817,23 @@ public class BattleManager: Singleton<BattleManager>
                 yield return null;
             }
 
+            if (PlayerPrefs.GetInt("Difficulty") == 0)
+            {
+                if (PlayerPrefs.GetInt("EasyClearFloor") < GameManager.Instance.floorNumber)
+                {
+                    PlayerPrefs.SetInt("EasyClearFloor", (int)GameManager.Instance.floorNumber);
+                }
+            }
+            else if (PlayerPrefs.GetInt("Difficulty") == 1)
+            {
+                if (PlayerPrefs.GetInt("NormalClearFloor") < GameManager.Instance.floorNumber)
+                {
+                    PlayerPrefs.SetInt("NormalClearFloor", (int)GameManager.Instance.floorNumber);
+                }
+            }
+            SoundManager.Instance.PlaySE("Select");
             Initiate.Fade("GameClearScene", Color.black, 1.0f);
+            StopAllCoroutines();
         }
 
         windows[(int)enumWindows.EnemyStatus].SetActive(false);

@@ -31,6 +31,7 @@ public class EventManager : Singleton<EventManager>
 
     public IEnumerator Fountain()
     {
+        SoundManager.Instance.PlayBGM("EventFountain");
         floorImage.sprite = floorSprite[(int)enumFloorSprite.Fountain];
 
         mainText.text = "あなたは奇跡の泉を見つけた！";
@@ -42,6 +43,7 @@ public class EventManager : Singleton<EventManager>
             yield return null;
         }
 
+        SoundManager.Instance.PlaySE("Select");
         mainText.text = "あなたは吸い込まれるように\n泉の水を飲んだ！";
 
         yield return new WaitForSeconds(1.0f);
@@ -51,6 +53,7 @@ public class EventManager : Singleton<EventManager>
             yield return null;
         }
 
+        SoundManager.Instance.PlaySE("Select");
         int randomValue = Random.Range(0, 2);
         if (randomValue == 0)
         {
@@ -63,6 +66,7 @@ public class EventManager : Singleton<EventManager>
                 yield return null;
             }
 
+            SoundManager.Instance.PlaySE("Select");
             mainText.text = "HPが50回復した！";
             BattleManager.Instance.playerHP += 50;
             if (BattleManager.Instance.playerMaxHP < BattleManager.Instance.playerHP)
@@ -76,6 +80,7 @@ public class EventManager : Singleton<EventManager>
             {
                 yield return null;
             }
+            SoundManager.Instance.PlaySE("Select");
 
         }
         else
@@ -89,6 +94,7 @@ public class EventManager : Singleton<EventManager>
                 yield return null;
             }
 
+            SoundManager.Instance.PlaySE("Select");
             mainText.text = "攻撃力が１下がった";
             BattleManager.Instance.playerATK -= 1;
 
@@ -98,6 +104,8 @@ public class EventManager : Singleton<EventManager>
             {
                 yield return null;
             }
+
+            SoundManager.Instance.PlaySE("Select");
         }
 
         mainText.text = "あなたは泉を後にした";
@@ -109,10 +117,14 @@ public class EventManager : Singleton<EventManager>
             yield return null;
         }
 
+        SoundManager.Instance.PlaySE("Select");
+        SoundManager.Instance.StopBGM();
+
     }
 
     public IEnumerator Magic()
     {
+        SoundManager.Instance.PlayBGM("EventMagic");
         floorImage.sprite = floorSprite[(int)enumFloorSprite.Magic];
 
         mainText.text = "あなたは魔法使いと出会った！";
@@ -124,6 +136,7 @@ public class EventManager : Singleton<EventManager>
             yield return null;
         }
 
+        SoundManager.Instance.PlaySE("Select");
         mainText.text = "あなた！\nちょうどいいところにいた！";
 
         yield return new WaitForSeconds(1.0f);
@@ -133,6 +146,7 @@ public class EventManager : Singleton<EventManager>
             yield return null;
         }
 
+        SoundManager.Instance.PlaySE("Select");
         mainText.text = "強化魔法の練習中なの\n練習させて！\nえい！";
 
         yield return new WaitForSeconds(1.0f);
@@ -142,6 +156,7 @@ public class EventManager : Singleton<EventManager>
             yield return null;
         }
 
+        SoundManager.Instance.PlaySE("Select");
         int randomValue = Random.Range(0, 2);
         if (randomValue == 0)
         {
@@ -154,6 +169,7 @@ public class EventManager : Singleton<EventManager>
                 yield return null;
             }
 
+            SoundManager.Instance.PlaySE("Select");
             mainText.text = "最大SPが10増えた！";
             BattleManager.Instance.playerMaxSP += 10;
             BattleManager.Instance.playerSP += 10;
@@ -176,6 +192,7 @@ public class EventManager : Singleton<EventManager>
                 yield return null;
             }
 
+            SoundManager.Instance.PlaySE("Select");
             mainText.text = "最大SPが5減った！";
             BattleManager.Instance.playerMaxSP -= 5;
             BattleManager.Instance.playerSP -= 5;
@@ -186,6 +203,8 @@ public class EventManager : Singleton<EventManager>
             {
                 yield return null;
             }
+
+            SoundManager.Instance.PlaySE("Select");
         }
 
         mainText.text = "ご協力ありがとう！\nお礼は今度でいいよ！";
@@ -197,6 +216,7 @@ public class EventManager : Singleton<EventManager>
             yield return null;
         }
 
+        SoundManager.Instance.PlaySE("Select");
         mainText.text = "魔法使いは霧のように消えた";
 
         yield return new WaitForSeconds(1.0f);
@@ -205,10 +225,14 @@ public class EventManager : Singleton<EventManager>
         {
             yield return null;
         }
+
+        SoundManager.Instance.PlaySE("Select");
+        SoundManager.Instance.StopBGM();
     }
 
     public IEnumerator Muscle()
     {
+        SoundManager.Instance.PlayBGM("EventMuscle");
         floorImage.sprite = floorSprite[(int)enumFloorSprite.Muscle];
 
         mainText.text = "突然筋肉に囲まれた！";
@@ -220,6 +244,7 @@ public class EventManager : Singleton<EventManager>
             yield return null;
         }
 
+        SoundManager.Instance.PlaySE("Select");
         mainText.text = "一緒に筋肉を鍛えよう！";
 
         yield return new WaitForSeconds(1.0f);
@@ -229,6 +254,7 @@ public class EventManager : Singleton<EventManager>
             yield return null;
         }
 
+        SoundManager.Instance.PlaySE("Select");
         mainText.text = "あなたはトレーニングに参加した！";
 
         yield return new WaitForSeconds(1.0f);
@@ -238,6 +264,7 @@ public class EventManager : Singleton<EventManager>
             yield return null;
         }
 
+        SoundManager.Instance.PlaySE("Select");
         int randomValue = Random.Range(0, 2);
         if (randomValue == 0)
         {
@@ -250,6 +277,7 @@ public class EventManager : Singleton<EventManager>
                 yield return null;
             }
 
+            SoundManager.Instance.PlaySE("Select");
             mainText.text = "攻撃力が3上がった！";
             BattleManager.Instance.playerATK += 3;
 
@@ -259,6 +287,8 @@ public class EventManager : Singleton<EventManager>
             {
                 yield return null;
             }
+
+            SoundManager.Instance.PlaySE("Select");
         }
         else
         {
@@ -271,6 +301,7 @@ public class EventManager : Singleton<EventManager>
                 yield return null;
             }
 
+            SoundManager.Instance.PlaySE("Select");
             mainText.text = "攻撃力が1下がった！";
             BattleManager.Instance.playerATK -= 1;
 
@@ -280,6 +311,8 @@ public class EventManager : Singleton<EventManager>
             {
                 yield return null;
             }
+
+            SoundManager.Instance.PlaySE("Select");
         }
 
         mainText.text = "筋肉は去っていった";
@@ -290,6 +323,9 @@ public class EventManager : Singleton<EventManager>
         {
             yield return null;
         }
+
+        SoundManager.Instance.PlaySE("Select");
+        SoundManager.Instance.StopBGM();
     }
 
 

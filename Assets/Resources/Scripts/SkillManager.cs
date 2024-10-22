@@ -55,13 +55,13 @@ public class SkillManager : Singleton<SkillManager>
         useSkillButtonText[(int)enumUseSkillButtontext.Skill2] = GameObject.Find("SkillButtonText2").GetComponent<TextMeshProUGUI>();
         useSkillButtonText[(int)enumUseSkillButtontext.Skill3] = GameObject.Find("SkillButtonText3").GetComponent<TextMeshProUGUI>();
 
-        if (DebugScript.Instance.Fighter)
+        if (PlayerPrefs.GetInt("Character") == 0)
         {
             useSkillButtonText[(int)enumUseSkillButtontext.Skill1].text = skillValueManager.DataList[0].skillName;
             useSkillButtonText[(int)enumUseSkillButtontext.Skill2].text = skillValueManager.DataList[1].skillName;
             useSkillButtonText[(int)enumUseSkillButtontext.Skill3].text = skillValueManager.DataList[2].skillName;
         }
-        else if (DebugScript.Instance.Magician)
+        else if (PlayerPrefs.GetInt("Character") == 1)
         {
             useSkillButtonText[(int)enumUseSkillButtontext.Skill1].text = skillValueManager.DataList[3].skillName;
             useSkillButtonText[(int)enumUseSkillButtontext.Skill2].text = skillValueManager.DataList[4].skillName;
@@ -95,7 +95,7 @@ public class SkillManager : Singleton<SkillManager>
 
         if (skillDescriptionDisplay)
         {
-            if (DebugScript.Instance.Fighter)
+            if (PlayerPrefs.GetInt("Character") == 0)
             {
                 GameObject selectedObject = EventSystem.current.currentSelectedGameObject;
                 if (selectedObject != null && selectedObject == useSkillButton[(int)enumSkillButton.Skill1].gameObject)
@@ -115,7 +115,7 @@ public class SkillManager : Singleton<SkillManager>
                     mainText.text = "";
                 }
             }
-            else if (DebugScript.Instance.Magician)
+            else if (PlayerPrefs.GetInt("Character") == 1)
             {
                 GameObject selectedObject = EventSystem.current.currentSelectedGameObject;
                 if (selectedObject != null && selectedObject == useSkillButton[(int)enumSkillButton.Skill1].gameObject)
@@ -241,6 +241,8 @@ public class SkillManager : Singleton<SkillManager>
             yield return null;
         }
 
+        SoundManager.Instance.PlaySE("PowerAttack");
+        FlashManager.Instance.EnemyFlash(Color.red, 0.3f);
         mainText.text = $"{BattleManager.Instance.playerATK*skillValueManager.DataList[0].skillValue}のダメージ！";
 
         BattleManager.Instance.playerSP -= skillValueManager.DataList[0].needSkillValue;
@@ -272,6 +274,10 @@ public class SkillManager : Singleton<SkillManager>
         {
             yield return StartCoroutine(BattleManager.Instance.PlayerWin());
         }
+        else
+        {
+            SoundManager.Instance.PlaySE("Select");
+        }
 
     }
 
@@ -286,6 +292,8 @@ public class SkillManager : Singleton<SkillManager>
             yield return null;
         }
 
+        SoundManager.Instance.PlaySE("PowerCharge");
+        FlashManager.Instance.FlashScreen(Color.yellow, 0.3f);
         mainText.text = "攻撃力が2倍になった！";
 
         BattleManager.Instance.playerSP -= skillValueManager.DataList[1].needSkillValue;
@@ -298,6 +306,8 @@ public class SkillManager : Singleton<SkillManager>
         {
             yield return null;
         }
+
+        SoundManager.Instance.PlaySE("Select");
     }
 
     public IEnumerator Meditation()
@@ -311,6 +321,8 @@ public class SkillManager : Singleton<SkillManager>
             yield return null;
         }
 
+        SoundManager.Instance.PlaySE("Healing");
+        FlashManager.Instance.FlashScreen(Color.green, 0.3f);
         mainText.text = $"HPを{skillValueManager.DataList[2].skillValue}回復した！";
 
         BattleManager.Instance.playerSP -= skillValueManager.DataList[2].needSkillValue;
@@ -327,6 +339,8 @@ public class SkillManager : Singleton<SkillManager>
             yield return null;
         }
 
+        SoundManager.Instance.PlaySE("Select");
+
     }
 
     public IEnumerator FireBall()
@@ -340,6 +354,8 @@ public class SkillManager : Singleton<SkillManager>
             yield return null;
         }
 
+        SoundManager.Instance.PlaySE("FireBall");
+        FlashManager.Instance.EnemyFlash(Color.red, 0.3f);
         mainText.text = $"{skillValueManager.DataList[3].skillValue}のダメージ！";
 
         BattleManager.Instance.playerSP -= skillValueManager.DataList[3].needSkillValue;
@@ -360,6 +376,10 @@ public class SkillManager : Singleton<SkillManager>
         {
             yield return StartCoroutine(BattleManager.Instance.PlayerWin());
         }
+        else
+        {
+            SoundManager.Instance.PlaySE("Select");
+        }
     }
 
     public IEnumerator IceLance()
@@ -373,6 +393,8 @@ public class SkillManager : Singleton<SkillManager>
             yield return null;
         }
 
+        SoundManager.Instance.PlaySE("IceLance");
+        FlashManager.Instance.EnemyFlash(Color.cyan, 0.3f);
         mainText.text = $"{skillValueManager.DataList[4].skillValue}のダメージ！";
 
         BattleManager.Instance.playerSP -= skillValueManager.DataList[4].needSkillValue;
@@ -393,6 +415,10 @@ public class SkillManager : Singleton<SkillManager>
         {
             yield return StartCoroutine(BattleManager.Instance.PlayerWin());
         }
+        else
+        {
+            SoundManager.Instance.PlaySE("Select");
+        }
     }
 
     public IEnumerator HealMagic()
@@ -406,6 +432,8 @@ public class SkillManager : Singleton<SkillManager>
             yield return null;
         }
 
+        SoundManager.Instance.PlaySE("Healing");
+        FlashManager.Instance.FlashScreen(Color.green, 0.3f);
         mainText.text = $"HPが{skillValueManager.DataList[5].skillValue}回復した！";
 
         BattleManager.Instance.playerSP -= skillValueManager.DataList[5].needSkillValue;
@@ -421,5 +449,7 @@ public class SkillManager : Singleton<SkillManager>
         {
             yield return null;
         }
+
+        SoundManager.Instance.PlaySE("Select");
     }
 }

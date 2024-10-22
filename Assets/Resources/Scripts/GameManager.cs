@@ -46,7 +46,6 @@ public class GameManager : Singleton<GameManager>
         floorIconSprite[(int)enumFloorIconSprite.TreasureFloor] = Resources.Load<Sprite>("Images/FloorIcons/TreasureFloor");
         floorIconSprite[(int)enumFloorIconSprite.RestFloor] = Resources.Load<Sprite>("Images/FloorIcons/RestFloor");
 
-
         floorNumberText.text = floorNumber.ToString();
         floorImage.sprite = floorSprite;
         StartCoroutine(StartAdventure());
@@ -62,7 +61,15 @@ public class GameManager : Singleton<GameManager>
         {
             yield return null;
         }
-
+        SoundManager.Instance.PlaySE("Select");
+        if (PlayerPrefs.GetInt("Difficulty") == 0)
+        {
+            SoundManager.Instance.PlayBGM("StageEasy");
+        }
+        else if (PlayerPrefs.GetInt("Difficulty") == 1)
+        {
+            SoundManager.Instance.PlayBGM("StageNormal");
+        }
         yield return StartCoroutine(NextFloor());
 
     }
@@ -77,7 +84,7 @@ public class GameManager : Singleton<GameManager>
         {
             yield return null;
         }
-
+        SoundManager.Instance.PlaySE("StageChange");
         floorNumberText.text = (floorNumber += 1).ToString();
 
         yield return new WaitForSeconds(1.0f);
@@ -132,7 +139,8 @@ public class GameManager : Singleton<GameManager>
         {
             yield return null;
         }
-
+        SoundManager.Instance.PlaySE("Select");
+        SoundManager.Instance.PlayBGM("Shop");
         IEnumerator[] shopcoroutines = new IEnumerator[]
             {
                 ShopManager.Instance.HPShop(),
@@ -158,7 +166,7 @@ public class GameManager : Singleton<GameManager>
         {
             yield return null;
         }
-
+        SoundManager.Instance.PlaySE("Select");
         IEnumerator[] eventcoroutines = new IEnumerator[]
             {
                 EventManager.Instance.Fountain(),
@@ -184,7 +192,8 @@ public class GameManager : Singleton<GameManager>
         {
             yield return null;
         }
-
+        SoundManager.Instance.PlaySE("Select");
+        SoundManager.Instance.PlayBGM("Treasure");
         yield return StartCoroutine(TreasureManager.Instance.RandomItem());
 
         yield return StartCoroutine(NextFloor());
@@ -202,7 +211,8 @@ public class GameManager : Singleton<GameManager>
         {
             yield return null;
         }
-
+        SoundManager.Instance.PlaySE("Select");
+        SoundManager.Instance.PlayBGM("Rest");
         yield return StartCoroutine(RestManager.Instance.Rest());
 
         yield return StartCoroutine(NextFloor());

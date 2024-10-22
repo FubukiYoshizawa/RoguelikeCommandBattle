@@ -90,6 +90,7 @@ public class TreasureManager : Singleton<TreasureManager>
             yield return null;
         }
 
+        SoundManager.Instance.PlaySE("Select");
         floorImage.sprite = floorSprite[(int)enumFloorSprite.OpenTreasure];
 
         mainText.text = $"宝箱には\n{itemValueManager.DataList[itemNumber].itemName}が入っていた！";
@@ -101,6 +102,7 @@ public class TreasureManager : Singleton<TreasureManager>
             yield return null;
         }
 
+        SoundManager.Instance.PlaySE("Select");
         if (ItemManager.Instance.haveItem)
         {
             mainText.text = "アイテムを交換しますか？";
@@ -115,6 +117,7 @@ public class TreasureManager : Singleton<TreasureManager>
                 yield return null;
             }
 
+            SoundManager.Instance.PlaySE("Select");
             selectWindow.SetActive(false);
 
             if (yes)
@@ -146,6 +149,9 @@ public class TreasureManager : Singleton<TreasureManager>
         {
             yield return null;
         }
+
+        SoundManager.Instance.PlaySE("Select");
+        SoundManager.Instance.StopBGM();
     }
 
     public void Yes()

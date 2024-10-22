@@ -70,6 +70,8 @@ public class EnemyActionManager : Singleton<EnemyActionManager>
             yield return null;
         }
 
+        SoundManager.Instance.PlaySE("EnemySpecialAttack");
+        FlashManager.Instance.FlashScreen(Color.green, 0.3f);
         battleText.text = $"{enemyStatusManager.DataList[0].skillValue1}のダメージ！";
 
         yield return new WaitForSeconds(0.5f);
@@ -87,6 +89,7 @@ public class EnemyActionManager : Singleton<EnemyActionManager>
             yield return null;
         }
 
+        SoundManager.Instance.PlaySE("Select");
         if (BattleManager.Instance.playerHP == 0)
         {
             yield return StartCoroutine(BattleManager.Instance.PlayerLose());
@@ -105,6 +108,8 @@ public class EnemyActionManager : Singleton<EnemyActionManager>
             yield return null;
         }
 
+        SoundManager.Instance.PlaySE("EnemySpecialAttack");
+        FlashManager.Instance.FlashScreen(Color.black, 0.3f);
         battleText.text = $"{enemyStatusManager.DataList[1].skillValue1}のダメージ！";
 
         yield return new WaitForSeconds(0.5f);
@@ -122,6 +127,7 @@ public class EnemyActionManager : Singleton<EnemyActionManager>
             yield return null;
         }
 
+        SoundManager.Instance.PlaySE("Select");
         if (BattleManager.Instance.playerHP == 0)
         {
             yield return StartCoroutine(BattleManager.Instance.PlayerLose());
@@ -140,6 +146,8 @@ public class EnemyActionManager : Singleton<EnemyActionManager>
             yield return null;
         }
 
+        SoundManager.Instance.PlaySE("FireBall");
+        FlashManager.Instance.FlashScreen(Color.red, 0.3f);
         battleText.text = $"{enemyStatusManager.DataList[2].skillValue1}のダメージ！";
 
         yield return new WaitForSeconds(0.5f);
@@ -157,6 +165,7 @@ public class EnemyActionManager : Singleton<EnemyActionManager>
             yield return null;
         }
 
+        SoundManager.Instance.PlaySE("Select");
         if (BattleManager.Instance.playerHP == 0)
         {
             yield return StartCoroutine(BattleManager.Instance.PlayerLose());
@@ -175,6 +184,8 @@ public class EnemyActionManager : Singleton<EnemyActionManager>
             yield return null;
         }
 
+        SoundManager.Instance.PlaySE("Scythe");
+        FlashManager.Instance.FlashScreen(Color.gray, 0.3f);
         battleText.text = $"{enemyStatusManager.DataList[3].skillValue1}のダメージ！";
 
         yield return new WaitForSeconds(0.5f);
@@ -192,6 +203,7 @@ public class EnemyActionManager : Singleton<EnemyActionManager>
             yield return null;
         }
 
+        SoundManager.Instance.PlaySE("Select");
         if (BattleManager.Instance.playerHP == 0)
         {
             yield return StartCoroutine(BattleManager.Instance.PlayerLose());
@@ -210,6 +222,8 @@ public class EnemyActionManager : Singleton<EnemyActionManager>
             yield return null;
         }
 
+        SoundManager.Instance.PlaySE("EnemySpecialAttack");
+        FlashManager.Instance.FlashScreen(Color.white, 0.3f);
         battleText.text = $"{enemyStatusManager.DataList[4].skillValue1}のダメージ！";
 
         yield return new WaitForSeconds(0.5f);
@@ -227,6 +241,7 @@ public class EnemyActionManager : Singleton<EnemyActionManager>
             yield return null;
         }
 
+        SoundManager.Instance.PlaySE("Select");
         if (BattleManager.Instance.playerHP == 0)
         {
             yield return StartCoroutine(BattleManager.Instance.PlayerLose());
@@ -245,6 +260,8 @@ public class EnemyActionManager : Singleton<EnemyActionManager>
             yield return null;
         }
 
+        SoundManager.Instance.PlaySE("Thunder");
+        FlashManager.Instance.FlashScreen(Color.yellow, 0.3f);
         battleText.text = $"{enemyStatusManager.DataList[5].skillValue1}のダメージ！";
 
         yield return new WaitForSeconds(0.5f);
@@ -262,6 +279,7 @@ public class EnemyActionManager : Singleton<EnemyActionManager>
             yield return null;
         }
 
+        SoundManager.Instance.PlaySE("Select");
         if (BattleManager.Instance.playerHP == 0)
         {
             yield return StartCoroutine(BattleManager.Instance.PlayerLose());
@@ -283,6 +301,8 @@ public class EnemyActionManager : Singleton<EnemyActionManager>
                 yield return null;
             }
 
+            SoundManager.Instance.PlaySE("FireBall");
+            FlashManager.Instance.FlashScreen(Color.red, 0.3f);
             battleText.text = $"{enemyStatusManager.DataList[6].skillValue1}のダメージ！";
 
             yield return new WaitForSeconds(0.5f);
@@ -304,6 +324,8 @@ public class EnemyActionManager : Singleton<EnemyActionManager>
                 yield return null;
             }
 
+            SoundManager.Instance.PlaySE("Healing");
+            FlashManager.Instance.EnemyFlash(Color.red, 0.3f);
             battleText.text = $"{BattleManager.Instance.enemyName}は\nHPを{enemyStatusManager.DataList[7].skillValue1}回復した！";
 
             yield return new WaitForSeconds(0.5f);
@@ -323,6 +345,7 @@ public class EnemyActionManager : Singleton<EnemyActionManager>
             yield return null;
         }
 
+        SoundManager.Instance.PlaySE("Select");
         if (BattleManager.Instance.playerHP == 0)
         {
             yield return StartCoroutine(BattleManager.Instance.PlayerLose());
@@ -344,6 +367,8 @@ public class EnemyActionManager : Singleton<EnemyActionManager>
                 yield return null;
             }
 
+            SoundManager.Instance.PlaySE("Breath");
+            FlashManager.Instance.FlashScreen(Color.magenta, 0.3f);
             battleText.text = $"{enemyStatusManager.DataList[7].skillValue1}のダメージ";
 
             yield return new WaitForSeconds(0.5f);
@@ -365,6 +390,8 @@ public class EnemyActionManager : Singleton<EnemyActionManager>
                 yield return null;
             }
 
+            SoundManager.Instance.PlaySE("Auro");
+            FlashManager.Instance.FlashScreen(Color.magenta, 0.3f);
             battleText.text = $"{enemyStatusManager.DataList[7].skillValue2}のダメージ！";
 
             yield return new WaitForSeconds(0.5f);
@@ -384,6 +411,7 @@ public class EnemyActionManager : Singleton<EnemyActionManager>
             yield return null;
         }
 
+        SoundManager.Instance.PlaySE("Select");
         if (BattleManager.Instance.playerHP == 0)
         {
             yield return StartCoroutine(BattleManager.Instance.PlayerLose());
@@ -405,6 +433,8 @@ public class EnemyActionManager : Singleton<EnemyActionManager>
                 yield return null;
             }
 
+            SoundManager.Instance.PlaySE("Breath");
+            FlashManager.Instance.FlashScreen(Color.cyan, 0.3f);
             battleText.text = $"{enemyStatusManager.DataList[8].skillValue1}のダメージ！";
 
             yield return new WaitForSeconds(0.5f);
@@ -426,6 +456,8 @@ public class EnemyActionManager : Singleton<EnemyActionManager>
                 yield return null;
             }
 
+            SoundManager.Instance.PlaySE("IceLance");
+            FlashManager.Instance.FlashScreen(Color.cyan, 0.3f);
             battleText.text = $"{enemyStatusManager.DataList[8].skillValue2}のダメージ！";
 
             yield return new WaitForSeconds(0.5f);
@@ -445,6 +477,7 @@ public class EnemyActionManager : Singleton<EnemyActionManager>
             yield return null;
         }
 
+        SoundManager.Instance.PlaySE("Select");
         if (BattleManager.Instance.playerHP == 0)
         {
             yield return StartCoroutine(BattleManager.Instance.PlayerLose());
@@ -466,6 +499,8 @@ public class EnemyActionManager : Singleton<EnemyActionManager>
                 yield return null;
             }
 
+            SoundManager.Instance.PlaySE("Breath");
+            FlashManager.Instance.FlashScreen(Color.yellow, 0.3f);
             battleText.text = $"{enemyStatusManager.DataList[9].skillValue1}のダメージ！";
 
             yield return new WaitForSeconds(0.5f);
@@ -487,6 +522,8 @@ public class EnemyActionManager : Singleton<EnemyActionManager>
                 yield return null;
             }
 
+            SoundManager.Instance.PlaySE("Healing");
+            FlashManager.Instance.EnemyFlash(Color.yellow, 0.3f);
             battleText.text = $"{BattleManager.Instance.enemyName}は\nHPを{enemyStatusManager.DataList[9].skillValue3}回復した！";
 
             yield return new WaitForSeconds(0.5f);
@@ -502,6 +539,7 @@ public class EnemyActionManager : Singleton<EnemyActionManager>
             yield return null;
         }
 
+        SoundManager.Instance.PlaySE("Select");
         if (BattleManager.Instance.playerHP == 0)
         {
             yield return StartCoroutine(BattleManager.Instance.PlayerLose());
@@ -523,6 +561,8 @@ public class EnemyActionManager : Singleton<EnemyActionManager>
                 yield return null;
             }
 
+            SoundManager.Instance.PlaySE("Breath");
+            FlashManager.Instance.FlashScreen(Color.yellow, 0.3f);
             battleText.text = $"{enemyStatusManager.DataList[10].skillValue1}のダメージ！";
 
             yield return new WaitForSeconds(0.5f);
@@ -544,6 +584,8 @@ public class EnemyActionManager : Singleton<EnemyActionManager>
                 yield return null;
             }
 
+            SoundManager.Instance.PlaySE("EnemySpecialAttack");
+            FlashManager.Instance.FlashScreen(Color.yellow, 0.3f);
             battleText.text = $"{enemyStatusManager.DataList[10].skillValue2}のダメージ！";
 
             yield return new WaitForSeconds(0.5f);
@@ -566,6 +608,8 @@ public class EnemyActionManager : Singleton<EnemyActionManager>
                 yield return null;
             }
 
+            SoundManager.Instance.PlaySE("Healing");
+            FlashManager.Instance.EnemyFlash(Color.yellow, 0.3f);
             battleText.text = $"{BattleManager.Instance.enemyName}は\nHPを{enemyStatusManager.DataList[10].skillValue3}回復した！";
 
             yield return new WaitForSeconds(0.5f);
@@ -581,6 +625,7 @@ public class EnemyActionManager : Singleton<EnemyActionManager>
             yield return null;
         }
 
+        SoundManager.Instance.PlaySE("Select");
         if (BattleManager.Instance.playerHP == 0)
         {
             yield return StartCoroutine(BattleManager.Instance.PlayerLose());

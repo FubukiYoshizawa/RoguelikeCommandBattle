@@ -11,6 +11,7 @@ public class TitleManager : MonoBehaviour
     public enum enumCanvas
     {
         Title,
+        Select,
         Stage,
         Character,
         Check,
@@ -33,11 +34,23 @@ public class TitleManager : MonoBehaviour
     public GameObject[] defaultButton;
     public enum enumDefaultButton
     {
+        SelectButton,
+        VolumeButton,
         StageButton,
         CharacterButton,
         CheckBackButton,
         Num
     }
+
+    public GameObject SelectWindow;
+    public GameObject VolumeOptionWindow;
+    public Image StageCheckImage;
+    public Image CharacterCheckImage;
+
+    public TextMeshProUGUI pressButtonText;
+    public float flishingTime = 0.5f;
+    public float fadeTime = 1f;
+
 
     private bool TitleOff = false;
 
@@ -49,6 +62,7 @@ public class TitleManager : MonoBehaviour
         defaultButton = new GameObject[(int)enumDefaultButton.Num];
 
         canvas[(int)enumCanvas.Title] = GameObject.Find("TitleCanvas");
+        canvas[(int)enumCanvas.Select] = GameObject.Find("SelectCanvas");
         canvas[(int)enumCanvas.Stage] = GameObject.Find("StageSelectCanvas");
         canvas[(int)enumCanvas.Character] = GameObject.Find("CharacterSelectCanvas");
         canvas[(int)enumCanvas.Check] = GameObject.Find("CheckCanvas");
@@ -59,6 +73,8 @@ public class TitleManager : MonoBehaviour
         clearImage[(int)enumClearImage.Easy] = GameObject.Find("EasyClear");
         clearImage[(int)enumClearImage.Normal] = GameObject.Find("NormalClear");
 
+        defaultButton[(int)enumDefaultButton.SelectButton] = GameObject.Find("StageSelectButton");
+        defaultButton[(int)enumDefaultButton.VolumeButton] = GameObject.Find("VolumeBackButton");
         defaultButton[(int)enumDefaultButton.StageButton] = GameObject.Find("EasyButton");
         defaultButton[(int)enumDefaultButton.CharacterButton] = GameObject.Find("FighterButton");
         defaultButton[(int)enumDefaultButton.CheckBackButton] = GameObject.Find("NoButton");
@@ -66,21 +82,37 @@ public class TitleManager : MonoBehaviour
         highestFloor[(int)enumHighesetFloor.Easy].text = PlayerPrefs.GetInt("EasyClearFloor").ToString();
         highestFloor[(int)enumHighesetFloor.Normal].text = PlayerPrefs.GetInt("NormalClearFloor").ToString();
 
+        SelectWindow = GameObject.Find("SelectWindow");
+        VolumeOptionWindow = GameObject.Find("VolumeOptionWindow");
+
+        StageCheckImage = GameObject.Find("StageCheckImage").GetComponent<Image>();
+        CharacterCheckImage = GameObject.Find("CharacterCheckImage").GetComponent<Image>();
+
+        pressButtonText = GameObject.Find("PressButton").GetComponent<TextMeshProUGUI>();
+
+        canvas[(int)enumCanvas.Select].SetActive(false);
         canvas[(int)enumCanvas.Stage].SetActive(false);
         canvas[(int)enumCanvas.Character].SetActive(false);
         canvas[(int)enumCanvas.Check].SetActive(false);
         clearImage[(int)enumClearImage.Easy].SetActive(false);
         clearImage[(int)enumClearImage.Normal].SetActive(false);
+        VolumeOptionWindow.SetActive(false);
+
+        SoundManager.Instance.PlayBGM("Title");
+
+        StartCoroutine(FlishingText());
+
     }
 
     void Update()
     {
         if (!TitleOff && (Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0)))
         {
+            SoundManager.Instance.PlaySE("Select");
             canvas[(int)enumCanvas.Title].SetActive(false);
-            canvas[(int)enumCanvas.Stage].SetActive(true);
+            canvas[(int)enumCanvas.Select].SetActive(true);
             TitleOff = true;
-            EventSystem.current.SetSelectedGameObject(defaultButton[(int)enumDefaultButton.StageButton]);
+            EventSystem.current.SetSelectedGameObject(defaultButton[(int)enumDefaultButton.SelectButton]);
         }
 
         if (PlayerPrefs.GetInt("EasyClearFloor") == 5)
@@ -94,9 +126,87 @@ public class TitleManager : MonoBehaviour
         }
 
     }
-    
-    public void Back()
+
+    private IEnumerator FlishingText()
     {
+        // 無限ループで点滅を繰り返す
+        while (true)
+        {
+            // フェードアウト
+            yield return StartCoroutine(FadeText(1f, 0f)); // アルファ値1から0へ
+            yield return new WaitForSeconds(flishingTime);   // フェード後の待機
+
+            // フェードイン
+            yield return StartCoroutine(FadeText(0f, 1f)); // アルファ値0から1へ
+            yield return new WaitForSeconds(flishingTime);   // フェード後の待機
+        }
+    }
+
+    // フェード効果を実装するコルーチン
+    private IEnumerator FadeText(float startAlpha, float endAlpha)
+    {
+        Color originalColor = pressButtonText.color;
+        float time = 0f;
+
+        while (time < fadeTime)
+        {
+            time += Time.deltaTime;
+            float alpha = Mathf.Lerp(startAlpha, endAlpha, time / fadeTime); // アルファ値を線形補間
+            originalColor.a = alpha;
+            pressButtonText.color = originalColor;
+            yield return null; // 次のフレームまで待機
+        }
+
+        // 最終的なアルファ値をセット
+        originalColor.a = endAlpha;
+        pressButtonText.color = originalColor;
+    }
+
+    public void StageSelect()
+    {
+        SoundManager.Instance.PlaySE("Select");
+        canvas[(int)enumCanvas.Select].SetActive(false);
+        canvas[(int)enumCanvas.Stage].SetActive(true);
+        EventSystem.current.SetSelectedGameObject(defaultButton[(int)enumDefaultButton.StageButton]);
+    }
+
+    public void VolumeOption()
+    {
+        SoundManager.Instance.PlaySE("Select");
+        SelectWindow.SetActive(false);
+        VolumeOptionWindow.SetActive(true);
+        EventSystem.current.SetSelectedGameObject(defaultButton[(int)enumDefaultButton.VolumeButton]);
+    }
+
+    public void VolumeBack()
+    {
+        SoundManager.Instance.PlaySE("Back");
+        VolumeOptionWindow.SetActive(false);
+        SelectWindow.SetActive(true);
+        EventSystem.current.SetSelectedGameObject(defaultButton[(int)enumDefaultButton.SelectButton]);
+    }
+
+    public void GameEnd()
+    {
+        SoundManager.Instance.PlaySE("Select");
+        Application.Quit();
+
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#endif
+    }
+
+    public void StageBack()
+    {
+        SoundManager.Instance.PlaySE("Back");
+        canvas[(int)enumCanvas.Stage].SetActive(false);
+        canvas[(int)enumCanvas.Select].SetActive(true);
+        EventSystem.current.SetSelectedGameObject(defaultButton[(int)enumDefaultButton.SelectButton]);
+    }
+
+    public void CharacterBack()
+    {
+        SoundManager.Instance.PlaySE("Back");
         canvas[(int)enumCanvas.Character].SetActive(false);
         canvas[(int)enumCanvas.Stage].SetActive(true);
         EventSystem.current.SetSelectedGameObject(defaultButton[(int)enumDefaultButton.StageButton]);
@@ -104,6 +214,7 @@ public class TitleManager : MonoBehaviour
 
     public void Easy()
     {
+        SoundManager.Instance.PlaySE("Select");
         canvas[(int)enumCanvas.Stage].SetActive(false);
         canvas[(int)enumCanvas.Character].SetActive(true);
         EventSystem.current.SetSelectedGameObject(defaultButton[(int)enumDefaultButton.CharacterButton]);
@@ -112,6 +223,7 @@ public class TitleManager : MonoBehaviour
 
     public void Normal()
     {
+        SoundManager.Instance.PlaySE("Select");
         canvas[(int)enumCanvas.Stage].SetActive(false);
         canvas[(int)enumCanvas.Character].SetActive(true);
         EventSystem.current.SetSelectedGameObject(defaultButton[(int)enumDefaultButton.CharacterButton]);
@@ -120,22 +232,43 @@ public class TitleManager : MonoBehaviour
 
     public void Fighter()
     {
+        SoundManager.Instance.PlaySE("Select");
         PlayerPrefs.SetInt("Character", 0);
         canvas[(int)enumCanvas.Character].SetActive(false);
         canvas[(int)enumCanvas.Check].SetActive(true);
         EventSystem.current.SetSelectedGameObject(defaultButton[(int)enumDefaultButton.CheckBackButton]);
+        CharacterCheckImage.sprite = Resources.Load<Sprite>("Images/PublicImages/Fighter");
+        if (PlayerPrefs.GetInt("Difficulty") == 0)
+        {
+            StageCheckImage.sprite = Resources.Load<Sprite>("Images/PublicImages/Easy");
+        }
+        else if (PlayerPrefs.GetInt("Difficulty") == 1)
+        {
+            StageCheckImage.sprite = Resources.Load<Sprite>("Images/PublicImages/Normal");
+        }
     }
 
     public void Magician()
     {
+        SoundManager.Instance.PlaySE("Select");
         PlayerPrefs.SetInt("Character", 1);
         canvas[(int)enumCanvas.Character].SetActive(false);
         canvas[(int)enumCanvas.Check].SetActive(true);
         EventSystem.current.SetSelectedGameObject(defaultButton[(int)enumDefaultButton.CheckBackButton]);
+        CharacterCheckImage.sprite = Resources.Load<Sprite>("Images/PublicImages/Magician");
+        if (PlayerPrefs.GetInt("Difficulty") == 0)
+        {
+            StageCheckImage.sprite = Resources.Load<Sprite>("Images/PublicImages/Easy");
+        }
+        else if (PlayerPrefs.GetInt("Difficulty") == 1)
+        {
+            StageCheckImage.sprite = Resources.Load<Sprite>("Images/PublicImages/Normal");
+        }
     }
 
     public void Yes()
     {
+        SoundManager.Instance.PlaySE("Select");
         if (PlayerPrefs.GetInt("Difficulty") == 0)
         {
             Initiate.Fade("MainSceneEasy", Color.black, 1.0f);
@@ -148,6 +281,7 @@ public class TitleManager : MonoBehaviour
 
     public void No()
     {
+        SoundManager.Instance.PlaySE("Back");
         canvas[(int)enumCanvas.Character].SetActive(true);
         canvas[(int)enumCanvas.Check].SetActive(false);
         EventSystem.current.SetSelectedGameObject(defaultButton[(int)enumDefaultButton.CharacterButton]);

@@ -85,7 +85,7 @@ public class ShopManager : Singleton<ShopManager>
         {
             yield return null;
         }
-
+        SoundManager.Instance.PlaySE("Select");
         mainText.text = "血を分けてくれたら\nポーションを売ってあげよう";
 
         yield return new WaitForSeconds(1.0f);
@@ -94,7 +94,7 @@ public class ShopManager : Singleton<ShopManager>
         {
             yield return null;
         }
-
+        SoundManager.Instance.PlaySE("Select");
         if (BattleManager.Instance.playerHP <= 10)
         {
             mainText.text = "おっと、HPが足りないね\nまた来ておくれ";
@@ -112,7 +112,7 @@ public class ShopManager : Singleton<ShopManager>
             {
                 yield return null;
             }
-
+            SoundManager.Instance.PlaySE("Select");
             selectWindow.SetActive(false);
 
             if (yes)
@@ -132,7 +132,7 @@ public class ShopManager : Singleton<ShopManager>
                     {
                         yield return null;
                     }
-
+                    SoundManager.Instance.PlaySE("Select");
                     selectWindow.SetActive(false);
 
                     if (yes)
@@ -163,12 +163,6 @@ public class ShopManager : Singleton<ShopManager>
                     ItemManager.Instance.itemText.text = itemValueManager.DataList[getItem].itemName;
                 }
 
-                yield return new WaitForSeconds(1.0f);
-
-                while (!Input.GetKeyDown(KeyCode.Space))
-                {
-                    yield return null;
-                }
             }
             else
             {
@@ -183,6 +177,8 @@ public class ShopManager : Singleton<ShopManager>
         {
             yield return null;
         }
+        SoundManager.Instance.PlaySE("Select");
+        SoundManager.Instance.StopBGM();
     }
 
     public void Yes()

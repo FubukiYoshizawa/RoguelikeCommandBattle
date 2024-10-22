@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.UI;
 
-public class SoundManager : MonoBehaviour
+public class SoundManager : Singleton<SoundManager>
 {
     [SerializeField] private BGMManager bgmManager; // BGMŠÇ——pScriptableObject
     [SerializeField] private SEManager seManager;   // SEŠÇ——pScriptableObject
@@ -53,11 +53,6 @@ public class SoundManager : MonoBehaviour
             seVolumeSlider.value = seSource.volume;
             seVolumeSlider.onValueChanged.AddListener(SetSEVolume);
         }
-    }
-
-    private void Start()
-    {
-        PlayBGM("BGM");
     }
 
     // BGMÄ¶
