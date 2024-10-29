@@ -8,6 +8,55 @@ public class SoundManager : Singleton<SoundManager>
     [SerializeField] private BGMManager bgmManager; // BGM管理用ScriptableObject
     [SerializeField] private SEManager seManager;   // SE管理用ScriptableObject
 
+    public int[] bgmNumber; // BGM番号を表す変数
+    public enum enumBgmNumber
+    {
+        Title,
+        StageEasy,
+        StageNormal,
+        Battle,
+        StrongBattle,
+        BossBattle,
+        GameOver,
+        GameClear,
+        EventFountain,
+        EventMagic,
+        EventMuscle,
+        Shop,
+        Treasure,
+        Rest,
+        Num
+    }
+    public int[] seNumber;　// SE番号を表す変数
+    public enum enumSENumber
+    {
+        Attack,
+        PowerAttack,
+        PowerCharge,
+        Healing,
+        FireBall,
+        IceLance,
+        Bomb,
+        Damage,
+        EnemySpecialAttack,
+        Scythe,
+        Tornado,
+        Thunder,
+        Breath,
+        Auro,
+        Lightning,
+        Select,
+        Back,
+        StageChange,
+        Pause,
+        Win,
+        LvUp,
+        ItemGet,
+        StatusDown,
+        Lose,
+        Num
+    }
+
     private AudioSource bgmSource;    // BGM再生用AudioSource
     private AudioSource seSource;     // SE再生用AudioSource
 
@@ -22,6 +71,12 @@ public class SoundManager : Singleton<SoundManager>
 
     private void Awake()
     {
+        bgmManager = Resources.Load<BGMManager>("ScriptableObject/BGMManager");
+        seManager = Resources.Load<SEManager>("ScriptableObject/SEManager");
+
+        bgmNumber = new int[(int)enumBgmNumber.Num];
+        seNumber = new int[(int)enumSENumber.Num];
+
         // BGM用とSE用でAudioSourceを分けて管理
         bgmSource = gameObject.AddComponent<AudioSource>();
         seSource = gameObject.AddComponent<AudioSource>();
@@ -56,17 +111,17 @@ public class SoundManager : Singleton<SoundManager>
     }
 
     // BGM再生
-    public void PlayBGM(string bgmName)
+    public void PlayBGM(int bgmElement)
     {
-        BGMData bgmData = bgmManager.DataList.Find(bgm => bgm.BGMName == bgmName);
-        if (bgmData != null)
+        if (bgmElement >= 0 && bgmElement < bgmManager.DataList.Count)
         {
+            BGMData bgmData = bgmManager.DataList[bgmElement];
             bgmSource.clip = bgmData.AudioClip;
             bgmSource.Play();
         }
         else
         {
-            Debug.LogWarning("指定されたBGMが見つかりません: " + bgmName);
+            Debug.LogWarning("指定されたBGMがありません: " + bgmElement);
         }
     }
 
@@ -77,16 +132,17 @@ public class SoundManager : Singleton<SoundManager>
     }
 
     // SE再生
-    public void PlaySE(string seName)
+    public void PlaySE(int seElement)
     {
-        SEData seData = seManager.DataList.Find(se => se.SEName == seName);
-        if (seData != null)
+        if (seElement >= 0 && seElement < seManager.DataList.Count)
         {
-            seSource.PlayOneShot(seData.AudioClip);
+            SEData sEData = seManager.DataList[seElement];
+            seSource.clip = sEData.AudioClip;
+            seSource.Play();
         }
         else
         {
-            Debug.LogWarning("指定されたSEが見つかりません: " + seName);
+            Debug.LogWarning("指定されたSEがありません: " + seElement);
         }
     }
 
@@ -104,5 +160,9 @@ public class SoundManager : Singleton<SoundManager>
         seSource.volume = volume;
         PlayerPrefs.SetFloat(SEVolumeKey, volume);   // 音量を保存
         PlayerPrefs.Save();  // PlayerPrefsを即時保存
+    }
+    public void PlaySampleSE()
+    {
+        PlaySE((int)enumSENumber.Win);
     }
 }

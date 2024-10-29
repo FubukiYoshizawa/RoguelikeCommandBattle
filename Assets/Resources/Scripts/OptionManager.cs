@@ -39,8 +39,10 @@ public class OptionManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
+            SoundManager.Instance.PlaySE((int)SoundManager.enumSENumber.Pause);
             if (!option)
             {
+                Time.timeScale = 0;
                 option = true;
                 if (EventSystem.current.currentSelectedGameObject != null)
                 {
@@ -48,7 +50,6 @@ public class OptionManager : MonoBehaviour
                 }
                 optionCanavas.SetActive(true);
                 EventSystem.current.SetSelectedGameObject(optionDefaultButton);
-                Time.timeScale = 0;
             }
             else
             {
@@ -65,15 +66,15 @@ public class OptionManager : MonoBehaviour
 
     public void Restart()
     {
-        Time.timeScale = 1;
         Scene currentScene = SceneManager.GetActiveScene();
         Initiate.Fade(currentScene.name, Color.black, 1.0f);
+        Time.timeScale = 1;
     }
 
     public void Menu()
     {
-        Time.timeScale = 1;
         Initiate.Fade("TitleScene", Color.black, 1.0f);
+        Time.timeScale = 1;
     }
 
     public void Volume()
@@ -94,7 +95,7 @@ public class OptionManager : MonoBehaviour
     {
         option = false;
         optionCanavas.SetActive(false);
-        Time.timeScale = 1;
         EventSystem.current.SetSelectedGameObject(lastSelectButton);
+        Time.timeScale = 1;
     }
 }

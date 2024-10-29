@@ -16,7 +16,7 @@ public class GameClearManager : MonoBehaviour
         CharacterImage = GameObject.Find("Character").GetComponent<Image>();
         if (PlayerPrefs.GetInt("Character") == 0)
         {
-            CharacterImage.sprite = Resources.Load<Sprite>("Images/PublicImages/Fighter");
+            CharacterImage.sprite = Resources.Load<Sprite>("Images/PublicImages/Warrior");
         }
         else if (PlayerPrefs.GetInt("Character") == 1)
         {
@@ -24,7 +24,7 @@ public class GameClearManager : MonoBehaviour
         }
         EventSystem.current.SetSelectedGameObject(defaultButton);
 
-        SoundManager.Instance.PlayBGM("GameClear");
+        SoundManager.Instance.PlayBGM((int)SoundManager.enumBgmNumber.GameClear);
     }
 
     void Update()
@@ -34,7 +34,7 @@ public class GameClearManager : MonoBehaviour
 
     public void Retry()
     {
-        SoundManager.Instance.PlaySE("Select");
+        SoundManager.Instance.PlaySE((int)SoundManager.enumSENumber.Select);
         if (PlayerPrefs.GetInt("Difficulty") == 0)
         {
             Initiate.Fade("MainSceneEasy", Color.black, 1.0f);
@@ -47,7 +47,7 @@ public class GameClearManager : MonoBehaviour
 
     public void Title()
     {
-        SoundManager.Instance.PlaySE("Select");
+        SoundManager.Instance.PlaySE((int)SoundManager.enumSENumber.Select);
         Initiate.Fade("TitleScene", Color.black, 1.0f);
     }
 }

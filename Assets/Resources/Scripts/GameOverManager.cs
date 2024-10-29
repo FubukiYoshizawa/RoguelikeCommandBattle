@@ -14,7 +14,7 @@ public class GameOverManager : MonoBehaviour
         defaultButton = GameObject.Find("Title");
         EventSystem.current.SetSelectedGameObject(defaultButton);
 
-        SoundManager.Instance.PlayBGM("GameOver");
+        SoundManager.Instance.PlayBGM((int)SoundManager.enumBgmNumber.GameOver);
     }
 
     void Update()
@@ -24,7 +24,7 @@ public class GameOverManager : MonoBehaviour
 
     public void Retry()
     {
-        SoundManager.Instance.PlaySE("Select");
+        SoundManager.Instance.PlaySE((int)SoundManager.enumSENumber.Select);
         if (PlayerPrefs.GetInt("Difficulty") == 0)
         {
             Initiate.Fade("MainSceneEasy", Color.black, 1.0f);
@@ -37,7 +37,7 @@ public class GameOverManager : MonoBehaviour
 
     public void Title()
     {
-        SoundManager.Instance.PlaySE("Select");
+        SoundManager.Instance.PlaySE((int)SoundManager.enumSENumber.Select);
         Initiate.Fade("TitleScene", Color.black, 1.0f);
     }
 

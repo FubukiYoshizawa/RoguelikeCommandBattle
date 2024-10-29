@@ -52,7 +52,7 @@ public class BattleManager: Singleton<BattleManager>
     }
     private Sprite[] nowEnemySprite; // 現在戦っている敵の画像
     public Sprite noneEnemy; // 敵がいないときの画像
-    public TextMeshProUGUI battleText; // バトル時のテキスト
+    public TextMeshProUGUI mainText; // メインのテキスト
 
     public TextMeshProUGUI[] playerStatusText; // 画面に表示するプレイヤーのステータス
     public enum enumPlayerStatusText
@@ -117,6 +117,12 @@ public class BattleManager: Singleton<BattleManager>
 
     void Start()
     {
+        // スクリプトからの読み込み
+        // ScriptableObjectの読み込み
+        enemyStatusManager = Resources.Load<EnemyStatusManager>("ScriptableObject/EnemyStatusManager");
+        playerStatusManager = Resources.Load<PlayerStatusManager>("ScriptableObject/PlayerStatusManager");
+
+        // 各配列の初期化
         enemySprite = new Sprite[(int)enumEnemySprite.Num];
         playerStatusText = new TextMeshProUGUI[(int)enumPlayerStatusText.Num];
         enemyStatusText = new TextMeshProUGUI[(int)enumEnemyStatusText.Num];
@@ -124,12 +130,16 @@ public class BattleManager: Singleton<BattleManager>
         defaultButton = new GameObject[(int)enumDefaultButton.Num];
         buttonOn = new bool[(int)enumButtonOn.Num];
 
+        // 表示するImageの取得と各画像の読み込み
         floorBackImage = GameObject.Find("FloorImage").GetComponent<Image>();
         floorBackSprite = Resources.Load<Sprite>("Images/FloorBacks/DefaultBack");
         displayEnemyImage = GameObject.Find("EnemyImage").GetComponent<Image>();
         noneEnemy = Resources.Load<Sprite>("Images/Enemys/Unknown");
-        battleText = GameObject.Find("MainText").GetComponent<TextMeshProUGUI>();
 
+        // メインテキストの読み込み
+        mainText = GameObject.Find("MainText").GetComponent<TextMeshProUGUI>();
+
+        // 敵画像のSpriteの読み込み
         enemySprite[(int)enumEnemySprite.Slime] = Resources.Load<Sprite>("Images/Enemys/Slime");
         enemySprite[(int)enumEnemySprite.IkeBat] = Resources.Load<Sprite>("Images/Enemys/IkeBat");
         enemySprite[(int)enumEnemySprite.HatGhost] = Resources.Load<Sprite>("Images/Enemys/HatGhost");
@@ -142,6 +152,7 @@ public class BattleManager: Singleton<BattleManager>
         enemySprite[(int)enumEnemySprite.BabyDragon] = Resources.Load<Sprite>("Images/Enemys/BabyDragon");
         enemySprite[(int)enumEnemySprite.LightDragon] = Resources.Load<Sprite>("Images/Enemys/LightDragon");
 
+        // プレイヤーステータスを表示するテキストの読み込み
         playerStatusText[(int)enumPlayerStatusText.Name] = GameObject.Find("PlayerNameText").GetComponent<TextMeshProUGUI>();
         playerStatusText[(int)enumPlayerStatusText.Lv] = GameObject.Find("PlayerLvText").GetComponent<TextMeshProUGUI>();
         playerStatusText[(int)enumPlayerStatusText.HP] = GameObject.Find("PlayerHPText").GetComponent<TextMeshProUGUI>();
@@ -150,54 +161,48 @@ public class BattleManager: Singleton<BattleManager>
         playerStatusText[(int)enumPlayerStatusText.MaxSP] = GameObject.Find("PlayerMaxSPText").GetComponent<TextMeshProUGUI>();
         playerStatusText[(int)enumPlayerStatusText.ATK] = GameObject.Find("PlayerATKText").GetComponent<TextMeshProUGUI>();
 
+        // 敵ステータスを表示するテキストの読み込み
         enemyStatusText[(int)enumEnemyStatusText.Name] = GameObject.Find("EnemyNameText").GetComponent<TextMeshProUGUI>();
         enemyStatusText[(int)enumEnemyStatusText.Lv] = GameObject.Find("EnemyLvText").GetComponent<TextMeshProUGUI>();
         enemyStatusText[(int)enumEnemyStatusText.HP] = GameObject.Find("EnemyHPText").GetComponent<TextMeshProUGUI>();
         enemyStatusText[(int)enumEnemyStatusText.MaxHP] = GameObject.Find("EnemyMaxHPText").GetComponent<TextMeshProUGUI>();
         enemyStatusText[(int)enumEnemyStatusText.ATK] = GameObject.Find("EnemyATKText").GetComponent<TextMeshProUGUI>();
 
+        // 表示を切り替えるウィンドウの読み込み
         windows[(int)enumWindows.EnemyStatus] = GameObject.Find("enemyStatusWindow");
         windows[(int)enumWindows.ItemWindow] = GameObject.Find("itemWindow");
         windows[(int)enumWindows.ComandWindow] = GameObject.Find("comandWindow");
         windows[(int)enumWindows.SkillWindow] = GameObject.Find("skillWindow");
         windows[(int)enumWindows.ItemUseSelect] = GameObject.Find("ItemSelectWindow");
 
+        // ウィンドウ切り替え時の選択ボタンの読み込み
         defaultButton[(int)enumDefaultButton.AttackButton] = GameObject.Find("attackButton");
         defaultButton[(int)enumDefaultButton.SkillBackButton] = GameObject.Find("SkillBackButton");
         defaultButton[(int)enumDefaultButton.ItemUseBackButton] = GameObject.Find("itemUseBackButton");
 
+        // 初期非表示ウィンドウの設定
         windows[(int)enumWindows.EnemyStatus].SetActive(false);
         windows[(int)enumWindows.ComandWindow].SetActive(false);
         windows[(int)enumWindows.ItemUseSelect].SetActive(false);
 
-        if (PlayerPrefs.GetInt("Character") == 0)
-        {
-            playerName = playerStatusManager.DataList[0].pNAME;
-            playerLv = playerStatusManager.DataList[0].pLv;
-            playerHP = playerStatusManager.DataList[0].pHP;
-            playerMaxHP = playerStatusManager.DataList[0].pHP;
-            playerSP = playerStatusManager.DataList[0].pSP;
-            playerMaxSP = playerStatusManager.DataList[0].pSP;
-            playerATK = playerStatusManager.DataList[0].pATK;
+        // プレイヤーのステータス初期化
+        int baseCharacterStatus = PlayerPrefs.GetInt("Character");
+        playerName = playerStatusManager.DataList[baseCharacterStatus].pNAME;
+        playerLv = playerStatusManager.DataList[baseCharacterStatus].pLv;
+        playerHP = playerStatusManager.DataList[baseCharacterStatus].pHP;
+        playerMaxHP = playerStatusManager.DataList[baseCharacterStatus].pHP;
+        playerSP = playerStatusManager.DataList[baseCharacterStatus].pSP;
+        playerMaxSP = playerStatusManager.DataList[baseCharacterStatus].pSP;
+        playerATK = playerStatusManager.DataList[baseCharacterStatus].pATK;
 
-        }
-        else if (PlayerPrefs.GetInt("Character") == 1)
-        {
-            playerName = playerStatusManager.DataList[1].pNAME;
-            playerLv = playerStatusManager.DataList[1].pLv;
-            playerHP = playerStatusManager.DataList[1].pHP;
-            playerMaxHP = playerStatusManager.DataList[1].pHP;
-            playerSP = playerStatusManager.DataList[1].pSP;
-            playerMaxSP = playerStatusManager.DataList[1].pSP;
-            playerATK = playerStatusManager.DataList[1].pATK;
-        }
-
+        // プレイヤー名の表示
         playerStatusText[(int)enumPlayerStatusText.Name].text = playerName;
 
     }
 
     void Update()
     {
+        // 各ステータスの更新
         playerStatusText[(int)enumPlayerStatusText.Lv].text = playerLv.ToString();
         playerStatusText[(int)enumPlayerStatusText.HP].text = playerHP.ToString();
         playerStatusText[(int)enumPlayerStatusText.MaxHP].text = playerMaxHP.ToString();
@@ -212,84 +217,57 @@ public class BattleManager: Singleton<BattleManager>
 
     }
 
+    // 通常戦闘開始時の処理
     public IEnumerator BattleStart()
     {
-        battleText.text = "バトルフロアだ！";
+        mainText.text = "バトルフロアだ！";
         floorBackImage.sprite = floorBackSprite;
 
-        yield return new WaitForSeconds(1.0f);
+        yield return StartCoroutine(NextProcess(1.0f));
 
-        while (!Input.GetKeyDown(KeyCode.Space))
+        SoundManager.Instance.PlayBGM((int)SoundManager.enumBgmNumber.Battle);
+        SoundManager.Instance.PlaySE((int)SoundManager.enumSENumber.Select);
+
+        // 選択した難易度か進行状況で敵を変える
+        nowEnemySprite = new Sprite[] { enemySprite[(int)enumEnemySprite.Slime], enemySprite[(int)enumEnemySprite.IkeBat], enemySprite[(int)enumEnemySprite.HatGhost] };
+        int randomNumber = Random.Range(0, nowEnemySprite.Length);
+        Sprite selectedSprite = nowEnemySprite[randomNumber];
+        displayEnemyImage.sprite = selectedSprite;
+        if (GameManager.Instance.floorNumber > GameManager.Instance.maxFloorNumber / 2 || PlayerPrefs.GetInt("Difficulty") >= 1)
         {
-            yield return null;
-        }
-
-        SoundManager.Instance.PlayBGM("Battle");
-        SoundManager.Instance.PlaySE("Select");
-        if (GameManager.Instance.floorNumber <= GameManager.Instance.maxFloorNumber / 2 || PlayerPrefs.GetInt("Difficulty") == 0)
-        {
-            nowEnemySprite = new Sprite[] { enemySprite[(int)enumEnemySprite.Slime], enemySprite[(int)enumEnemySprite.IkeBat], enemySprite[(int)enumEnemySprite.HatGhost] };
-            int randomNumber = Random.Range(0, nowEnemySprite.Length);
-            Sprite selectedSprite = nowEnemySprite[randomNumber];
-            displayEnemyImage.sprite = selectedSprite;
-
-            enemyName = enemyStatusManager.DataList[randomNumber].eNAME;
-            enemyLv = enemyStatusManager.DataList[randomNumber].eLv;
-            enemyHP = enemyStatusManager.DataList[randomNumber].eHP;
-            enemyMaxHP = enemyStatusManager.DataList[randomNumber].eHP;
-            enemyATK = enemyStatusManager.DataList[randomNumber].eATK;
-            enemyEXP = enemyStatusManager.DataList[randomNumber].eEXP;
-            enemyStatusText[(int)enumEnemyStatusText.Name].text = enemyName;
-        }
-        else if (PlayerPrefs.GetInt("Difficulty") >= 1)
-        {
-            nowEnemySprite = new Sprite[] { enemySprite[(int)enumEnemySprite.GodADeath], enemySprite[(int)enumEnemySprite.Tornado], enemySprite[(int)enumEnemySprite.ThunderOni] };
-            int randomNumber = Random.Range(0, nowEnemySprite.Length);
-            Sprite selectedSprite = nowEnemySprite[randomNumber];
-            displayEnemyImage.sprite = selectedSprite;
-
             randomNumber += 3;
-            enemyName = enemyStatusManager.DataList[randomNumber].eNAME;
-            enemyLv = enemyStatusManager.DataList[randomNumber].eLv;
-            enemyHP = enemyStatusManager.DataList[randomNumber].eHP;
-            enemyMaxHP = enemyStatusManager.DataList[randomNumber].eHP;
-            enemyATK = enemyStatusManager.DataList[randomNumber].eATK;
-            enemyEXP = enemyStatusManager.DataList[randomNumber].eEXP;
-            enemyStatusText[(int)enumEnemyStatusText.Name].text = enemyName;
         }
+        enemyName = enemyStatusManager.DataList[randomNumber].eNAME;
+        enemyLv = enemyStatusManager.DataList[randomNumber].eLv;
+        enemyHP = enemyStatusManager.DataList[randomNumber].eHP;
+        enemyMaxHP = enemyStatusManager.DataList[randomNumber].eHP;
+        enemyATK = enemyStatusManager.DataList[randomNumber].eATK;
+        enemyEXP = enemyStatusManager.DataList[randomNumber].eEXP;
+        enemyStatusText[(int)enumEnemyStatusText.Name].text = enemyName;
 
-        battleText.text = $"{enemyName}が現れた！";
+        mainText.text = $"{enemyName}が現れた！";
 
         windows[(int)enumWindows.EnemyStatus].SetActive(true);
         windows[(int)enumWindows.ItemWindow].SetActive(false);
 
-        yield return new WaitForSeconds(1.0f);
+        yield return StartCoroutine(NextProcess(1.0f));
 
-        while (!Input.GetKeyDown(KeyCode.Space))
-        {
-            yield return null;
-        }
-
-        SoundManager.Instance.PlaySE("Select");
+        SoundManager.Instance.PlaySE((int)SoundManager.enumSENumber.Select);
         yield return StartCoroutine(Battle());
 
     }
 
+    // 強敵戦闘開始時の処理
     public IEnumerator StrongStart()
     {
-        battleText.text = "強敵フロアだ！";
+        mainText.text = "強敵フロアだ！";
         floorBackImage.sprite = floorBackSprite;
         GameManager.Instance.floorIconImage.sprite = GameManager.Instance.floorIconSprite[(int)GameManager.enumFloorIconSprite.StrongFloor];
 
-        yield return new WaitForSeconds(1.0f);
+        yield return StartCoroutine(NextProcess(1.0f));
 
-        while (!Input.GetKeyDown(KeyCode.Space))
-        {
-            yield return null;
-        }
-
-        SoundManager.Instance.PlayBGM("StrongBattle");
-        SoundManager.Instance.PlaySE("Select");
+        SoundManager.Instance.PlayBGM((int)SoundManager.enumBgmNumber.StrongBattle);
+        SoundManager.Instance.PlaySE((int)SoundManager.enumSENumber.Select);
         nowEnemySprite = new Sprite[] { enemySprite[(int)enumEnemySprite.InfernoButterfly], enemySprite[(int)enumEnemySprite.DarkDragon], enemySprite[(int)enumEnemySprite.IceDragon] };
         int randomNumber = Random.Range(0, nowEnemySprite.Length);
         Sprite selectedSprite = nowEnemySprite[randomNumber];
@@ -304,39 +282,30 @@ public class BattleManager: Singleton<BattleManager>
         enemyEXP = enemyStatusManager.DataList[randomNumber].eEXP;
         enemyStatusText[(int)enumEnemyStatusText.Name].text = enemyName;
 
-        battleText.text = $"{enemyName}が現れた！";
+        mainText.text = $"{enemyName}が現れた！";
 
         windows[(int)enumWindows.EnemyStatus].SetActive(true);
         windows[(int)enumWindows.ItemWindow].SetActive(false);
 
-        yield return new WaitForSeconds(1.0f);
+        yield return StartCoroutine(NextProcess(1.0f));
 
-        while (!Input.GetKeyDown(KeyCode.Space))
-        {
-            yield return null;
-        }
-
-        SoundManager.Instance.PlaySE("Select");
+        SoundManager.Instance.PlaySE((int)SoundManager.enumSENumber.Select);
         yield return StartCoroutine(Battle());
 
     }
 
+    // ボス戦闘開始時の処理
     public IEnumerator BossStart()
     {
-        battleText.text = "ボスフロアだ！";
+        mainText.text = "ボスフロアだ！";
         floorBackImage.sprite = floorBackSprite;
         GameManager.Instance.floorIconImage.sprite = GameManager.Instance.floorIconSprite[(int)GameManager.enumFloorIconSprite.BossFloor];
         bossBattle = true;
 
-        yield return new WaitForSeconds(1.0f);
+        yield return StartCoroutine(NextProcess(1.0f));
 
-        while (!Input.GetKeyDown(KeyCode.Space))
-        {
-            yield return null;
-        }
-
-        SoundManager.Instance.PlayBGM("BossBattle");
-        SoundManager.Instance.PlaySE("Select");
+        SoundManager.Instance.PlayBGM((int)SoundManager.enumBgmNumber.BossBattle);
+        SoundManager.Instance.PlaySE((int)SoundManager.enumSENumber.Select);
         if (PlayerPrefs.GetInt("Difficulty") == 0)
         {
             displayEnemyImage.sprite = enemySprite[(int)enumEnemySprite.BabyDragon];
@@ -362,37 +331,34 @@ public class BattleManager: Singleton<BattleManager>
             enemyStatusText[(int)enumEnemyStatusText.Name].text = enemyName;
         }
 
-        battleText.text = $"{enemyName}が現れた！";
+        mainText.text = $"{enemyName}が現れた！";
 
         windows[(int)enumWindows.EnemyStatus].SetActive(true);
         windows[(int)enumWindows.ItemWindow].SetActive(false);
 
-        yield return new WaitForSeconds(1.0f);
+        yield return StartCoroutine(NextProcess(1.0f));
 
-        while (!Input.GetKeyDown(KeyCode.Space))
-        {
-            yield return null;
-        }
-
-        SoundManager.Instance.PlaySE("Select");
+        SoundManager.Instance.PlaySE((int)SoundManager.enumSENumber.Select);
         yield return StartCoroutine(Battle());
 
     }
 
+    // 戦闘時の共通処理
     public IEnumerator Battle()
     {
-        battleText.text = "コマンド？";
+        mainText.text = "コマンド？";
+
+        yield return new WaitForSeconds(0.5f);
+
         windows[(int)enumWindows.ComandWindow].SetActive(true);
         EventSystem.current.SetSelectedGameObject(defaultButton[0]);
-
-        yield return new WaitForSeconds(1.0f);
 
         while (!buttonOn[(int)enumButtonOn.Attack] && !buttonOn[(int)enumButtonOn.Skill] && !buttonOn[(int)enumButtonOn.Item])
         {
             yield return null;
         }
 
-        SoundManager.Instance.PlaySE("Select");
+        SoundManager.Instance.PlaySE((int)SoundManager.enumSENumber.Select);
         windows[(int)enumWindows.ComandWindow].SetActive(false);
 
         if (buttonOn[(int)enumButtonOn.Attack])
@@ -416,7 +382,7 @@ public class BattleManager: Singleton<BattleManager>
 
             if (skillUse)
             {
-                SoundManager.Instance.PlaySE("Select");
+                SoundManager.Instance.PlaySE((int)SoundManager.enumSENumber.Select);
                 windows[(int)enumWindows.SkillWindow].SetActive(false);
                 skillUse = false;
                 SkillManager.Instance.skillDescriptionDisplay = false;
@@ -424,7 +390,7 @@ public class BattleManager: Singleton<BattleManager>
             }
             else
             {
-                SoundManager.Instance.PlaySE("Back");
+                SoundManager.Instance.PlaySE((int)SoundManager.enumSENumber.Back);
                 windows[(int)enumWindows.SkillWindow].SetActive(false);
                 back = false;
                 SkillManager.Instance.skillDescriptionDisplay = false;
@@ -444,35 +410,43 @@ public class BattleManager: Singleton<BattleManager>
 
     }
 
+    // 攻撃コマンド選択時の処理
     public IEnumerator Attack()
     {
         yield return StartCoroutine(PlayerAttack());
 
         yield return StartCoroutine(EnemyAttack());
 
-
-        while (!Input.GetKeyDown(KeyCode.Space))
-        {
-            yield return null;
-        }
-
-        SoundManager.Instance.PlaySE("Select");
         yield return StartCoroutine(Battle());
     }
 
+    /*
+    enum E_SEID
+    {
+        Attack,
+        Select,
+        Num
+    };
+
+    string GetSEName(E_SEID seID)
+    {
+        string[] name = new string[(int)E_SEID.Num];
+        name[0] = "Attack";
+
+        return name[(int)seID];
+    }
+    */
+
+    // プレイヤーの通常攻撃の処理
     public IEnumerator PlayerAttack()
     {
-        battleText.text = $"{playerName}の攻撃！";
+        mainText.text = $"{playerName}の攻撃！";
 
-        yield return new WaitForSeconds(1.0f);
+        yield return StartCoroutine(NextProcess(1.0f));
 
-        while (!Input.GetKeyDown(KeyCode.Space))
-        {
-            yield return null;
-        }
-
-        SoundManager.Instance.PlaySE("Attack");
-        battleText.text = $"{playerATK}のダメージ！";
+        SoundManager.Instance.PlaySE((int)SoundManager.enumSENumber.Select);
+        FlashManager.Instance.EnemyFlash(Color.red, 0.3f);
+        mainText.text = $"{playerATK}のダメージ！";
 
         yield return new WaitForSeconds(0.5f);
 
@@ -482,7 +456,13 @@ public class BattleManager: Singleton<BattleManager>
             enemyHP = 0;
         }
 
-        if (powerUp2)
+        if (powerUp2 && powerUp3)
+        {
+            powerUp2 = false;
+            powerUp3 = false;
+            playerATK /= 6;
+        }
+        else if (powerUp2)
         {
             powerUp2 = false;
             playerATK /= 2;
@@ -493,12 +473,7 @@ public class BattleManager: Singleton<BattleManager>
             playerATK /= 3;
         }
 
-        yield return new WaitForSeconds(1.0f);
-
-        while (!Input.GetKeyDown(KeyCode.Space))
-        {
-            yield return null;
-        }
+        yield return StartCoroutine(NextProcess(1.0f));
 
         if (enemyHP == 0)
         {
@@ -506,11 +481,12 @@ public class BattleManager: Singleton<BattleManager>
         }
         else
         {
-            SoundManager.Instance.PlaySE("Select");
+            SoundManager.Instance.PlaySE((int)SoundManager.enumSENumber.Select);
         }
 
     }
 
+    // 敵の攻撃の処理
     public IEnumerator EnemyAttack()
     {
         if (Random.Range(0, 3) == 0)
@@ -520,17 +496,13 @@ public class BattleManager: Singleton<BattleManager>
         else
         {
 
-            battleText.text = $"{enemyName}の攻撃！";
+            mainText.text = $"{enemyName}の攻撃！";
 
-            yield return new WaitForSeconds(1.0f);
+            yield return StartCoroutine(NextProcess(1.0f));
 
-            while (!Input.GetKeyDown(KeyCode.Space))
-            {
-                yield return null;
-            }
-
-            SoundManager.Instance.PlaySE("Damage");
-            battleText.text = $"{enemyATK}のダメージ！";
+            SoundManager.Instance.PlaySE((int)SoundManager.enumSENumber.Damage);
+            FlashManager.Instance.FlashScreen(Color.red, 0.3f);
+            mainText.text = $"{enemyATK}のダメージ！";
 
             yield return new WaitForSeconds(0.5f);
 
@@ -540,14 +512,9 @@ public class BattleManager: Singleton<BattleManager>
                 playerHP = 0;
             }
 
-            yield return new WaitForSeconds(1.0f);
+            yield return StartCoroutine(NextProcess(1.0f));
 
-            while (!Input.GetKeyDown(KeyCode.Space))
-            {
-                yield return null;
-            }
-
-            SoundManager.Instance.PlaySE("Select");
+            SoundManager.Instance.PlaySE((int)SoundManager.enumSENumber.Select);
             if (playerHP == 0)
             {
                 yield return StartCoroutine(PlayerLose());
@@ -556,8 +523,35 @@ public class BattleManager: Singleton<BattleManager>
 
     }
 
+    // スキル使用時の処理
     public IEnumerator Skill()
     {
+        /*
+        int INVALID_SKILL_SLOT = -1;
+        int selectSkillSlot = INVALID_SKILL_SLOT;
+        if (buttonOn[(int)enumButtonOn.Skill1])
+        {
+            buttonOn[(int)enumButtonOn.Skill1] = false;
+            selectSkillSlot = 1;
+        }
+        else if (buttonOn[(int)enumButtonOn.Skill2])
+        {
+            buttonOn[(int)enumButtonOn.Skill2] = false;
+            selectSkillSlot = 2;
+        }
+        else if (buttonOn[(int)enumButtonOn.Skill3])
+        {
+            buttonOn[(int)enumButtonOn.Skill3] = false;
+            selectSkillSlot = 3;
+        }
+
+        int skillId = PlayerData.skillId[selectSkillSlot];
+        SkillManager.Instance.useSkill[skillId] = true;
+        yield return StartCoroutine(SkillManager.Instance.UseSkill());
+        */
+
+
+        // スキルごとの処理分岐
         if (buttonOn[(int)enumButtonOn.Skill1])
         {
             buttonOn[(int)enumButtonOn.Skill1] = false;
@@ -601,39 +595,24 @@ public class BattleManager: Singleton<BattleManager>
             }
         }
 
-        yield return new WaitForSeconds(1.0f);
+        yield return StartCoroutine(NextProcess(1.0f));
 
-        while (!Input.GetKeyDown(KeyCode.Space))
-        {
-            yield return null;
-        }
-
-        SoundManager.Instance.PlaySE("Select");
+        SoundManager.Instance.PlaySE((int)SoundManager.enumSENumber.Select);
         yield return StartCoroutine(EnemyAttack());
 
-        while (!Input.GetKeyDown(KeyCode.Space))
-        {
-            yield return null;
-        }
-
-        SoundManager.Instance.PlaySE("Select");
         yield return StartCoroutine(Battle());
     }
 
+    // アイテム使用時の処理
     public IEnumerator Item()
     {
         if (!ItemManager.Instance.haveItem)
         {
-            battleText.text = "アイテムを持っていない！";
+            mainText.text = "アイテムを持っていない！";
 
-            yield return new WaitForSeconds(1.0f);
+            yield return StartCoroutine(NextProcess(1.0f));
 
-            while (!Input.GetKeyDown(KeyCode.Space))
-            {
-                yield return null;
-            }
-
-            SoundManager.Instance.PlaySE("Select");
+            SoundManager.Instance.PlaySE((int)SoundManager.enumSENumber.Select);
             yield return StartCoroutine(Battle());
         }
         else
@@ -642,29 +621,29 @@ public class BattleManager: Singleton<BattleManager>
             EventSystem.current.SetSelectedGameObject(defaultButton[2]);
         }
 
-        if (ItemManager.Instance.getItem[0])
+        if (ItemManager.Instance.getItem[(int)ItemManager.enumGetItem.HPPotion])
         {
-            battleText.text = "HPポーション:HPを30回復";
+            mainText.text = "HPポーション:HPを30回復";
         }
-        else if (ItemManager.Instance.getItem[1])
+        else if (ItemManager.Instance.getItem[(int)ItemManager.enumGetItem.SPPotion])
         {
-            battleText.text = "SPポーション:SPを30回復";
+            mainText.text = "SPポーション:SPを30回復";
         }
-        else if (ItemManager.Instance.getItem[2])
+        else if (ItemManager.Instance.getItem[(int)ItemManager.enumGetItem.ATKPotion])
         {
-            battleText.text = "攻撃ポーション:次の攻撃力が2倍";
+            mainText.text = "攻撃ポーション:次の攻撃力が2倍";
         }
-        else if (ItemManager.Instance.getItem[3])
+        else if (ItemManager.Instance.getItem[(int)ItemManager.enumGetItem.HealHerb])
         {
-            battleText.text = "薬草:HPを50回復";
+            mainText.text = "癒し草:HPを50回復";
         }
-        else if (ItemManager.Instance.getItem[4])
+        else if (ItemManager.Instance.getItem[(int)ItemManager.enumGetItem.DamageBomb])
         {
-            battleText.text = "ボム:敵に30のダメージ";
+            mainText.text = "ボム:敵に30のダメージ";
         }
-        else if (ItemManager.Instance.getItem[5])
+        else if (ItemManager.Instance.getItem[(int)ItemManager.enumGetItem.ATKJewel])
         {
-            battleText.text = "攻撃ジュエル:次の攻撃力が3倍";
+            mainText.text = "攻撃ジュエル:次の攻撃力が3倍";
         }
 
         while (!buttonOn[(int)enumButtonOn.ItemUse] && !buttonOn[(int)enumButtonOn.Back])
@@ -672,7 +651,7 @@ public class BattleManager: Singleton<BattleManager>
             yield return null;
         }
 
-        SoundManager.Instance.PlaySE("Select");
+        SoundManager.Instance.PlaySE((int)SoundManager.enumSENumber.Select);
         if (buttonOn[(int)enumButtonOn.ItemUse])
         {
             buttonOn[(int)enumButtonOn.ItemUse] = false;
@@ -686,60 +665,48 @@ public class BattleManager: Singleton<BattleManager>
             yield return StartCoroutine(Battle());
         }
 
-        yield return new WaitForSeconds(1.0f);
+        yield return StartCoroutine(NextProcess(1.0f));
 
-        while (!Input.GetKeyDown(KeyCode.Space))
-        {
-            yield return null;
-        }
-
-        SoundManager.Instance.PlaySE("Select");
+        SoundManager.Instance.PlaySE((int)SoundManager.enumSENumber.Select);
         yield return StartCoroutine(EnemyAttack());
 
-        while (!Input.GetKeyDown(KeyCode.Space))
-        {
-            yield return null;
-        }
-
-        SoundManager.Instance.PlaySE("Select");
         yield return StartCoroutine(Battle());
 
 
     }
 
+    // プレイヤー敗北時の処理
     public IEnumerator PlayerLose()
     {
-        battleText.text = $"{playerName}は負けた";
+        SoundManager.Instance.PlaySE((int)SoundManager.enumSENumber.Lose);
+        SoundManager.Instance.StopBGM();
+        mainText.text = $"{playerName}は負けた";
         if (PlayerPrefs.GetInt("Difficulty") == 0)
         {
-            if (PlayerPrefs.GetInt("EasyClearFloor") < GameManager.Instance.floorNumber)
+            if (PlayerPrefs.GetInt("EasyClearFloor") < GameManager.Instance.floorNumber-1)
             {
-                PlayerPrefs.SetInt("EasyClearFloor", (int)GameManager.Instance.floorNumber);
+                PlayerPrefs.SetInt("EasyClearFloor", (int)GameManager.Instance.floorNumber-1);
             }
         }
         else if (PlayerPrefs.GetInt("Difficulty") == 1)
         {
-            if (PlayerPrefs.GetInt("NormalClearFloor") < GameManager.Instance.floorNumber)
+            if (PlayerPrefs.GetInt("NormalClearFloor") < GameManager.Instance.floorNumber-1)
             {
-                PlayerPrefs.SetInt("NormalClearFloor", (int)GameManager.Instance.floorNumber);
+                PlayerPrefs.SetInt("NormalClearFloor", (int)GameManager.Instance.floorNumber-1);
             }
         }
 
-        yield return new WaitForSeconds(1.0f);
+        yield return StartCoroutine(NextProcess(1.0f));
 
-        while (!Input.GetKeyDown(KeyCode.Space))
-        {
-            yield return null;
-        }
-
-        SoundManager.Instance.PlaySE("Select");
+        SoundManager.Instance.PlaySE((int)SoundManager.enumSENumber.Select);
         Initiate.Fade("GameOverScene", Color.black, 1.0f);
-        StopAllCoroutines();
+        yield return new WaitForSeconds(5.0f);
     }
 
+    // プレイヤー勝利時の処理
     public IEnumerator PlayerWin()
     {
-        SoundManager.Instance.PlaySE("Win");
+        SoundManager.Instance.PlaySE((int)SoundManager.enumSENumber.Win);
         SoundManager.Instance.StopBGM();
         if (powerUp2)
         {
@@ -753,30 +720,20 @@ public class BattleManager: Singleton<BattleManager>
         }
 
         displayEnemyImage.sprite = noneEnemy;
-        battleText.text = $"{playerName}の勝利！";
+        mainText.text = $"{playerName}の勝利！";
 
-        yield return new WaitForSeconds(1.0f);
+        yield return StartCoroutine(NextProcess(1.0f));
 
-        while (!Input.GetKeyDown(KeyCode.Space))
-        {
-            yield return null;
-        }
-
-        SoundManager.Instance.PlaySE("Select");
-        battleText.text = $"{enemyEXP}の経験値を獲得！";
+        SoundManager.Instance.PlaySE((int)SoundManager.enumSENumber.Select);
+        mainText.text = $"{enemyEXP}の経験値を獲得！";
         playerEXP += enemyEXP;
 
-        yield return new WaitForSeconds(1.0f);
-
-        while (!Input.GetKeyDown(KeyCode.Space))
-        {
-            yield return null;
-        }
+        yield return StartCoroutine(NextProcess(1.0f));
 
         if (playerEXP >= playerNextLvEXP)
         {
-            SoundManager.Instance.PlaySE("LvUp");
-            battleText.text = "レベルが上がった！\nステータスが上がった！";
+            SoundManager.Instance.PlaySE((int)SoundManager.enumSENumber.LvUp);
+            mainText.text = "レベルが上がった！\nステータスが上昇！";
             if (PlayerPrefs.GetInt("Character") == 0)
             {
                 playerLv += 1;
@@ -796,26 +753,32 @@ public class BattleManager: Singleton<BattleManager>
                 playerNextLvEXP *= 2;
             }
 
-            yield return new WaitForSeconds(1.0f);
-
-            while (!Input.GetKeyDown(KeyCode.Space))
+            if (playerLv >= 2)
             {
-                yield return null;
+                SkillManager.Instance.useSkillButton[(int)SkillManager.enumSkillButton.Skill1].SetActive(true);
             }
+
+            if (playerLv >= 4)
+            {
+                SkillManager.Instance.useSkillButton[(int)SkillManager.enumSkillButton.Skill2].SetActive(true);
+            }
+
+            if (playerLv >= 6)
+            {
+                SkillManager.Instance.useSkillButton[(int)SkillManager.enumSkillButton.Skill3].SetActive(true);
+            }
+
+            yield return StartCoroutine(NextProcess(1.0f));
+
         }
 
 
         if (bossBattle)
         {
-            SoundManager.Instance.PlaySE("Win");
-            battleText.text = "ダンジョンを制覇した！";
+            SoundManager.Instance.PlaySE((int)SoundManager.enumSENumber.Win);
+            mainText.text = "ダンジョンを制覇した！";
 
-            yield return new WaitForSeconds(1.0f);
-
-            while (!Input.GetKeyDown(KeyCode.Space))
-            {
-                yield return null;
-            }
+            yield return StartCoroutine(NextProcess(1.0f));
 
             if (PlayerPrefs.GetInt("Difficulty") == 0)
             {
@@ -831,14 +794,25 @@ public class BattleManager: Singleton<BattleManager>
                     PlayerPrefs.SetInt("NormalClearFloor", (int)GameManager.Instance.floorNumber);
                 }
             }
-            SoundManager.Instance.PlaySE("Select");
+            SoundManager.Instance.PlaySE((int)SoundManager.enumSENumber.Select);
             Initiate.Fade("GameClearScene", Color.black, 1.0f);
-            StopAllCoroutines();
+            yield return new WaitForSeconds(5.0f);
         }
 
         windows[(int)enumWindows.EnemyStatus].SetActive(false);
         windows[(int)enumWindows.ItemWindow].SetActive(true);
         yield return StartCoroutine(GameManager.Instance.NextFloor());
+    }
+
+    // コルーチン内で次の処理に移動する際のディレイの設定
+    public IEnumerator NextProcess(float waitTime)
+    {
+        yield return new WaitForSeconds(waitTime);
+
+        while (!Input.GetKeyDown(KeyCode.Space))
+        {
+            yield return null;
+        }
     }
 
     public void AttackComand()

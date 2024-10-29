@@ -41,6 +41,8 @@ public class SkillManager : Singleton<SkillManager>
 
     private void Start()
     {
+        skillValueManager = Resources.Load<SkillValueManager>("ScriptableObject/SkillValueManager");
+
         useSkillButton = new GameObject[(int)enumSkillButton.Num];
         useSkillButtonText = new TextMeshProUGUI[(int)enumUseSkillButtontext.Num];
         useSkill = new bool[(int)enumUseSkill.Num];
@@ -78,57 +80,42 @@ public class SkillManager : Singleton<SkillManager>
 
     private void Update()
     {
-        if (BattleManager.Instance.playerLv >= 2)
-        {
-            useSkillButton[(int)enumSkillButton.Skill1].SetActive(true);
-        }
-        
-        if (BattleManager.Instance.playerLv >= 5)
-        {
-            useSkillButton[(int)enumSkillButton.Skill2].SetActive(true);
-        }
-
-        if (BattleManager.Instance.playerLv >= 7)
-        {
-            useSkillButton[(int)enumSkillButton.Skill3].SetActive(true);
-        }
-
         if (skillDescriptionDisplay)
         {
-            if (PlayerPrefs.GetInt("Character") == 0)
+            if (PlayerPrefs.GetInt("Character") == (int)TitleManager.enumCharacterID.Warrior)
             {
                 GameObject selectedObject = EventSystem.current.currentSelectedGameObject;
                 if (selectedObject != null && selectedObject == useSkillButton[(int)enumSkillButton.Skill1].gameObject)
                 {
-                    mainText.text = "パワーアタック\n強い力を込めて相手に\n攻撃力の1.5倍のダメージ";
+                    mainText.text = "パワーアタック:SP5\n強い力を込めて相手に\n攻撃力の1.5倍のダメージ";
                 }
                 else if (selectedObject != null && selectedObject == useSkillButton[(int)enumSkillButton.Skill2].gameObject)
                 {
-                    mainText.text = "パワーチャージ\n力をためて次の攻撃が２倍";
+                    mainText.text = "パワーチャージ:SP10\n力をためて次の攻撃が２倍";
                 }
                 else if (selectedObject != null && selectedObject == useSkillButton[(int)enumSkillButton.Skill3].gameObject)
                 {
-                    mainText.text = "瞑想\n心を静めて瞑想する\nHPを50回復";
+                    mainText.text = "瞑想:SP20\n心を静めて瞑想する\nHPを50回復";
                 }
                 else if (BattleManager.Instance.defaultButton[(int)BattleManager.enumDefaultButton.SkillBackButton])
                 {
                     mainText.text = "";
                 }
             }
-            else if (PlayerPrefs.GetInt("Character") == 1)
+            else if (PlayerPrefs.GetInt("Character") == (int)TitleManager.enumCharacterID.Magician)
             {
                 GameObject selectedObject = EventSystem.current.currentSelectedGameObject;
                 if (selectedObject != null && selectedObject == useSkillButton[(int)enumSkillButton.Skill1].gameObject)
                 {
-                    mainText.text = "ファイアボール\n炎の球を相手に放つ\n15の固定ダメージ";
+                    mainText.text = "ファイアボール:SP3\n炎の球を相手に放つ\n15の固定ダメージ";
                 }
                 else if (selectedObject != null && selectedObject == useSkillButton[(int)enumSkillButton.Skill2].gameObject)
                 {
-                    mainText.text = "アイスランス\n氷の槍を相手に放つ\n30の固定ダメージ";
+                    mainText.text = "アイスランス:SP7\n氷の槍を相手に放つ\n30の固定ダメージ";
                 }
                 else if (selectedObject != null && selectedObject == useSkillButton[(int)enumSkillButton.Skill3].gameObject)
                 {
-                    mainText.text = "ヒール\n癒しの呪文を唱える\nHPを30回復";
+                    mainText.text = "ヒール:SP10\n癒しの呪文を唱える\nHPを30回復";
                 }
                 else if (BattleManager.Instance.defaultButton[(int)BattleManager.enumDefaultButton.SkillBackButton])
                 {
@@ -158,6 +145,14 @@ public class SkillManager : Singleton<SkillManager>
             if (BattleManager.Instance.playerSP < skillValueManager.DataList[1].needSkillValue)
             {
                 yield return StartCoroutine(NotEnoughSP());
+            }
+            else if (BattleManager.Instance.powerUp2 == true)
+            {
+                mainText.text = "すでに使用している！";
+
+                yield return StartCoroutine(NextProcess(1.0f));
+
+                yield return StartCoroutine(BattleManager.Instance.Battle());
             }
             else
             {
@@ -220,12 +215,7 @@ public class SkillManager : Singleton<SkillManager>
     {
         mainText.text = "SPが足りない！";
 
-        yield return new WaitForSeconds(1.0f);
-
-        while (!Input.GetKeyDown(KeyCode.Space))
-        {
-            yield return null;
-        }
+        yield return StartCoroutine(NextProcess(1.0f));
 
         yield return StartCoroutine(BattleManager.Instance.Battle());
     }
@@ -234,16 +224,11 @@ public class SkillManager : Singleton<SkillManager>
     {
         mainText.text = "パワーアアタックを使った！";
 
-        yield return new WaitForSeconds(1.0f);
+        yield return StartCoroutine(NextProcess(1.0f));
 
-        while (!Input.GetKeyDown(KeyCode.Space))
-        {
-            yield return null;
-        }
-
-        SoundManager.Instance.PlaySE("PowerAttack");
+        SoundManager.Instance.PlaySE((int)SoundManager.enumSENumber.PowerAttack);
         FlashManager.Instance.EnemyFlash(Color.red, 0.3f);
-        mainText.text = $"{BattleManager.Instance.playerATK*skillValueManager.DataList[0].skillValue}のダメージ！";
+        mainText.text = $"{(int)(BattleManager.Instance.playerATK*skillValueManager.DataList[0].skillValue)}のダメージ！";
 
         BattleManager.Instance.playerSP -= skillValueManager.DataList[0].needSkillValue;
         BattleManager.Instance.enemyHP -= (int)(BattleManager.Instance.playerATK * skillValueManager.DataList[0].skillValue);
@@ -252,7 +237,13 @@ public class SkillManager : Singleton<SkillManager>
             BattleManager.Instance.enemyHP = 0;
         }
 
-        if (BattleManager.Instance.powerUp2)
+        if(BattleManager.Instance.powerUp2&&BattleManager.Instance.powerUp3)
+        {
+            BattleManager.Instance.powerUp2 = false;
+            BattleManager.Instance.powerUp3 = false;
+            BattleManager.Instance.playerATK /= 6;
+        }
+        else if (BattleManager.Instance.powerUp2)
         {
             BattleManager.Instance.powerUp2 = false;
             BattleManager.Instance.playerATK /= 2;
@@ -263,12 +254,7 @@ public class SkillManager : Singleton<SkillManager>
             BattleManager.Instance.playerATK /= 3;
         }
 
-        yield return new WaitForSeconds(1.0f);
-
-        while (!Input.GetKeyDown(KeyCode.Space))
-        {
-            yield return null;
-        }
+        yield return StartCoroutine(NextProcess(1.0f));
 
         if (BattleManager.Instance.enemyHP == 0)
         {
@@ -276,7 +262,7 @@ public class SkillManager : Singleton<SkillManager>
         }
         else
         {
-            SoundManager.Instance.PlaySE("Select");
+            SoundManager.Instance.PlaySE((int)SoundManager.enumSENumber.Select);
         }
 
     }
@@ -285,14 +271,9 @@ public class SkillManager : Singleton<SkillManager>
     {
         mainText.text = "パワーチャージを使った！";
 
-        yield return new WaitForSeconds(1.0f);
+        yield return StartCoroutine(NextProcess(1.0f));
 
-        while (!Input.GetKeyDown(KeyCode.Space))
-        {
-            yield return null;
-        }
-
-        SoundManager.Instance.PlaySE("PowerCharge");
+        SoundManager.Instance.PlaySE((int)SoundManager.enumSENumber.PowerCharge);
         FlashManager.Instance.FlashScreen(Color.yellow, 0.3f);
         mainText.text = "攻撃力が2倍になった！";
 
@@ -300,29 +281,19 @@ public class SkillManager : Singleton<SkillManager>
         BattleManager.Instance.powerUp2 = true;
         BattleManager.Instance.playerATK *= 2;
 
-        yield return new WaitForSeconds(1.0f);
+        yield return StartCoroutine(NextProcess(1.0f));
 
-        while (!Input.GetKeyDown(KeyCode.Space))
-        {
-            yield return null;
-        }
-
-        SoundManager.Instance.PlaySE("Select");
+        SoundManager.Instance.PlaySE((int)SoundManager.enumSENumber.Select);
     }
 
     public IEnumerator Meditation()
     {
         mainText.text = "瞑想を使った！";
 
-        yield return new WaitForSeconds(1.0f);
+        yield return StartCoroutine(NextProcess(1.0f));
 
-        while (!Input.GetKeyDown(KeyCode.Space))
-        {
-            yield return null;
-        }
-
-        SoundManager.Instance.PlaySE("Healing");
-        FlashManager.Instance.FlashScreen(Color.green, 0.3f);
+        SoundManager.Instance.PlaySE((int)SoundManager.enumSENumber.Healing);
+        FlashManager.Instance.FlashScreen(new Color(0.5f, 1f, 0f), 0.3f);
         mainText.text = $"HPを{skillValueManager.DataList[2].skillValue}回復した！";
 
         BattleManager.Instance.playerSP -= skillValueManager.DataList[2].needSkillValue;
@@ -332,14 +303,9 @@ public class SkillManager : Singleton<SkillManager>
             BattleManager.Instance.playerHP = BattleManager.Instance.playerMaxHP;
         }
 
-        yield return new WaitForSeconds(1.0f);
+        yield return StartCoroutine(NextProcess(1.0f));
 
-        while (!Input.GetKeyDown(KeyCode.Space))
-        {
-            yield return null;
-        }
-
-        SoundManager.Instance.PlaySE("Select");
+        SoundManager.Instance.PlaySE((int)SoundManager.enumSENumber.Select);
 
     }
 
@@ -347,14 +313,9 @@ public class SkillManager : Singleton<SkillManager>
     {
         mainText.text = "ファイアボールを唱えた！";
 
-        yield return new WaitForSeconds(1.0f);
+        yield return StartCoroutine(NextProcess(1.0f));
 
-        while (!Input.GetKeyDown(KeyCode.Space))
-        {
-            yield return null;
-        }
-
-        SoundManager.Instance.PlaySE("FireBall");
+        SoundManager.Instance.PlaySE((int)SoundManager.enumSENumber.FireBall);
         FlashManager.Instance.EnemyFlash(Color.red, 0.3f);
         mainText.text = $"{skillValueManager.DataList[3].skillValue}のダメージ！";
 
@@ -365,12 +326,7 @@ public class SkillManager : Singleton<SkillManager>
             BattleManager.Instance.enemyHP = 0;
         }
 
-        yield return new WaitForSeconds(1.0f);
-
-        while (!Input.GetKeyDown(KeyCode.Space))
-        {
-            yield return null;
-        }
+        yield return StartCoroutine(NextProcess(1.0f));
 
         if (BattleManager.Instance.enemyHP == 0)
         {
@@ -378,7 +334,7 @@ public class SkillManager : Singleton<SkillManager>
         }
         else
         {
-            SoundManager.Instance.PlaySE("Select");
+            SoundManager.Instance.PlaySE((int)SoundManager.enumSENumber.Select);
         }
     }
 
@@ -386,14 +342,9 @@ public class SkillManager : Singleton<SkillManager>
     {
         mainText.text = "アイスランスを唱えた！";
 
-        yield return new WaitForSeconds(1.0f);
+        yield return StartCoroutine(NextProcess(1.0f));
 
-        while (!Input.GetKeyDown(KeyCode.Space))
-        {
-            yield return null;
-        }
-
-        SoundManager.Instance.PlaySE("IceLance");
+        SoundManager.Instance.PlaySE((int)SoundManager.enumSENumber.IceLance);
         FlashManager.Instance.EnemyFlash(Color.cyan, 0.3f);
         mainText.text = $"{skillValueManager.DataList[4].skillValue}のダメージ！";
 
@@ -404,12 +355,7 @@ public class SkillManager : Singleton<SkillManager>
             BattleManager.Instance.enemyHP = 0;
         }
 
-        yield return new WaitForSeconds(1.0f);
-
-        while (!Input.GetKeyDown(KeyCode.Space))
-        {
-            yield return null;
-        }
+        yield return StartCoroutine(NextProcess(1.0f));
 
         if (BattleManager.Instance.enemyHP == 0)
         {
@@ -417,7 +363,7 @@ public class SkillManager : Singleton<SkillManager>
         }
         else
         {
-            SoundManager.Instance.PlaySE("Select");
+            SoundManager.Instance.PlaySE((int)SoundManager.enumSENumber.Select);
         }
     }
 
@@ -425,15 +371,10 @@ public class SkillManager : Singleton<SkillManager>
     {
         mainText.text = "ヒールを唱えた！";
 
-        yield return new WaitForSeconds(1.0f);
+        yield return StartCoroutine(NextProcess(1.0f));
 
-        while (!Input.GetKeyDown(KeyCode.Space))
-        {
-            yield return null;
-        }
-
-        SoundManager.Instance.PlaySE("Healing");
-        FlashManager.Instance.FlashScreen(Color.green, 0.3f);
+        SoundManager.Instance.PlaySE((int)SoundManager.enumSENumber.Healing);
+        FlashManager.Instance.FlashScreen(new Color(0.5f, 1f, 0f), 0.3f);
         mainText.text = $"HPが{skillValueManager.DataList[5].skillValue}回復した！";
 
         BattleManager.Instance.playerSP -= skillValueManager.DataList[5].needSkillValue;
@@ -443,13 +384,20 @@ public class SkillManager : Singleton<SkillManager>
             BattleManager.Instance.playerHP = BattleManager.Instance.playerMaxHP;
         }
 
-        yield return new WaitForSeconds(1.0f);
+        yield return StartCoroutine(NextProcess(1.0f));
+
+        SoundManager.Instance.PlaySE((int)SoundManager.enumSENumber.Select);
+    }
+
+    // コルーチン内で次の処理に移動する際のディレイの設定
+    public IEnumerator NextProcess(float waitTime)
+    {
+        yield return new WaitForSeconds(waitTime);
 
         while (!Input.GetKeyDown(KeyCode.Space))
         {
             yield return null;
         }
-
-        SoundManager.Instance.PlaySE("Select");
     }
+
 }

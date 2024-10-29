@@ -55,20 +55,16 @@ public class GameManager : Singleton<GameManager>
     {
         mainText.text = "探索スタート！";
 
-        yield return new WaitForSeconds(1.0f);
+        yield return StartCoroutine(NextProcess(1.0f));
 
-        while (!Input.GetKeyDown(KeyCode.Space))
-        {
-            yield return null;
-        }
-        SoundManager.Instance.PlaySE("Select");
+        SoundManager.Instance.PlaySE((int)SoundManager.enumSENumber.Select);
         if (PlayerPrefs.GetInt("Difficulty") == 0)
         {
-            SoundManager.Instance.PlayBGM("StageEasy");
+            SoundManager.Instance.PlayBGM((int)SoundManager.enumBgmNumber.StageEasy);
         }
         else if (PlayerPrefs.GetInt("Difficulty") == 1)
         {
-            SoundManager.Instance.PlayBGM("StageNormal");
+            SoundManager.Instance.PlayBGM((int)SoundManager.enumBgmNumber.StageNormal);
         }
         yield return StartCoroutine(NextFloor());
 
@@ -78,13 +74,9 @@ public class GameManager : Singleton<GameManager>
     {
         mainText.text = "次のフロアへ";
 
-        yield return new WaitForSeconds(1.0f);
+        yield return StartCoroutine(NextProcess(0.5f));
 
-        while (!Input.GetKeyDown(KeyCode.Space))
-        {
-            yield return null;
-        }
-        SoundManager.Instance.PlaySE("StageChange");
+        SoundManager.Instance.PlaySE((int)SoundManager.enumSENumber.StageChange);
         floorNumberText.text = (floorNumber += 1).ToString();
 
         yield return new WaitForSeconds(1.0f);
@@ -133,14 +125,10 @@ public class GameManager : Singleton<GameManager>
         floorIconImage.sprite = floorIconSprite[(int)enumFloorIconSprite.ShopFloor];
         mainText.text = "ショップフロアだ！";
 
-        yield return new WaitForSeconds(1.0f);
+        yield return StartCoroutine(NextProcess(1.0f));
 
-        while (!Input.GetKeyDown(KeyCode.Space))
-        {
-            yield return null;
-        }
-        SoundManager.Instance.PlaySE("Select");
-        SoundManager.Instance.PlayBGM("Shop");
+        SoundManager.Instance.PlaySE((int)SoundManager.enumSENumber.Select);
+        SoundManager.Instance.PlayBGM((int)SoundManager.enumBgmNumber.Shop);
         IEnumerator[] shopcoroutines = new IEnumerator[]
             {
                 ShopManager.Instance.HPShop(),
@@ -160,13 +148,9 @@ public class GameManager : Singleton<GameManager>
         floorIconImage.sprite = floorIconSprite[(int)enumFloorIconSprite.EventFloor];
         mainText.text = "イベントフロアだ！";
 
-        yield return new WaitForSeconds(1.0f);
+        yield return StartCoroutine(NextProcess(1.0f));
 
-        while (!Input.GetKeyDown(KeyCode.Space))
-        {
-            yield return null;
-        }
-        SoundManager.Instance.PlaySE("Select");
+        SoundManager.Instance.PlaySE((int)SoundManager.enumSENumber.Select);
         IEnumerator[] eventcoroutines = new IEnumerator[]
             {
                 EventManager.Instance.Fountain(),
@@ -186,14 +170,10 @@ public class GameManager : Singleton<GameManager>
         floorIconImage.sprite = floorIconSprite[(int)enumFloorIconSprite.TreasureFloor];
         mainText.text = "お宝フロアだ！";
 
-        yield return new WaitForSeconds(1.0f);
+        yield return StartCoroutine(NextProcess(1.0f));
 
-        while (!Input.GetKeyDown(KeyCode.Space))
-        {
-            yield return null;
-        }
-        SoundManager.Instance.PlaySE("Select");
-        SoundManager.Instance.PlayBGM("Treasure");
+        SoundManager.Instance.PlaySE((int)SoundManager.enumSENumber.Select);
+        SoundManager.Instance.PlayBGM((int)SoundManager.enumBgmNumber.Treasure);
         yield return StartCoroutine(TreasureManager.Instance.RandomItem());
 
         yield return StartCoroutine(NextFloor());
@@ -205,18 +185,25 @@ public class GameManager : Singleton<GameManager>
         floorIconImage.sprite = floorIconSprite[(int)enumFloorIconSprite.RestFloor];
         mainText.text = "休憩フロアだ！";
 
-        yield return new WaitForSeconds(1.0f);
+        yield return StartCoroutine(NextProcess(1.0f));
+
+        SoundManager.Instance.PlaySE((int)SoundManager.enumSENumber.Select);
+        SoundManager.Instance.PlayBGM((int)SoundManager.enumBgmNumber.Rest);
+        yield return StartCoroutine(RestManager.Instance.Rest());
+
+        yield return StartCoroutine(NextFloor());
+
+    }
+
+    // コルーチン内で次の処理に移動する際のディレイの設定
+    public IEnumerator NextProcess(float waitTime)
+    {
+        yield return new WaitForSeconds(waitTime);
 
         while (!Input.GetKeyDown(KeyCode.Space))
         {
             yield return null;
         }
-        SoundManager.Instance.PlaySE("Select");
-        SoundManager.Instance.PlayBGM("Rest");
-        yield return StartCoroutine(RestManager.Instance.Rest());
-
-        yield return StartCoroutine(NextFloor());
-
     }
 
 }

@@ -35,6 +35,8 @@ public class ShopManager : Singleton<ShopManager>
 
     public void Start()
     {
+        itemValueManager = Resources.Load<ItemValueManager>("ScriptableObject/ItemValueManager");
+
         floorSprite = new Sprite[(int)enumFloorSprite.Num];
         getItemNumber = new int[(int)enumGetItemNumber.Num];
 
@@ -79,22 +81,14 @@ public class ShopManager : Singleton<ShopManager>
     {
         mainText.text = "いらっしゃい！\nここはポーションショップだよ";
 
-        yield return new WaitForSeconds(1.0f);
+        yield return StartCoroutine(NextProcess(1.0f));
 
-        while (!Input.GetKeyDown(KeyCode.Space))
-        {
-            yield return null;
-        }
-        SoundManager.Instance.PlaySE("Select");
-        mainText.text = "血を分けてくれたら\nポーションを売ってあげよう";
+        SoundManager.Instance.PlaySE((int)SoundManager.enumSENumber.Select);
+        mainText.text = "HPを10分けてくれたら\nポーションを売ってあげよう";
 
-        yield return new WaitForSeconds(1.0f);
+        yield return StartCoroutine(NextProcess(1.0f));
 
-        while (!Input.GetKeyDown(KeyCode.Space))
-        {
-            yield return null;
-        }
-        SoundManager.Instance.PlaySE("Select");
+        SoundManager.Instance.PlaySE((int)SoundManager.enumSENumber.Select);
         if (BattleManager.Instance.playerHP <= 10)
         {
             mainText.text = "おっと、HPが足りないね\nまた来ておくれ";
@@ -112,7 +106,7 @@ public class ShopManager : Singleton<ShopManager>
             {
                 yield return null;
             }
-            SoundManager.Instance.PlaySE("Select");
+            SoundManager.Instance.PlaySE((int)SoundManager.enumSENumber.Select);
             selectWindow.SetActive(false);
 
             if (yes)
@@ -132,11 +126,12 @@ public class ShopManager : Singleton<ShopManager>
                     {
                         yield return null;
                     }
-                    SoundManager.Instance.PlaySE("Select");
                     selectWindow.SetActive(false);
 
                     if (yes)
                     {
+                        SoundManager.Instance.PlaySE((int)SoundManager.enumSENumber.Damage);
+                        FlashManager.Instance.FlashScreen(Color.red, 0.3f);
                         yes = false;
                         mainText.text = "交換成立だ\nまた会えるといいね";
                         BattleManager.Instance.playerHP -= 10;
@@ -149,6 +144,7 @@ public class ShopManager : Singleton<ShopManager>
                     }
                     else
                     {
+                        SoundManager.Instance.PlaySE((int)SoundManager.enumSENumber.Select);
                         no = false;
                         mainText.text = "後悔しないことを願うよ";
                     }
@@ -156,6 +152,8 @@ public class ShopManager : Singleton<ShopManager>
                 }
                 else
                 {
+                    SoundManager.Instance.PlaySE((int)SoundManager.enumSENumber.Damage);
+                    FlashManager.Instance.FlashScreen(Color.red, 0.3f);
                     mainText.text = "交換成立だ\nまた会えるといいね";
                     BattleManager.Instance.playerHP -= 10;
                     ItemManager.Instance.getItem[getItem] = true;
@@ -166,19 +164,27 @@ public class ShopManager : Singleton<ShopManager>
             }
             else
             {
+                SoundManager.Instance.PlaySE((int)SoundManager.enumSENumber.Select);
                 no = false;
                 mainText.text = "後悔しないことを願うよ";
             }
         }
 
-        yield return new WaitForSeconds(1.0f);
+        yield return StartCoroutine(NextProcess(1.0f));
+
+        SoundManager.Instance.PlaySE((int)SoundManager.enumSENumber.Select);
+        SoundManager.Instance.StopBGM();
+    }
+
+    // コルーチン内で次の処理に移動する際のディレイの設定
+    public IEnumerator NextProcess(float waitTime)
+    {
+        yield return new WaitForSeconds(waitTime);
 
         while (!Input.GetKeyDown(KeyCode.Space))
         {
             yield return null;
         }
-        SoundManager.Instance.PlaySE("Select");
-        SoundManager.Instance.StopBGM();
     }
 
     public void Yes()

@@ -38,6 +38,8 @@ public class TreasureManager : Singleton<TreasureManager>
 
     private void Start()
     {
+        itemValueManager = Resources.Load<ItemValueManager>("ScriptableObject/ItemValueManager");
+
         floorSprite = new Sprite[(int)enumFloorSprite.Num];
         getItemNumber = new int[(int)enumGetItemNumber.Num];
 
@@ -83,26 +85,17 @@ public class TreasureManager : Singleton<TreasureManager>
 
         mainText.text = "あなたは宝箱を見つけた！";
 
-        yield return new WaitForSeconds(1.0f);
+        yield return StartCoroutine(NextProcess(1.0f));
 
-        while (!Input.GetKeyDown(KeyCode.Space))
-        {
-            yield return null;
-        }
-
-        SoundManager.Instance.PlaySE("Select");
+        SoundManager.Instance.PlaySE((int)SoundManager.enumSENumber.Select);
+        FlashManager.Instance.FlashScreen(Color.yellow, 0.3f);
         floorImage.sprite = floorSprite[(int)enumFloorSprite.OpenTreasure];
 
         mainText.text = $"宝箱には\n{itemValueManager.DataList[itemNumber].itemName}が入っていた！";
 
-        yield return new WaitForSeconds(1.0f);
+        yield return StartCoroutine(NextProcess(1.0f));
 
-        while (!Input.GetKeyDown(KeyCode.Space))
-        {
-            yield return null;
-        }
-
-        SoundManager.Instance.PlaySE("Select");
+        SoundManager.Instance.PlaySE((int)SoundManager.enumSENumber.Select);
         if (ItemManager.Instance.haveItem)
         {
             mainText.text = "アイテムを交換しますか？";
@@ -117,7 +110,7 @@ public class TreasureManager : Singleton<TreasureManager>
                 yield return null;
             }
 
-            SoundManager.Instance.PlaySE("Select");
+            SoundManager.Instance.PlaySE((int)SoundManager.enumSENumber.Select);
             selectWindow.SetActive(false);
 
             if (yes)
@@ -143,15 +136,21 @@ public class TreasureManager : Singleton<TreasureManager>
             mainText.text = $"{itemValueManager.DataList[itemNumber].itemName}を手に入れた！";
         }
 
-        yield return new WaitForSeconds(1.0f);
+        yield return StartCoroutine(NextProcess(1.0f));
+
+        SoundManager.Instance.PlaySE((int)SoundManager.enumSENumber.Select);
+        SoundManager.Instance.StopBGM();
+    }
+
+    // コルーチン内で次の処理に移動する際のディレイの設定
+    public IEnumerator NextProcess(float waitTime)
+    {
+        yield return new WaitForSeconds(waitTime);
 
         while (!Input.GetKeyDown(KeyCode.Space))
         {
             yield return null;
         }
-
-        SoundManager.Instance.PlaySE("Select");
-        SoundManager.Instance.StopBGM();
     }
 
     public void Yes()

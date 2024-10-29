@@ -41,6 +41,20 @@ public class TitleManager : MonoBehaviour
         CheckBackButton,
         Num
     }
+    public int[] characterID;
+    public enum enumCharacterID
+    {
+        Warrior,
+        Magician,
+        Num
+    }
+    public int[] DifficultyID;
+    public enum enumDifficultyID
+    {
+        Easy,
+        Normal,
+        Num
+    }
 
     public GameObject SelectWindow;
     public GameObject VolumeOptionWindow;
@@ -60,6 +74,8 @@ public class TitleManager : MonoBehaviour
         highestFloor = new TextMeshProUGUI[(int)enumHighesetFloor.Num];
         clearImage = new GameObject[(int)enumClearImage.Num];
         defaultButton = new GameObject[(int)enumDefaultButton.Num];
+        characterID = new int[(int)enumCharacterID.Num];
+        DifficultyID = new int[(int)enumDifficultyID.Num];
 
         canvas[(int)enumCanvas.Title] = GameObject.Find("TitleCanvas");
         canvas[(int)enumCanvas.Select] = GameObject.Find("SelectCanvas");
@@ -76,7 +92,7 @@ public class TitleManager : MonoBehaviour
         defaultButton[(int)enumDefaultButton.SelectButton] = GameObject.Find("StageSelectButton");
         defaultButton[(int)enumDefaultButton.VolumeButton] = GameObject.Find("VolumeBackButton");
         defaultButton[(int)enumDefaultButton.StageButton] = GameObject.Find("EasyButton");
-        defaultButton[(int)enumDefaultButton.CharacterButton] = GameObject.Find("FighterButton");
+        defaultButton[(int)enumDefaultButton.CharacterButton] = GameObject.Find("WarriorButton");
         defaultButton[(int)enumDefaultButton.CheckBackButton] = GameObject.Find("NoButton");
 
         highestFloor[(int)enumHighesetFloor.Easy].text = PlayerPrefs.GetInt("EasyClearFloor").ToString();
@@ -98,7 +114,7 @@ public class TitleManager : MonoBehaviour
         clearImage[(int)enumClearImage.Normal].SetActive(false);
         VolumeOptionWindow.SetActive(false);
 
-        SoundManager.Instance.PlayBGM("Title");
+        SoundManager.Instance.PlayBGM((int)SoundManager.enumBgmNumber.Title);
 
         StartCoroutine(FlishingText());
 
@@ -108,7 +124,7 @@ public class TitleManager : MonoBehaviour
     {
         if (!TitleOff && (Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0)))
         {
-            SoundManager.Instance.PlaySE("Select");
+            SoundManager.Instance.PlaySE((int)SoundManager.enumSENumber.Select);
             canvas[(int)enumCanvas.Title].SetActive(false);
             canvas[(int)enumCanvas.Select].SetActive(true);
             TitleOff = true;
@@ -164,7 +180,7 @@ public class TitleManager : MonoBehaviour
 
     public void StageSelect()
     {
-        SoundManager.Instance.PlaySE("Select");
+        SoundManager.Instance.PlaySE((int)SoundManager.enumSENumber.Select);
         canvas[(int)enumCanvas.Select].SetActive(false);
         canvas[(int)enumCanvas.Stage].SetActive(true);
         EventSystem.current.SetSelectedGameObject(defaultButton[(int)enumDefaultButton.StageButton]);
@@ -172,7 +188,7 @@ public class TitleManager : MonoBehaviour
 
     public void VolumeOption()
     {
-        SoundManager.Instance.PlaySE("Select");
+        SoundManager.Instance.PlaySE((int)SoundManager.enumSENumber.Select);
         SelectWindow.SetActive(false);
         VolumeOptionWindow.SetActive(true);
         EventSystem.current.SetSelectedGameObject(defaultButton[(int)enumDefaultButton.VolumeButton]);
@@ -180,7 +196,7 @@ public class TitleManager : MonoBehaviour
 
     public void VolumeBack()
     {
-        SoundManager.Instance.PlaySE("Back");
+        SoundManager.Instance.PlaySE((int)SoundManager.enumSENumber.Back);
         VolumeOptionWindow.SetActive(false);
         SelectWindow.SetActive(true);
         EventSystem.current.SetSelectedGameObject(defaultButton[(int)enumDefaultButton.SelectButton]);
@@ -188,7 +204,7 @@ public class TitleManager : MonoBehaviour
 
     public void GameEnd()
     {
-        SoundManager.Instance.PlaySE("Select");
+        SoundManager.Instance.PlaySE((int)SoundManager.enumSENumber.Select);
         Application.Quit();
 
 #if UNITY_EDITOR
@@ -198,7 +214,7 @@ public class TitleManager : MonoBehaviour
 
     public void StageBack()
     {
-        SoundManager.Instance.PlaySE("Back");
+        SoundManager.Instance.PlaySE((int)SoundManager.enumSENumber.Back);
         canvas[(int)enumCanvas.Stage].SetActive(false);
         canvas[(int)enumCanvas.Select].SetActive(true);
         EventSystem.current.SetSelectedGameObject(defaultButton[(int)enumDefaultButton.SelectButton]);
@@ -206,7 +222,7 @@ public class TitleManager : MonoBehaviour
 
     public void CharacterBack()
     {
-        SoundManager.Instance.PlaySE("Back");
+        SoundManager.Instance.PlaySE((int)SoundManager.enumSENumber.Back);
         canvas[(int)enumCanvas.Character].SetActive(false);
         canvas[(int)enumCanvas.Stage].SetActive(true);
         EventSystem.current.SetSelectedGameObject(defaultButton[(int)enumDefaultButton.StageButton]);
@@ -214,7 +230,7 @@ public class TitleManager : MonoBehaviour
 
     public void Easy()
     {
-        SoundManager.Instance.PlaySE("Select");
+        SoundManager.Instance.PlaySE((int)SoundManager.enumSENumber.Select);
         canvas[(int)enumCanvas.Stage].SetActive(false);
         canvas[(int)enumCanvas.Character].SetActive(true);
         EventSystem.current.SetSelectedGameObject(defaultButton[(int)enumDefaultButton.CharacterButton]);
@@ -223,26 +239,26 @@ public class TitleManager : MonoBehaviour
 
     public void Normal()
     {
-        SoundManager.Instance.PlaySE("Select");
+        SoundManager.Instance.PlaySE((int)SoundManager.enumSENumber.Select);
         canvas[(int)enumCanvas.Stage].SetActive(false);
         canvas[(int)enumCanvas.Character].SetActive(true);
         EventSystem.current.SetSelectedGameObject(defaultButton[(int)enumDefaultButton.CharacterButton]);
         PlayerPrefs.SetInt("Difficulty", 1);
     }
 
-    public void Fighter()
+    public void Warrior()
     {
-        SoundManager.Instance.PlaySE("Select");
+        SoundManager.Instance.PlaySE((int)SoundManager.enumSENumber.Select);
         PlayerPrefs.SetInt("Character", 0);
         canvas[(int)enumCanvas.Character].SetActive(false);
         canvas[(int)enumCanvas.Check].SetActive(true);
         EventSystem.current.SetSelectedGameObject(defaultButton[(int)enumDefaultButton.CheckBackButton]);
-        CharacterCheckImage.sprite = Resources.Load<Sprite>("Images/PublicImages/Fighter");
-        if (PlayerPrefs.GetInt("Difficulty") == 0)
+        CharacterCheckImage.sprite = Resources.Load<Sprite>("Images/PublicImages/Warrior");
+        if (PlayerPrefs.GetInt("Difficulty") == (int)enumCharacterID.Warrior)
         {
             StageCheckImage.sprite = Resources.Load<Sprite>("Images/PublicImages/Easy");
         }
-        else if (PlayerPrefs.GetInt("Difficulty") == 1)
+        else if (PlayerPrefs.GetInt("Difficulty") == (int)enumCharacterID.Magician)
         {
             StageCheckImage.sprite = Resources.Load<Sprite>("Images/PublicImages/Normal");
         }
@@ -250,17 +266,17 @@ public class TitleManager : MonoBehaviour
 
     public void Magician()
     {
-        SoundManager.Instance.PlaySE("Select");
+        SoundManager.Instance.PlaySE((int)SoundManager.enumSENumber.Select);
         PlayerPrefs.SetInt("Character", 1);
         canvas[(int)enumCanvas.Character].SetActive(false);
         canvas[(int)enumCanvas.Check].SetActive(true);
         EventSystem.current.SetSelectedGameObject(defaultButton[(int)enumDefaultButton.CheckBackButton]);
         CharacterCheckImage.sprite = Resources.Load<Sprite>("Images/PublicImages/Magician");
-        if (PlayerPrefs.GetInt("Difficulty") == 0)
+        if (PlayerPrefs.GetInt("Difficulty") == (int)enumDifficultyID.Easy)
         {
             StageCheckImage.sprite = Resources.Load<Sprite>("Images/PublicImages/Easy");
         }
-        else if (PlayerPrefs.GetInt("Difficulty") == 1)
+        else if (PlayerPrefs.GetInt("Difficulty") == (int)enumDifficultyID.Normal)
         {
             StageCheckImage.sprite = Resources.Load<Sprite>("Images/PublicImages/Normal");
         }
@@ -268,12 +284,12 @@ public class TitleManager : MonoBehaviour
 
     public void Yes()
     {
-        SoundManager.Instance.PlaySE("Select");
-        if (PlayerPrefs.GetInt("Difficulty") == 0)
+        SoundManager.Instance.PlaySE((int)SoundManager.enumSENumber.Select);
+        if (PlayerPrefs.GetInt("Difficulty") == (int)enumDifficultyID.Easy)
         {
             Initiate.Fade("MainSceneEasy", Color.black, 1.0f);
         }
-        else if (PlayerPrefs.GetInt("Difficulty") == 1)
+        else if (PlayerPrefs.GetInt("Difficulty") == (int)enumDifficultyID.Normal)
         {
             Initiate.Fade("MainSceneNormal", Color.black, 1.0f);
         }
@@ -281,7 +297,7 @@ public class TitleManager : MonoBehaviour
 
     public void No()
     {
-        SoundManager.Instance.PlaySE("Back");
+        SoundManager.Instance.PlaySE((int)SoundManager.enumSENumber.Back);
         canvas[(int)enumCanvas.Character].SetActive(true);
         canvas[(int)enumCanvas.Check].SetActive(false);
         EventSystem.current.SetSelectedGameObject(defaultButton[(int)enumDefaultButton.CharacterButton]);

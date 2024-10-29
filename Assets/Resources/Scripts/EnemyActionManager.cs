@@ -59,18 +59,20 @@ public class EnemyActionManager : Singleton<EnemyActionManager>
 
     }
 
+    private void Start()
+    {
+        enemyStatusManager = Resources.Load<EnemyStatusManager>("ScriptableObject/EnemyStatusManager");
+
+        battleText = GameObject.Find("MainText").GetComponent<TextMeshProUGUI>();
+    }
+
     public IEnumerator Slime()
     {
         battleText.text = $"{BattleManager.Instance.enemyName}は\nスライムショットを放った！";
 
-        yield return new WaitForSeconds(1.0f);
+        yield return StartCoroutine(NextProcess(1.0f));
 
-        while (!Input.GetKeyDown(KeyCode.Space))
-        {
-            yield return null;
-        }
-
-        SoundManager.Instance.PlaySE("EnemySpecialAttack");
+        SoundManager.Instance.PlaySE((int)SoundManager.enumSENumber.EnemySpecialAttack);
         FlashManager.Instance.FlashScreen(Color.green, 0.3f);
         battleText.text = $"{enemyStatusManager.DataList[0].skillValue1}のダメージ！";
 
@@ -82,14 +84,9 @@ public class EnemyActionManager : Singleton<EnemyActionManager>
             BattleManager.Instance.playerHP = 0;
         }
 
-        yield return new WaitForSeconds(1.0f);
+        yield return StartCoroutine(NextProcess(1.0f));
 
-        while (!Input.GetKeyDown(KeyCode.Space))
-        {
-            yield return null;
-        }
-
-        SoundManager.Instance.PlaySE("Select");
+        SoundManager.Instance.PlaySE((int)SoundManager.enumSENumber.Select);
         if (BattleManager.Instance.playerHP == 0)
         {
             yield return StartCoroutine(BattleManager.Instance.PlayerLose());
@@ -101,14 +98,9 @@ public class EnemyActionManager : Singleton<EnemyActionManager>
     {
         battleText.text = $"{BattleManager.Instance.enemyName}は\nフライングアタックを放った！";
 
-        yield return new WaitForSeconds(1.0f);
+        yield return StartCoroutine(NextProcess(1.0f));
 
-        while (!Input.GetKeyDown(KeyCode.Space))
-        {
-            yield return null;
-        }
-
-        SoundManager.Instance.PlaySE("EnemySpecialAttack");
+        SoundManager.Instance.PlaySE((int)SoundManager.enumSENumber.EnemySpecialAttack);
         FlashManager.Instance.FlashScreen(Color.black, 0.3f);
         battleText.text = $"{enemyStatusManager.DataList[1].skillValue1}のダメージ！";
 
@@ -120,14 +112,9 @@ public class EnemyActionManager : Singleton<EnemyActionManager>
             BattleManager.Instance.playerHP = 0;
         }
 
-        yield return new WaitForSeconds(1.0f);
+        yield return StartCoroutine(NextProcess(1.0f));
 
-        while (!Input.GetKeyDown(KeyCode.Space))
-        {
-            yield return null;
-        }
-
-        SoundManager.Instance.PlaySE("Select");
+        SoundManager.Instance.PlaySE((int)SoundManager.enumSENumber.Select);
         if (BattleManager.Instance.playerHP == 0)
         {
             yield return StartCoroutine(BattleManager.Instance.PlayerLose());
@@ -139,14 +126,9 @@ public class EnemyActionManager : Singleton<EnemyActionManager>
     {
         battleText.text = $"{BattleManager.Instance.enemyName}は\nファイアボールを放った！";
 
-        yield return new WaitForSeconds(1.0f);
+        yield return StartCoroutine(NextProcess(1.0f));
 
-        while (!Input.GetKeyDown(KeyCode.Space))
-        {
-            yield return null;
-        }
-
-        SoundManager.Instance.PlaySE("FireBall");
+        SoundManager.Instance.PlaySE((int)SoundManager.enumSENumber.FireBall);
         FlashManager.Instance.FlashScreen(Color.red, 0.3f);
         battleText.text = $"{enemyStatusManager.DataList[2].skillValue1}のダメージ！";
 
@@ -158,14 +140,9 @@ public class EnemyActionManager : Singleton<EnemyActionManager>
             BattleManager.Instance.playerHP = 0;
         }
 
-        yield return new WaitForSeconds(1.0f);
+        yield return StartCoroutine(NextProcess(1.0f));
 
-        while (!Input.GetKeyDown(KeyCode.Space))
-        {
-            yield return null;
-        }
-
-        SoundManager.Instance.PlaySE("Select");
+        SoundManager.Instance.PlaySE((int)SoundManager.enumSENumber.Select);
         if (BattleManager.Instance.playerHP == 0)
         {
             yield return StartCoroutine(BattleManager.Instance.PlayerLose());
@@ -177,14 +154,9 @@ public class EnemyActionManager : Singleton<EnemyActionManager>
     {
         battleText.text = $"{BattleManager.Instance.enemyName}は\n鎌を振りかぶった！";
 
-        yield return new WaitForSeconds(1.0f);
+        yield return StartCoroutine(NextProcess(1.0f));
 
-        while (!Input.GetKeyDown(KeyCode.Space))
-        {
-            yield return null;
-        }
-
-        SoundManager.Instance.PlaySE("Scythe");
+        SoundManager.Instance.PlaySE((int)SoundManager.enumSENumber.Scythe);
         FlashManager.Instance.FlashScreen(Color.gray, 0.3f);
         battleText.text = $"{enemyStatusManager.DataList[3].skillValue1}のダメージ！";
 
@@ -196,14 +168,9 @@ public class EnemyActionManager : Singleton<EnemyActionManager>
             BattleManager.Instance.playerHP = 0;
         }
 
-        yield return new WaitForSeconds(1.0f);
+        yield return StartCoroutine(NextProcess(1.0f));
 
-        while (!Input.GetKeyDown(KeyCode.Space))
-        {
-            yield return null;
-        }
-
-        SoundManager.Instance.PlaySE("Select");
+        SoundManager.Instance.PlaySE((int)SoundManager.enumSENumber.Select);
         if (BattleManager.Instance.playerHP == 0)
         {
             yield return StartCoroutine(BattleManager.Instance.PlayerLose());
@@ -215,14 +182,9 @@ public class EnemyActionManager : Singleton<EnemyActionManager>
     {
         battleText.text = $"{BattleManager.Instance.enemyName}は\n竜巻を巻き起こした！";
 
-        yield return new WaitForSeconds(1.0f);
+        yield return StartCoroutine(NextProcess(1.0f));
 
-        while (!Input.GetKeyDown(KeyCode.Space))
-        {
-            yield return null;
-        }
-
-        SoundManager.Instance.PlaySE("EnemySpecialAttack");
+        SoundManager.Instance.PlaySE((int)SoundManager.enumSENumber.EnemySpecialAttack);
         FlashManager.Instance.FlashScreen(Color.white, 0.3f);
         battleText.text = $"{enemyStatusManager.DataList[4].skillValue1}のダメージ！";
 
@@ -234,14 +196,9 @@ public class EnemyActionManager : Singleton<EnemyActionManager>
             BattleManager.Instance.playerHP = 0;
         }
 
-        yield return new WaitForSeconds(1.0f);
+        yield return StartCoroutine(NextProcess(1.0f));
 
-        while (!Input.GetKeyDown(KeyCode.Space))
-        {
-            yield return null;
-        }
-
-        SoundManager.Instance.PlaySE("Select");
+        SoundManager.Instance.PlaySE((int)SoundManager.enumSENumber.Select);
         if (BattleManager.Instance.playerHP == 0)
         {
             yield return StartCoroutine(BattleManager.Instance.PlayerLose());
@@ -253,14 +210,9 @@ public class EnemyActionManager : Singleton<EnemyActionManager>
     {
         battleText.text = $"{BattleManager.Instance.enemyName}は\n雷雲を呼んだ！";
 
-        yield return new WaitForSeconds(1.0f);
+        yield return StartCoroutine(NextProcess(1.0f));
 
-        while (!Input.GetKeyDown(KeyCode.Space))
-        {
-            yield return null;
-        }
-
-        SoundManager.Instance.PlaySE("Thunder");
+        SoundManager.Instance.PlaySE((int)SoundManager.enumSENumber.Thunder);
         FlashManager.Instance.FlashScreen(Color.yellow, 0.3f);
         battleText.text = $"{enemyStatusManager.DataList[5].skillValue1}のダメージ！";
 
@@ -272,14 +224,9 @@ public class EnemyActionManager : Singleton<EnemyActionManager>
             BattleManager.Instance.playerHP = 0;
         }
 
-        yield return new WaitForSeconds(1.0f);
+        yield return StartCoroutine(NextProcess(1.0f));
 
-        while (!Input.GetKeyDown(KeyCode.Space))
-        {
-            yield return null;
-        }
-
-        SoundManager.Instance.PlaySE("Select");
+        SoundManager.Instance.PlaySE((int)SoundManager.enumSENumber.Select);
         if (BattleManager.Instance.playerHP == 0)
         {
             yield return StartCoroutine(BattleManager.Instance.PlayerLose());
@@ -294,14 +241,9 @@ public class EnemyActionManager : Singleton<EnemyActionManager>
         {
             battleText.text = $"{BattleManager.Instance.enemyName}は\nファイアボールを唱えた！";
 
-            yield return new WaitForSeconds(1.0f);
+            yield return StartCoroutine(NextProcess(1.0f));
 
-            while (!Input.GetKeyDown(KeyCode.Space))
-            {
-                yield return null;
-            }
-
-            SoundManager.Instance.PlaySE("FireBall");
+            SoundManager.Instance.PlaySE((int)SoundManager.enumSENumber.FireBall);
             FlashManager.Instance.FlashScreen(Color.red, 0.3f);
             battleText.text = $"{enemyStatusManager.DataList[6].skillValue1}のダメージ！";
 
@@ -317,16 +259,11 @@ public class EnemyActionManager : Singleton<EnemyActionManager>
         {
             battleText.text = $"{BattleManager.Instance.enemyName}は\n火の粉を集めた！";
 
-            yield return new WaitForSeconds(1.0f);
+            yield return StartCoroutine(NextProcess(1.0f));
 
-            while (!Input.GetKeyDown(KeyCode.Space))
-            {
-                yield return null;
-            }
-
-            SoundManager.Instance.PlaySE("Healing");
+            SoundManager.Instance.PlaySE((int)SoundManager.enumSENumber.Healing);
             FlashManager.Instance.EnemyFlash(Color.red, 0.3f);
-            battleText.text = $"{BattleManager.Instance.enemyName}は\nHPを{enemyStatusManager.DataList[7].skillValue1}回復した！";
+            battleText.text = $"{BattleManager.Instance.enemyName}は\nHPを{enemyStatusManager.DataList[7].skillValue2}回復した！";
 
             yield return new WaitForSeconds(0.5f);
 
@@ -338,14 +275,9 @@ public class EnemyActionManager : Singleton<EnemyActionManager>
 
         }
 
-        yield return new WaitForSeconds(1.0f);
+        yield return StartCoroutine(NextProcess(1.0f));
 
-        while (!Input.GetKeyDown(KeyCode.Space))
-        {
-            yield return null;
-        }
-
-        SoundManager.Instance.PlaySE("Select");
+        SoundManager.Instance.PlaySE((int)SoundManager.enumSENumber.Select);
         if (BattleManager.Instance.playerHP == 0)
         {
             yield return StartCoroutine(BattleManager.Instance.PlayerLose());
@@ -360,14 +292,9 @@ public class EnemyActionManager : Singleton<EnemyActionManager>
         {
             battleText.text = $"{BattleManager.Instance.enemyName}は\nダークブレスを放った！";
 
-            yield return new WaitForSeconds(1.0f);
+            yield return StartCoroutine(NextProcess(1.0f));
 
-            while (!Input.GetKeyDown(KeyCode.Space))
-            {
-                yield return null;
-            }
-
-            SoundManager.Instance.PlaySE("Breath");
+            SoundManager.Instance.PlaySE((int)SoundManager.enumSENumber.Breath);
             FlashManager.Instance.FlashScreen(Color.magenta, 0.3f);
             battleText.text = $"{enemyStatusManager.DataList[7].skillValue1}のダメージ";
 
@@ -383,14 +310,9 @@ public class EnemyActionManager : Singleton<EnemyActionManager>
         {
             battleText.text = $"{BattleManager.Instance.enemyName}は\nダークオーラを放った！";
 
-            yield return new WaitForSeconds(1.0f);
+            yield return StartCoroutine(NextProcess(1.0f));
 
-            while (!Input.GetKeyDown(KeyCode.Space))
-            {
-                yield return null;
-            }
-
-            SoundManager.Instance.PlaySE("Auro");
+            SoundManager.Instance.PlaySE((int)SoundManager.enumSENumber.Auro);
             FlashManager.Instance.FlashScreen(Color.magenta, 0.3f);
             battleText.text = $"{enemyStatusManager.DataList[7].skillValue2}のダメージ！";
 
@@ -404,14 +326,9 @@ public class EnemyActionManager : Singleton<EnemyActionManager>
 
         }
 
-        yield return new WaitForSeconds(1.0f);
+        yield return StartCoroutine(NextProcess(1.0f));
 
-        while (!Input.GetKeyDown(KeyCode.Space))
-        {
-            yield return null;
-        }
-
-        SoundManager.Instance.PlaySE("Select");
+        SoundManager.Instance.PlaySE((int)SoundManager.enumSENumber.Select);
         if (BattleManager.Instance.playerHP == 0)
         {
             yield return StartCoroutine(BattleManager.Instance.PlayerLose());
@@ -426,14 +343,9 @@ public class EnemyActionManager : Singleton<EnemyActionManager>
         {
             battleText.text = $"{BattleManager.Instance.enemyName}は\nアイスブレスを放った！";
 
-            yield return new WaitForSeconds(1.0f);
+            yield return StartCoroutine(NextProcess(1.0f));
 
-            while (!Input.GetKeyDown(KeyCode.Space))
-            {
-                yield return null;
-            }
-
-            SoundManager.Instance.PlaySE("Breath");
+            SoundManager.Instance.PlaySE((int)SoundManager.enumSENumber.Breath);
             FlashManager.Instance.FlashScreen(Color.cyan, 0.3f);
             battleText.text = $"{enemyStatusManager.DataList[8].skillValue1}のダメージ！";
 
@@ -449,14 +361,9 @@ public class EnemyActionManager : Singleton<EnemyActionManager>
         {
             battleText.text = $"{BattleManager.Instance.enemyName}は\nアイスレインを放った！";
 
-            yield return new WaitForSeconds(1.0f);
+            yield return StartCoroutine(NextProcess(1.0f));
 
-            while (!Input.GetKeyDown(KeyCode.Space))
-            {
-                yield return null;
-            }
-
-            SoundManager.Instance.PlaySE("IceLance");
+            SoundManager.Instance.PlaySE((int)SoundManager.enumSENumber.IceLance);
             FlashManager.Instance.FlashScreen(Color.cyan, 0.3f);
             battleText.text = $"{enemyStatusManager.DataList[8].skillValue2}のダメージ！";
 
@@ -470,14 +377,9 @@ public class EnemyActionManager : Singleton<EnemyActionManager>
 
         }
 
-        yield return new WaitForSeconds(1.0f);
+        yield return StartCoroutine(NextProcess(1.0f));
 
-        while (!Input.GetKeyDown(KeyCode.Space))
-        {
-            yield return null;
-        }
-
-        SoundManager.Instance.PlaySE("Select");
+        SoundManager.Instance.PlaySE((int)SoundManager.enumSENumber.Select);
         if (BattleManager.Instance.playerHP == 0)
         {
             yield return StartCoroutine(BattleManager.Instance.PlayerLose());
@@ -492,14 +394,9 @@ public class EnemyActionManager : Singleton<EnemyActionManager>
         {
             battleText.text = $"{BattleManager.Instance.enemyName}は\nプチブレスを放った！";
 
-            yield return new WaitForSeconds(1.0f);
+            yield return StartCoroutine(NextProcess(1.0f));
 
-            while (!Input.GetKeyDown(KeyCode.Space))
-            {
-                yield return null;
-            }
-
-            SoundManager.Instance.PlaySE("Breath");
+            SoundManager.Instance.PlaySE((int)SoundManager.enumSENumber.Breath);
             FlashManager.Instance.FlashScreen(Color.yellow, 0.3f);
             battleText.text = $"{enemyStatusManager.DataList[9].skillValue1}のダメージ！";
 
@@ -515,16 +412,11 @@ public class EnemyActionManager : Singleton<EnemyActionManager>
         {
             battleText.text = $"{BattleManager.Instance.enemyName}は\n光を集めた！";
 
-            yield return new WaitForSeconds(1.0f);
+            yield return StartCoroutine(NextProcess(1.0f));
 
-            while (!Input.GetKeyDown(KeyCode.Space))
-            {
-                yield return null;
-            }
-
-            SoundManager.Instance.PlaySE("Healing");
+            SoundManager.Instance.PlaySE((int)SoundManager.enumSENumber.Healing);
             FlashManager.Instance.EnemyFlash(Color.yellow, 0.3f);
-            battleText.text = $"{BattleManager.Instance.enemyName}は\nHPを{enemyStatusManager.DataList[9].skillValue3}回復した！";
+            battleText.text = $"{BattleManager.Instance.enemyName}は\nHPを{enemyStatusManager.DataList[9].skillValue2}回復した！";
 
             yield return new WaitForSeconds(0.5f);
 
@@ -532,14 +424,9 @@ public class EnemyActionManager : Singleton<EnemyActionManager>
 
         }
 
-        yield return new WaitForSeconds(1.0f);
+        yield return StartCoroutine(NextProcess(1.0f));
 
-        while (!Input.GetKeyDown(KeyCode.Space))
-        {
-            yield return null;
-        }
-
-        SoundManager.Instance.PlaySE("Select");
+        SoundManager.Instance.PlaySE((int)SoundManager.enumSENumber.Select);
         if (BattleManager.Instance.playerHP == 0)
         {
             yield return StartCoroutine(BattleManager.Instance.PlayerLose());
@@ -554,14 +441,9 @@ public class EnemyActionManager : Singleton<EnemyActionManager>
         {
             battleText.text = $"{BattleManager.Instance.enemyName}は\nライトニングブレスを放った！";
 
-            yield return new WaitForSeconds(1.0f);
+            yield return StartCoroutine(NextProcess(1.0f));
 
-            while (!Input.GetKeyDown(KeyCode.Space))
-            {
-                yield return null;
-            }
-
-            SoundManager.Instance.PlaySE("Breath");
+            SoundManager.Instance.PlaySE((int)SoundManager.enumSENumber.Breath);
             FlashManager.Instance.FlashScreen(Color.yellow, 0.3f);
             battleText.text = $"{enemyStatusManager.DataList[10].skillValue1}のダメージ！";
 
@@ -577,14 +459,9 @@ public class EnemyActionManager : Singleton<EnemyActionManager>
         {
             battleText.text = $"{BattleManager.Instance.enemyName}は\nライトニングショットを放った！";
 
-            yield return new WaitForSeconds(1.0f);
+            yield return StartCoroutine(NextProcess(1.0f));
 
-            while (!Input.GetKeyDown(KeyCode.Space))
-            {
-                yield return null;
-            }
-
-            SoundManager.Instance.PlaySE("EnemySpecialAttack");
+            SoundManager.Instance.PlaySE((int)SoundManager.enumSENumber.EnemySpecialAttack);
             FlashManager.Instance.FlashScreen(Color.yellow, 0.3f);
             battleText.text = $"{enemyStatusManager.DataList[10].skillValue2}のダメージ！";
 
@@ -601,14 +478,9 @@ public class EnemyActionManager : Singleton<EnemyActionManager>
         {
             battleText.text = $"{BattleManager.Instance.enemyName}は\n光を集めた！";
 
-            yield return new WaitForSeconds(1.0f);
+            yield return StartCoroutine(NextProcess(1.0f));
 
-            while (!Input.GetKeyDown(KeyCode.Space))
-            {
-                yield return null;
-            }
-
-            SoundManager.Instance.PlaySE("Healing");
+            SoundManager.Instance.PlaySE((int)SoundManager.enumSENumber.Healing);
             FlashManager.Instance.EnemyFlash(Color.yellow, 0.3f);
             battleText.text = $"{BattleManager.Instance.enemyName}は\nHPを{enemyStatusManager.DataList[10].skillValue3}回復した！";
 
@@ -618,19 +490,25 @@ public class EnemyActionManager : Singleton<EnemyActionManager>
 
         }
 
-        yield return new WaitForSeconds(1.0f);
+        yield return StartCoroutine(NextProcess(1.0f));
 
-        while (!Input.GetKeyDown(KeyCode.Space))
-        {
-            yield return null;
-        }
-
-        SoundManager.Instance.PlaySE("Select");
+        SoundManager.Instance.PlaySE((int)SoundManager.enumSENumber.Select);
         if (BattleManager.Instance.playerHP == 0)
         {
             yield return StartCoroutine(BattleManager.Instance.PlayerLose());
         }
 
+    }
+
+    // コルーチン内で次の処理に移動する際のディレイの設定
+    public IEnumerator NextProcess(float waitTime)
+    {
+        yield return new WaitForSeconds(waitTime);
+
+        while (!Input.GetKeyDown(KeyCode.Space))
+        {
+            yield return null;
+        }
     }
 
 }
