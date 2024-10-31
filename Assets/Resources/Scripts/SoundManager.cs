@@ -8,7 +8,7 @@ public class SoundManager : Singleton<SoundManager>
     [SerializeField] private BGMManager bgmManager; // BGM管理用ScriptableObject
     [SerializeField] private SEManager seManager;   // SE管理用ScriptableObject
 
-    public int[] bgmNumber; // BGM番号を表す変数
+    public int[] bgmNumber; // BGM番号
     public enum enumBgmNumber
     {
         Title,
@@ -27,7 +27,7 @@ public class SoundManager : Singleton<SoundManager>
         Rest,
         Num
     }
-    public int[] seNumber;　// SE番号を表す変数
+    public int[] seNumber;　// SE番号
     public enum enumSENumber
     {
         Attack,
@@ -71,9 +71,11 @@ public class SoundManager : Singleton<SoundManager>
 
     private void Awake()
     {
+        // ScriptableObjectの読み込み
         bgmManager = Resources.Load<BGMManager>("ScriptableObject/BGMManager");
         seManager = Resources.Load<SEManager>("ScriptableObject/SEManager");
 
+        // 各配列の初期化
         bgmNumber = new int[(int)enumBgmNumber.Num];
         seNumber = new int[(int)enumSENumber.Num];
 
@@ -146,21 +148,23 @@ public class SoundManager : Singleton<SoundManager>
         }
     }
 
-    // BGMの音量を設定
+    // BGMの音量を設定、保存
     public void SetBGMVolume(float volume)
     {
         bgmSource.volume = volume;
-        PlayerPrefs.SetFloat(BGMVolumeKey, volume);  // 音量を保存
-        PlayerPrefs.Save();  // PlayerPrefsを即時保存
+        PlayerPrefs.SetFloat(BGMVolumeKey, volume);
+        PlayerPrefs.Save();
     }
 
-    // SEの音量を設定
+    // SEの音量を設定、保存
     public void SetSEVolume(float volume)
     {
         seSource.volume = volume;
-        PlayerPrefs.SetFloat(SEVolumeKey, volume);   // 音量を保存
-        PlayerPrefs.Save();  // PlayerPrefsを即時保存
+        PlayerPrefs.SetFloat(SEVolumeKey, volume);
+        PlayerPrefs.Save();
     }
+
+    // サンプルSEの再生
     public void PlaySampleSE()
     {
         PlaySE((int)enumSENumber.Win);

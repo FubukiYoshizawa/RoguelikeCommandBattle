@@ -26,14 +26,19 @@ public class ItemManager : Singleton<ItemManager>
 
     private void Start()
     {
+        // ScriptableObjectの読み込み
         itemValueManager = Resources.Load<ItemValueManager>("ScriptableObject/ItemValueManager");
 
+        // メインテキストとアイテム名を表示するテキストのUIオブジェクトの読み込み
         mainText = GameObject.Find("MainText").GetComponent<TextMeshProUGUI>();
         itemText = GameObject.Find("ItemText").GetComponent<TextMeshProUGUI>();
+
+        // 各配列の初期化
         getItem = new bool[(int)enumGetItem.Num];
         itemText.text = itemValueManager.DataList[(int)enumGetItem.Num].itemName;
     }
 
+    // どのアイテムを所持しているかの処理
     public IEnumerator HaveItem()
     {
         if (getItem[(int)enumGetItem.HPPotion])
@@ -69,6 +74,7 @@ public class ItemManager : Singleton<ItemManager>
 
     }
 
+    // HPポーション
     public IEnumerator HPPotion()
     {
         mainText.text = $"{itemValueManager.DataList[0].itemName}を使った！";
@@ -91,6 +97,7 @@ public class ItemManager : Singleton<ItemManager>
         SoundManager.Instance.PlaySE((int)SoundManager.enumSENumber.Select);
     }
 
+    // SPポーション
     public IEnumerator SPPotion()
     {
         mainText.text = $"{itemValueManager.DataList[1].itemName}を使った！";
@@ -112,6 +119,7 @@ public class ItemManager : Singleton<ItemManager>
         SoundManager.Instance.PlaySE((int)SoundManager.enumSENumber.Select);
     }
 
+    // 攻撃ポーション
     public IEnumerator ATKPotion()
     {
         mainText.text = $"{itemValueManager.DataList[2].itemName}を使った！";
@@ -130,6 +138,7 @@ public class ItemManager : Singleton<ItemManager>
         SoundManager.Instance.PlaySE((int)SoundManager.enumSENumber.Select);
     }
 
+    // 癒し草
     public IEnumerator HealHerb()
     {
         mainText.text = $"{itemValueManager.DataList[3].itemName}を使った！";
@@ -152,6 +161,7 @@ public class ItemManager : Singleton<ItemManager>
         SoundManager.Instance.PlaySE((int)SoundManager.enumSENumber.Select);
     }
 
+    // 爆弾
     public IEnumerator DamageBomb()
     {
         mainText.text = $"{itemValueManager.DataList[4].itemName}を使った！";
@@ -182,6 +192,7 @@ public class ItemManager : Singleton<ItemManager>
 
     }
 
+    // 攻撃ジュエル
     public IEnumerator ATKJewel()
     {
         mainText.text = $"{itemValueManager.DataList[5].itemName}を使った！";

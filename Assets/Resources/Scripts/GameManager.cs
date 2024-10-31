@@ -30,14 +30,17 @@ public class GameManager : Singleton<GameManager>
 
     void Start()
     {
+        // 配列の初期化
         floorIconSprite = new Sprite[(int)enumFloorIconSprite.Num];
 
+        // UIオブジェクトの読み込み
         mainText = GameObject.Find("MainText").GetComponent<TextMeshProUGUI>();
         floorNumberText = GameObject.Find("FloorNumber").GetComponent<TextMeshProUGUI>();
         floorImage = GameObject.Find("FloorImage").GetComponent<Image>();
         floorSprite = Resources.Load<Sprite>("Images/FloorBacks/DefaultBack");
         floorIconImage = GameObject.Find("FloorIcon").GetComponent<Image>();
 
+        // フロアアイコンのSpriteの読み込み
         floorIconSprite[(int)enumFloorIconSprite.BattleFloor] = Resources.Load<Sprite>("Images/FloorIcons/BattleFloor");
         floorIconSprite[(int)enumFloorIconSprite.StrongFloor] = Resources.Load<Sprite>("Images/FloorIcons/StrongFloor");
         floorIconSprite[(int)enumFloorIconSprite.BossFloor] = Resources.Load<Sprite>("Images/FloorIcons/BossFloor");
@@ -46,11 +49,15 @@ public class GameManager : Singleton<GameManager>
         floorIconSprite[(int)enumFloorIconSprite.TreasureFloor] = Resources.Load<Sprite>("Images/FloorIcons/TreasureFloor");
         floorIconSprite[(int)enumFloorIconSprite.RestFloor] = Resources.Load<Sprite>("Images/FloorIcons/RestFloor");
 
+        // デフォルトのフロア数とフロア背景の表示
         floorNumberText.text = floorNumber.ToString();
         floorImage.sprite = floorSprite;
+
+        // ゲーム開始のコルーチン
         StartCoroutine(StartAdventure());
     }
 
+    // ゲーム開始時のコルーチン
     public IEnumerator StartAdventure()
     {
         mainText.text = "探索スタート！";
@@ -58,11 +65,11 @@ public class GameManager : Singleton<GameManager>
         yield return StartCoroutine(NextProcess(1.0f));
 
         SoundManager.Instance.PlaySE((int)SoundManager.enumSENumber.Select);
-        if (PlayerPrefs.GetInt("Difficulty") == 0)
+        if (PlayerPrefs.GetInt("Difficulty") == (int)TitleManager.enumDifficultyID.Easy)
         {
             SoundManager.Instance.PlayBGM((int)SoundManager.enumBgmNumber.StageEasy);
         }
-        else if (PlayerPrefs.GetInt("Difficulty") == 1)
+        else if (PlayerPrefs.GetInt("Difficulty") == (int)TitleManager.enumDifficultyID.Normal)
         {
             SoundManager.Instance.PlayBGM((int)SoundManager.enumBgmNumber.StageNormal);
         }
@@ -70,6 +77,7 @@ public class GameManager : Singleton<GameManager>
 
     }
 
+    // 次のフロアに進むときのコルーチン
     public IEnumerator NextFloor()
     {
         mainText.text = "次のフロアへ";
@@ -81,16 +89,19 @@ public class GameManager : Singleton<GameManager>
 
         yield return new WaitForSeconds(1.0f);
 
+        // 最終フロアはボスフロア
         if (floorNumber == maxFloorNumber)
         {
             yield return StartCoroutine(BattleManager.Instance.BossStart());
         }
+        // 奇数フロアは戦闘フロア
         else if (floorNumber % 2 != 0)
         {
             floorIconImage.sprite = floorIconSprite[(int)enumFloorIconSprite.BattleFloor];
             yield return StartCoroutine(BattleManager.Instance.BattleStart());
         }
-        else if (floorNumber < maxFloorNumber&& floorNumber > maxFloorNumber/2 && floorNumber % 2 == 0 || PlayerPrefs.GetInt("Difficulty") != 0)
+        // 偶数フロアかつ全体の半分以上進んでいるか、イージーステージではない場合は以下からランダム
+        else if (floorNumber < maxFloorNumber&& floorNumber > maxFloorNumber/2 && floorNumber % 2 == 0 || PlayerPrefs.GetInt("Difficulty") != (int)TitleManager.enumDifficultyID.Easy)
         {
             IEnumerator[] coroutines = new IEnumerator[]
             {
@@ -104,6 +115,7 @@ public class GameManager : Singleton<GameManager>
             int random = UnityEngine.Random.Range(0, coroutines.Length);
             yield return StartCoroutine(coroutines[random]);
         }
+        // イージーステージの場合は以下からランダム
         else
         {
             IEnumerator[] coroutines = new IEnumerator[]
@@ -120,6 +132,7 @@ public class GameManager : Singleton<GameManager>
 
     }
 
+    // ショップフロアの処理
     public IEnumerator ShopFloor()
     {
         floorIconImage.sprite = floorIconSprite[(int)enumFloorIconSprite.ShopFloor];
@@ -143,6 +156,7 @@ public class GameManager : Singleton<GameManager>
 
     }
 
+    // イベントフロアの処理
     public IEnumerator EventFloor()
     {
         floorIconImage.sprite = floorIconSprite[(int)enumFloorIconSprite.EventFloor];
@@ -165,6 +179,7 @@ public class GameManager : Singleton<GameManager>
 
     }
 
+    // 宝箱フロアの処理
     public IEnumerator TreasureFloor()
     {
         floorIconImage.sprite = floorIconSprite[(int)enumFloorIconSprite.TreasureFloor];
@@ -180,6 +195,7 @@ public class GameManager : Singleton<GameManager>
 
     }
 
+    // 休憩フロアの処理
     public IEnumerator RestFloor()
     {
         floorIconImage.sprite = floorIconSprite[(int)enumFloorIconSprite.RestFloor];

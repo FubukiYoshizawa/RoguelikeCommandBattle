@@ -5,8 +5,8 @@ using UnityEngine;
 [Serializable]
 public class BGMData
 {
-    public string BGMName;
-    public AudioClip AudioClip;
+    public string BGMName; // BGM‚Ì–¼‘O
+    public AudioClip AudioClip; // BGM‚ÌAudioClip
 }
 
 [CreateAssetMenu(menuName = "ScriptableObject/BGMManager", fileName = "BGMManager")]

@@ -10,6 +10,7 @@ public class EnemyActionManager : Singleton<EnemyActionManager>
 
     public TextMeshProUGUI battleText; // テキスト表示
 
+    // 敵ごとの分岐
     public IEnumerator EnemyAction()
     {
         if (BattleManager.Instance.enemyName == enemyStatusManager.DataList[0].eNAME)
@@ -61,11 +62,14 @@ public class EnemyActionManager : Singleton<EnemyActionManager>
 
     private void Start()
     {
+        // ScriptableObjectの読み込み
         enemyStatusManager = Resources.Load<EnemyStatusManager>("ScriptableObject/EnemyStatusManager");
 
+        // メインテキストのUIオブジェクト読み込み
         battleText = GameObject.Find("MainText").GetComponent<TextMeshProUGUI>();
     }
 
+    // スライムの特殊攻撃
     public IEnumerator Slime()
     {
         battleText.text = $"{BattleManager.Instance.enemyName}は\nスライムショットを放った！";
@@ -94,6 +98,7 @@ public class EnemyActionManager : Singleton<EnemyActionManager>
 
     }
 
+    // イケバットの特殊攻撃
     public IEnumerator IkeBat()
     {
         battleText.text = $"{BattleManager.Instance.enemyName}は\nフライングアタックを放った！";
@@ -122,6 +127,7 @@ public class EnemyActionManager : Singleton<EnemyActionManager>
 
     }
 
+    // 帽子お化けの特殊攻撃
     public IEnumerator HatGhost()
     {
         battleText.text = $"{BattleManager.Instance.enemyName}は\nファイアボールを放った！";
@@ -150,6 +156,7 @@ public class EnemyActionManager : Singleton<EnemyActionManager>
 
     }
 
+    // 死神の特殊攻撃
     public IEnumerator GodADeath()
     {
         battleText.text = $"{BattleManager.Instance.enemyName}は\n鎌を振りかぶった！";
@@ -178,6 +185,7 @@ public class EnemyActionManager : Singleton<EnemyActionManager>
 
     }
 
+    // タツマキの特殊攻撃
     public IEnumerator TornadoMan()
     {
         battleText.text = $"{BattleManager.Instance.enemyName}は\n竜巻を巻き起こした！";
@@ -206,6 +214,7 @@ public class EnemyActionManager : Singleton<EnemyActionManager>
 
     }
 
+    // 雷太郎の特殊攻撃
     public IEnumerator ThunderOni()
     {
         battleText.text = $"{BattleManager.Instance.enemyName}は\n雷雲を呼んだ！";
@@ -234,6 +243,7 @@ public class EnemyActionManager : Singleton<EnemyActionManager>
 
     }
 
+    // 紅蓮蝶の特殊攻撃
     public IEnumerator InfernoButterfly()
     {
         int randomValue = Random.Range(0, 5);
@@ -285,6 +295,7 @@ public class EnemyActionManager : Singleton<EnemyActionManager>
 
     }
 
+    // ダークドラゴンの特殊攻撃
     public IEnumerator DarkDragon()
     {
         int randomValue = Random.Range(0, 5);
@@ -336,6 +347,7 @@ public class EnemyActionManager : Singleton<EnemyActionManager>
 
     }
 
+    // アイスドラゴンの特殊攻撃
     public IEnumerator IceDragon()
     {
         int randomValue = Random.Range(0, 5);
@@ -387,6 +399,7 @@ public class EnemyActionManager : Singleton<EnemyActionManager>
 
     }
 
+    // ベビードラゴンの特殊攻撃
     public IEnumerator BabyDragon()
     {
         int randomValue = Random.Range(0, 3);
@@ -434,6 +447,7 @@ public class EnemyActionManager : Singleton<EnemyActionManager>
 
     }
 
+    // ライトドラゴンの特殊攻撃
     public IEnumerator LightDragon()
     {
         int randomValue = Random.Range(0, 8);

@@ -35,11 +35,14 @@ public class ShopManager : Singleton<ShopManager>
 
     public void Start()
     {
+        // ScriptableObjectの読み込み
         itemValueManager = Resources.Load<ItemValueManager>("ScriptableObject/ItemValueManager");
 
+        // 各配列の初期化
         floorSprite = new Sprite[(int)enumFloorSprite.Num];
         getItemNumber = new int[(int)enumGetItemNumber.Num];
 
+        // 各UIオブジェクトの読み込み
         mainText = GameObject.Find("MainText").GetComponent<TextMeshProUGUI>();
         selectWindow = GameObject.Find("ShopSelectWindow");
         defaultButton = GameObject.Find("ShopSelectYes");
@@ -48,14 +51,17 @@ public class ShopManager : Singleton<ShopManager>
         floorSprite[(int)enumFloorSprite.SPPotion] = Resources.Load<Sprite>("Images/FloorBacks/SPPotion");
         floorSprite[(int)enumFloorSprite.ATKPotion] = Resources.Load<Sprite>("Images/FloorBacks/ATKPotion");
 
+        // データリストからのアイテムIDの読み込み
         getItemNumber[(int)enumGetItemNumber.HPPotion] = itemValueManager.DataList[0].itemID;
         getItemNumber[(int)enumGetItemNumber.SPPotion] = itemValueManager.DataList[1].itemID;
         getItemNumber[(int)enumGetItemNumber.ATKPotion] = itemValueManager.DataList[2].itemID;
 
+        // 初期非表示ウィンドウを非表示
         selectWindow.SetActive(false);
 
     }
 
+    // HPポーション
     public IEnumerator HPShop()
     {
         floorImage.sprite = floorSprite[(int)enumFloorSprite.HPPotion];
@@ -63,6 +69,7 @@ public class ShopManager : Singleton<ShopManager>
         yield return StartCoroutine(PotionShop());
     }
 
+    // SPポーション
     public IEnumerator SPShop()
     {
         floorImage.sprite = floorSprite[(int)enumFloorSprite.SPPotion];
@@ -70,6 +77,7 @@ public class ShopManager : Singleton<ShopManager>
         yield return StartCoroutine(PotionShop());
     }
 
+    // 攻撃ポーション
     public IEnumerator ATKShop()
     {
         floorImage.sprite = floorSprite[(int)enumFloorSprite.ATKPotion];
@@ -77,6 +85,7 @@ public class ShopManager : Singleton<ShopManager>
         yield return StartCoroutine(PotionShop());
     }
 
+    // ショップの処理
     public IEnumerator PotionShop()
     {
         mainText.text = "いらっしゃい！\nここはポーションショップだよ";
@@ -187,11 +196,13 @@ public class ShopManager : Singleton<ShopManager>
         }
     }
 
+    // 購入時の選択肢はい
     public void Yes()
     {
         yes = true;
     }
 
+    // 購入時の選択肢いいえ
     public void No()
     {
         no = true;

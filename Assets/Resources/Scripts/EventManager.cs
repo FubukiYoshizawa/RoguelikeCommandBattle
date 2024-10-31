@@ -20,15 +20,19 @@ public class EventManager : Singleton<EventManager>
 
     private void Start()
     {
+        // 配列の初期化
         floorSprite = new Sprite[(int)enumFloorSprite.Num];
 
+        // メインテキストのUIオブジェクト読み込み
         mainText = GameObject.Find("MainText").GetComponent<TextMeshProUGUI>();
+        // 各背景画像のImage、Spriteの読み込み
         floorImage = GameObject.Find("FloorImage").GetComponent<Image>();
         floorSprite[(int)enumFloorSprite.Fountain] = Resources.Load<Sprite>("Images/FloorBacks/Fountain");
         floorSprite[(int)enumFloorSprite.Magic] = Resources.Load<Sprite>("Images/FloorBacks/Magic");
         floorSprite[(int)enumFloorSprite.Muscle] = Resources.Load<Sprite>("Images/FloorBacks/Muscle");
     }
 
+    // 奇跡の泉イベント
     public IEnumerator Fountain()
     {
         SoundManager.Instance.PlayBGM((int)SoundManager.enumBgmNumber.EventFountain);
@@ -95,6 +99,7 @@ public class EventManager : Singleton<EventManager>
 
     }
 
+    // 魔法使いと出会うイベント
     public IEnumerator Magic()
     {
         SoundManager.Instance.PlayBGM((int)SoundManager.enumBgmNumber.EventMagic);
@@ -170,6 +175,7 @@ public class EventManager : Singleton<EventManager>
         SoundManager.Instance.StopBGM();
     }
 
+    // 筋肉と出会うイベント
     public IEnumerator Muscle()
     {
         SoundManager.Instance.PlayBGM((int)SoundManager.enumBgmNumber.EventMuscle);

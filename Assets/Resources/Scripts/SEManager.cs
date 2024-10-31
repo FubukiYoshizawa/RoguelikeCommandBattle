@@ -5,8 +5,8 @@ using UnityEngine;
 [Serializable]
 public class SEData
 {
-    public string SEName;
-    public AudioClip AudioClip;
+    public string SEName; // SE–¼
+    public AudioClip AudioClip; // SE‚ÌAudioClip
 }
 
 [CreateAssetMenu(menuName = "ScriptableObject/SEManager", fileName = "SEManager")]

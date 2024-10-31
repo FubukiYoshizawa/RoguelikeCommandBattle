@@ -8,28 +8,28 @@ using UnityEngine.SceneManagement;
 
 public class OptionManager : MonoBehaviour
 {
-    public GameObject optionCanavas;
+    public GameObject optionCanavas; // オプションキャンバス
 
-    public GameObject optionWindow;
-    public GameObject volumeWindow;
+    public GameObject optionWindow; // オプションウィンドウ
+    public GameObject volumeWindow; // 音量調節ウィンドウ
 
-    private GameObject lastSelectButton;
+    private GameObject lastSelectButton; // オプションを開く前最後に選択していたボタン
 
-    public GameObject optionDefaultButton;
-    public GameObject volumeDefaultButton;
+    public GameObject optionDefaultButton; // オプションウィンドウのデフォルトボタン
+    public GameObject volumeDefaultButton; // 音量調節ウィンドウのデフォルトボタン
 
     public bool option;
 
     private void Start()
     {
+        // 各UIオブジェクトの読み込み
         optionCanavas = GameObject.Find("OptionCanvas");
-
         optionWindow = GameObject.Find("OptionWindow");
         volumeWindow = GameObject.Find("VolumeWindow");
-
         optionDefaultButton = GameObject.Find("Restart");
         volumeDefaultButton = GameObject.Find("Back");
 
+        // 初期非表示オブジェクトを非表示
         optionCanavas.SetActive(false);
         volumeWindow.SetActive(false);
 
@@ -37,6 +37,8 @@ public class OptionManager : MonoBehaviour
 
     void Update()
     {
+        // Escapeキーが押されたときにポーズ画面を開き、ゲームを一時停止
+        // ポーズ画面表示時はポーズ画面を閉じてゲーム再開
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             SoundManager.Instance.PlaySE((int)SoundManager.enumSENumber.Pause);
@@ -64,6 +66,7 @@ public class OptionManager : MonoBehaviour
         }
     }
 
+    // リスタートボタン
     public void Restart()
     {
         Scene currentScene = SceneManager.GetActiveScene();
@@ -71,12 +74,14 @@ public class OptionManager : MonoBehaviour
         Time.timeScale = 1;
     }
 
-    public void Menu()
+    // タイトルシーンへ移動するボタン
+    public void Title()
     {
         Initiate.Fade("TitleScene", Color.black, 1.0f);
         Time.timeScale = 1;
     }
 
+    // 音量設定ウィンドウ表示ボタン
     public void Volume()
     {
         optionWindow.SetActive(false);
@@ -84,6 +89,7 @@ public class OptionManager : MonoBehaviour
         EventSystem.current.SetSelectedGameObject(volumeDefaultButton);
     }
 
+    // 音量設定ウィンドウから戻るボタン
     public void Back()
     {
         volumeWindow.SetActive(false);
@@ -91,6 +97,7 @@ public class OptionManager : MonoBehaviour
         EventSystem.current.SetSelectedGameObject(optionDefaultButton);
     }
 
+    // ポーズ画面を閉じるボタン
     public void Close()
     {
         option = false;

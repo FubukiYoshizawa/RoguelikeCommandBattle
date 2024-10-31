@@ -13,11 +13,13 @@ public class RestManager : Singleton<RestManager>
 
     private void Start()
     {
+        // 各UIオブジェクトの読み込み
         mainText = GameObject.Find("MainText").GetComponent<TextMeshProUGUI>();
         floorImage = GameObject.Find("FloorImage").GetComponent<Image>();
         floorSprite = Resources.Load<Sprite>("Images/FloorBacks/Rest");
     }
 
+    // 休憩の処理
     public IEnumerator Rest()
     {
         floorImage.sprite = floorSprite;

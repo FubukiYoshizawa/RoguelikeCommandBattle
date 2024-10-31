@@ -41,12 +41,15 @@ public class SkillManager : Singleton<SkillManager>
 
     private void Start()
     {
+        // ScriptableObjectの読み込み
         skillValueManager = Resources.Load<SkillValueManager>("ScriptableObject/SkillValueManager");
 
+        // 各配列の初期化
         useSkillButton = new GameObject[(int)enumSkillButton.Num];
         useSkillButtonText = new TextMeshProUGUI[(int)enumUseSkillButtontext.Num];
         useSkill = new bool[(int)enumUseSkill.Num];
 
+        // 各UIオブジェクトの読み込み
         mainText = GameObject.Find("MainText").GetComponent<TextMeshProUGUI>();
 
         useSkillButton[(int)enumSkillButton.Skill1] = GameObject.Find("SkillButton1");
@@ -57,19 +60,21 @@ public class SkillManager : Singleton<SkillManager>
         useSkillButtonText[(int)enumUseSkillButtontext.Skill2] = GameObject.Find("SkillButtonText2").GetComponent<TextMeshProUGUI>();
         useSkillButtonText[(int)enumUseSkillButtontext.Skill3] = GameObject.Find("SkillButtonText3").GetComponent<TextMeshProUGUI>();
 
-        if (PlayerPrefs.GetInt("Character") == 0)
+        // データリストからスキル名を読み込み
+        if (PlayerPrefs.GetInt("Character") == (int)TitleManager.enumCharacterID.Warrior)
         {
             useSkillButtonText[(int)enumUseSkillButtontext.Skill1].text = skillValueManager.DataList[0].skillName;
             useSkillButtonText[(int)enumUseSkillButtontext.Skill2].text = skillValueManager.DataList[1].skillName;
             useSkillButtonText[(int)enumUseSkillButtontext.Skill3].text = skillValueManager.DataList[2].skillName;
         }
-        else if (PlayerPrefs.GetInt("Character") == 1)
+        else if (PlayerPrefs.GetInt("Character") == (int)TitleManager.enumCharacterID.Magician)
         {
             useSkillButtonText[(int)enumUseSkillButtontext.Skill1].text = skillValueManager.DataList[3].skillName;
             useSkillButtonText[(int)enumUseSkillButtontext.Skill2].text = skillValueManager.DataList[4].skillName;
             useSkillButtonText[(int)enumUseSkillButtontext.Skill3].text = skillValueManager.DataList[5].skillName;
         }
 
+        // 初期非表示オブジェクトを非表示
         useSkillButton[(int)enumSkillButton.Skill1].SetActive(false);
         useSkillButton[(int)enumSkillButton.Skill2].SetActive(false);
         useSkillButton[(int)enumSkillButton.Skill3].SetActive(false);
@@ -80,6 +85,7 @@ public class SkillManager : Singleton<SkillManager>
 
     private void Update()
     {
+        // スキル選択時にスキルの効果を表示する
         if (skillDescriptionDisplay)
         {
             if (PlayerPrefs.GetInt("Character") == (int)TitleManager.enumCharacterID.Warrior)
@@ -126,6 +132,7 @@ public class SkillManager : Singleton<SkillManager>
 
     }
 
+    // スキル使用の処理
     public IEnumerator UseSkill()
     {
         if (useSkill[(int)enumUseSkill.PowerAttack])
@@ -166,6 +173,14 @@ public class SkillManager : Singleton<SkillManager>
             {
                 yield return StartCoroutine(NotEnoughSP());
             }
+            else if (BattleManager.Instance.playerHP == BattleManager.Instance.playerMaxHP)
+            {
+                mainText.text = "回復は必要ない！";
+
+                yield return StartCoroutine(NextProcess(1.0f));
+
+                yield return StartCoroutine(BattleManager.Instance.Battle());
+            }
             else
             {
                 useSkill[(int)enumUseSkill.Meditation] = false;
@@ -202,6 +217,14 @@ public class SkillManager : Singleton<SkillManager>
             {
                 yield return StartCoroutine(NotEnoughSP());
             }
+            else if (BattleManager.Instance.playerHP == BattleManager.Instance.playerMaxHP)
+            {
+                mainText.text = "回復は必要ない！";
+
+                yield return StartCoroutine(NextProcess(1.0f));
+
+                yield return StartCoroutine(BattleManager.Instance.Battle());
+            }
             else
             {
                 useSkill[(int)enumUseSkill.HealMagic] = false;
@@ -211,6 +234,7 @@ public class SkillManager : Singleton<SkillManager>
 
     }
 
+    // SP不足時の処理
     public IEnumerator NotEnoughSP()
     {
         mainText.text = "SPが足りない！";
@@ -220,6 +244,7 @@ public class SkillManager : Singleton<SkillManager>
         yield return StartCoroutine(BattleManager.Instance.Battle());
     }
 
+    // パワーアタック
     public IEnumerator PowerAttack()
     {
         mainText.text = "パワーアアタックを使った！";
@@ -267,6 +292,7 @@ public class SkillManager : Singleton<SkillManager>
 
     }
 
+    // パワーアタック
     public IEnumerator PowerUp()
     {
         mainText.text = "パワーチャージを使った！";
@@ -286,6 +312,7 @@ public class SkillManager : Singleton<SkillManager>
         SoundManager.Instance.PlaySE((int)SoundManager.enumSENumber.Select);
     }
 
+    // 瞑想
     public IEnumerator Meditation()
     {
         mainText.text = "瞑想を使った！";
@@ -309,6 +336,7 @@ public class SkillManager : Singleton<SkillManager>
 
     }
 
+    // ファイアボール
     public IEnumerator FireBall()
     {
         mainText.text = "ファイアボールを唱えた！";
@@ -338,6 +366,7 @@ public class SkillManager : Singleton<SkillManager>
         }
     }
 
+    // アイスランス
     public IEnumerator IceLance()
     {
         mainText.text = "アイスランスを唱えた！";
@@ -367,6 +396,7 @@ public class SkillManager : Singleton<SkillManager>
         }
     }
 
+    // ヒール
     public IEnumerator HealMagic()
     {
         mainText.text = "ヒールを唱えた！";

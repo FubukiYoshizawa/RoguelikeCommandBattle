@@ -1098,6 +1098,7 @@ MonoBehaviour:
   playerATK: 5
   playerEXP: 0
   playerNextLvEXP: 10
+  skillSlot: 
   enemyName: 
   enemyLv: 0
   enemyHP: 0
@@ -1122,7 +1123,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: beaba0dfb48b2034ca89318bf725b187, type: 3}
   - {fileID: 21300000, guid: 4e51543c14dfa6a42b79b344fd46b671, type: 3}
   noneEnemy: {fileID: 21300000, guid: 98722b3b4ac44714482477fe0595d89c, type: 3}
-  battleText: {fileID: 0}
+  mainText: {fileID: 0}
   playerStatusText:
   - {fileID: 0}
   - {fileID: 0}
@@ -1149,7 +1150,7 @@ MonoBehaviour:
   buttonOn: 0000000000000000
   skillUse: 0
   itemUse: 0
-  back: 0
+  skillBack: 0
 --- !u!4 &213963502
 Transform:
   m_ObjectHideFlags: 0
@@ -6306,7 +6307,7 @@ GameObject:
   - component: {fileID: 1078835006}
   - component: {fileID: 1078835005}
   m_Layer: 5
-  m_Name: Menu
+  m_Name: Title
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6358,7 +6359,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 578394174}
         m_TargetAssemblyTypeName: OptionManager, Assembly-CSharp
-        m_MethodName: Menu
+        m_MethodName: Title
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -8194,6 +8195,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bgmManager: {fileID: 11400000, guid: 6714c3b2fa25e764893c89e499c9df2d, type: 2}
   seManager: {fileID: 11400000, guid: 27b12ce262b51924fb84fbc9b227fcdf, type: 2}
+  bgmNumber: 
+  seNumber: 
   bgmVolumeSlider: {fileID: 1268179816}
   seVolumeSlider: {fileID: 1594709093}
   bgmMixerGroup: {fileID: -2170257548881568108, guid: 1ae43b1a06a348f4488f6c54a4416b11, type: 2}

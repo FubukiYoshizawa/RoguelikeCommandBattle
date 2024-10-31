@@ -19,6 +19,14 @@ public class BattleManager: Singleton<BattleManager>
     public int playerATK; // プレイヤー攻撃力
     public int playerEXP; // プレイヤー経験値
     public int playerNextLvEXP; // レベルアップまでの経験値
+    public int[] skillSlot; // キャラクターごとの使用可能スキル
+    public enum enumSkillSlot
+    {
+        Skill1,
+        Skill2,
+        Skill3,
+        Num
+    }
 
     public string enemyName; // 敵名
     public int enemyLv; // 敵レベル
@@ -113,16 +121,16 @@ public class BattleManager: Singleton<BattleManager>
     }
     public bool skillUse; // スキルコマンドを表示
     public bool itemUse; // アイテムコマンドを表示
-    public bool back; // 各表示から戻る
+    public bool skillBack; // スキルコマンド表示から戻る
 
     void Start()
     {
-        // スクリプトからの読み込み
         // ScriptableObjectの読み込み
         enemyStatusManager = Resources.Load<EnemyStatusManager>("ScriptableObject/EnemyStatusManager");
         playerStatusManager = Resources.Load<PlayerStatusManager>("ScriptableObject/PlayerStatusManager");
 
         // 各配列の初期化
+        skillSlot = new int[(int)enumSkillSlot.Num];
         enemySprite = new Sprite[(int)enumEnemySprite.Num];
         playerStatusText = new TextMeshProUGUI[(int)enumPlayerStatusText.Num];
         enemyStatusText = new TextMeshProUGUI[(int)enumEnemyStatusText.Num];
@@ -130,13 +138,13 @@ public class BattleManager: Singleton<BattleManager>
         defaultButton = new GameObject[(int)enumDefaultButton.Num];
         buttonOn = new bool[(int)enumButtonOn.Num];
 
-        // 表示するImageの取得と各画像の読み込み
+        // 表示するImageコンポーネントの取得と各Spriteの読み込み
         floorBackImage = GameObject.Find("FloorImage").GetComponent<Image>();
         floorBackSprite = Resources.Load<Sprite>("Images/FloorBacks/DefaultBack");
         displayEnemyImage = GameObject.Find("EnemyImage").GetComponent<Image>();
         noneEnemy = Resources.Load<Sprite>("Images/Enemys/Unknown");
 
-        // メインテキストの読み込み
+        // メインテキストのUIオブジェクト読み込み
         mainText = GameObject.Find("MainText").GetComponent<TextMeshProUGUI>();
 
         // 敵画像のSpriteの読み込み
@@ -152,7 +160,7 @@ public class BattleManager: Singleton<BattleManager>
         enemySprite[(int)enumEnemySprite.BabyDragon] = Resources.Load<Sprite>("Images/Enemys/BabyDragon");
         enemySprite[(int)enumEnemySprite.LightDragon] = Resources.Load<Sprite>("Images/Enemys/LightDragon");
 
-        // プレイヤーステータスを表示するテキストの読み込み
+        // プレイヤーステータスを表示するUIオブジェクトの読み込み
         playerStatusText[(int)enumPlayerStatusText.Name] = GameObject.Find("PlayerNameText").GetComponent<TextMeshProUGUI>();
         playerStatusText[(int)enumPlayerStatusText.Lv] = GameObject.Find("PlayerLvText").GetComponent<TextMeshProUGUI>();
         playerStatusText[(int)enumPlayerStatusText.HP] = GameObject.Find("PlayerHPText").GetComponent<TextMeshProUGUI>();
@@ -161,7 +169,7 @@ public class BattleManager: Singleton<BattleManager>
         playerStatusText[(int)enumPlayerStatusText.MaxSP] = GameObject.Find("PlayerMaxSPText").GetComponent<TextMeshProUGUI>();
         playerStatusText[(int)enumPlayerStatusText.ATK] = GameObject.Find("PlayerATKText").GetComponent<TextMeshProUGUI>();
 
-        // 敵ステータスを表示するテキストの読み込み
+        // 敵ステータスを表示するUIオブジェクトの読み込み
         enemyStatusText[(int)enumEnemyStatusText.Name] = GameObject.Find("EnemyNameText").GetComponent<TextMeshProUGUI>();
         enemyStatusText[(int)enumEnemyStatusText.Lv] = GameObject.Find("EnemyLvText").GetComponent<TextMeshProUGUI>();
         enemyStatusText[(int)enumEnemyStatusText.HP] = GameObject.Find("EnemyHPText").GetComponent<TextMeshProUGUI>();
@@ -194,6 +202,9 @@ public class BattleManager: Singleton<BattleManager>
         playerSP = playerStatusManager.DataList[baseCharacterStatus].pSP;
         playerMaxSP = playerStatusManager.DataList[baseCharacterStatus].pSP;
         playerATK = playerStatusManager.DataList[baseCharacterStatus].pATK;
+        skillSlot[0] = playerStatusManager.DataList[baseCharacterStatus].skillSlot[0];
+        skillSlot[1] = playerStatusManager.DataList[baseCharacterStatus].skillSlot[1];
+        skillSlot[2] = playerStatusManager.DataList[baseCharacterStatus].skillSlot[2];
 
         // プレイヤー名の表示
         playerStatusText[(int)enumPlayerStatusText.Name].text = playerName;
@@ -231,12 +242,12 @@ public class BattleManager: Singleton<BattleManager>
         // 選択した難易度か進行状況で敵を変える
         nowEnemySprite = new Sprite[] { enemySprite[(int)enumEnemySprite.Slime], enemySprite[(int)enumEnemySprite.IkeBat], enemySprite[(int)enumEnemySprite.HatGhost] };
         int randomNumber = Random.Range(0, nowEnemySprite.Length);
-        Sprite selectedSprite = nowEnemySprite[randomNumber];
-        displayEnemyImage.sprite = selectedSprite;
-        if (GameManager.Instance.floorNumber > GameManager.Instance.maxFloorNumber / 2 || PlayerPrefs.GetInt("Difficulty") >= 1)
+        if (GameManager.Instance.floorNumber > GameManager.Instance.maxFloorNumber / 2 && PlayerPrefs.GetInt("Difficulty") >= 1)
         {
             randomNumber += 3;
         }
+        Sprite selectedSprite = nowEnemySprite[randomNumber];
+        displayEnemyImage.sprite = selectedSprite;
         enemyName = enemyStatusManager.DataList[randomNumber].eNAME;
         enemyLv = enemyStatusManager.DataList[randomNumber].eLv;
         enemyHP = enemyStatusManager.DataList[randomNumber].eHP;
@@ -306,7 +317,7 @@ public class BattleManager: Singleton<BattleManager>
 
         SoundManager.Instance.PlayBGM((int)SoundManager.enumBgmNumber.BossBattle);
         SoundManager.Instance.PlaySE((int)SoundManager.enumSENumber.Select);
-        if (PlayerPrefs.GetInt("Difficulty") == 0)
+        if (PlayerPrefs.GetInt("Difficulty") == (int)TitleManager.enumDifficultyID.Easy)
         {
             displayEnemyImage.sprite = enemySprite[(int)enumEnemySprite.BabyDragon];
 
@@ -318,7 +329,7 @@ public class BattleManager: Singleton<BattleManager>
             enemyEXP = enemyStatusManager.DataList[9].eEXP;
             enemyStatusText[(int)enumEnemyStatusText.Name].text = enemyName;
         }
-        else if (PlayerPrefs.GetInt("Difficulty") == 1)
+        else if (PlayerPrefs.GetInt("Difficulty") == (int)TitleManager.enumDifficultyID.Normal)
         {
             displayEnemyImage.sprite = enemySprite[(int)enumEnemySprite.LightDragon];
 
@@ -375,7 +386,7 @@ public class BattleManager: Singleton<BattleManager>
             SkillManager.Instance.skillDescriptionDisplay = true;
             EventSystem.current.SetSelectedGameObject(defaultButton[1]);
 
-            while (!skillUse && !back)
+            while (!skillUse && !skillBack)
             {
                 yield return null;
             }
@@ -392,7 +403,7 @@ public class BattleManager: Singleton<BattleManager>
             {
                 SoundManager.Instance.PlaySE((int)SoundManager.enumSENumber.Back);
                 windows[(int)enumWindows.SkillWindow].SetActive(false);
-                back = false;
+                skillBack = false;
                 SkillManager.Instance.skillDescriptionDisplay = false;
                 yield return StartCoroutine(Battle());
 
@@ -420,23 +431,6 @@ public class BattleManager: Singleton<BattleManager>
         yield return StartCoroutine(Battle());
     }
 
-    /*
-    enum E_SEID
-    {
-        Attack,
-        Select,
-        Num
-    };
-
-    string GetSEName(E_SEID seID)
-    {
-        string[] name = new string[(int)E_SEID.Num];
-        name[0] = "Attack";
-
-        return name[(int)seID];
-    }
-    */
-
     // プレイヤーの通常攻撃の処理
     public IEnumerator PlayerAttack()
     {
@@ -444,7 +438,7 @@ public class BattleManager: Singleton<BattleManager>
 
         yield return StartCoroutine(NextProcess(1.0f));
 
-        SoundManager.Instance.PlaySE((int)SoundManager.enumSENumber.Select);
+        SoundManager.Instance.PlaySE((int)SoundManager.enumSENumber.Attack);
         FlashManager.Instance.EnemyFlash(Color.red, 0.3f);
         mainText.text = $"{playerATK}のダメージ！";
 
@@ -526,73 +520,24 @@ public class BattleManager: Singleton<BattleManager>
     // スキル使用時の処理
     public IEnumerator Skill()
     {
-        /*
-        int INVALID_SKILL_SLOT = -1;
-        int selectSkillSlot = INVALID_SKILL_SLOT;
-        if (buttonOn[(int)enumButtonOn.Skill1])
-        {
-            buttonOn[(int)enumButtonOn.Skill1] = false;
-            selectSkillSlot = 1;
-        }
-        else if (buttonOn[(int)enumButtonOn.Skill2])
-        {
-            buttonOn[(int)enumButtonOn.Skill2] = false;
-            selectSkillSlot = 2;
-        }
-        else if (buttonOn[(int)enumButtonOn.Skill3])
-        {
-            buttonOn[(int)enumButtonOn.Skill3] = false;
-            selectSkillSlot = 3;
-        }
-
-        int skillId = PlayerData.skillId[selectSkillSlot];
-        SkillManager.Instance.useSkill[skillId] = true;
-        yield return StartCoroutine(SkillManager.Instance.UseSkill());
-        */
-
-
         // スキルごとの処理分岐
         if (buttonOn[(int)enumButtonOn.Skill1])
         {
             buttonOn[(int)enumButtonOn.Skill1] = false;
-            if (PlayerPrefs.GetInt("Character") == 0)
-            {
-                SkillManager.Instance.useSkill[0] = true;
-                yield return StartCoroutine(SkillManager.Instance.UseSkill());
-            }
-            else if (PlayerPrefs.GetInt("Character") == 1)
-            {
-                SkillManager.Instance.useSkill[3] = true;
-                yield return StartCoroutine(SkillManager.Instance.UseSkill());
-            }
+            SkillManager.Instance.useSkill[skillSlot[0]] = true;
+            yield return StartCoroutine(SkillManager.Instance.UseSkill());
         }
         else if (buttonOn[(int)enumButtonOn.Skill2])
         {
-            buttonOn[(int)enumButtonOn.Skill2] = false;
-            if (PlayerPrefs.GetInt("Character") == 0)
-            {
-                SkillManager.Instance.useSkill[1] = true;
-                yield return StartCoroutine(SkillManager.Instance.UseSkill());
-            }
-            else if (PlayerPrefs.GetInt("Character") == 1)
-            {
-                SkillManager.Instance.useSkill[4] = true;
-                yield return StartCoroutine(SkillManager.Instance.UseSkill());
-            }
+            buttonOn[(int)enumButtonOn.Skill1] = false;
+            SkillManager.Instance.useSkill[skillSlot[1]] = true;
+            yield return StartCoroutine(SkillManager.Instance.UseSkill());
         }
         else if (buttonOn[(int)enumButtonOn.Skill3])
         {
-            buttonOn[(int)enumButtonOn.Skill3] = false;
-            if (PlayerPrefs.GetInt("Character") == 0)
-            {
-                SkillManager.Instance.useSkill[2] = true;
-                yield return StartCoroutine(SkillManager.Instance.UseSkill());
-            }
-            else if (PlayerPrefs.GetInt("Character") == 1)
-            {
-                SkillManager.Instance.useSkill[5] = true;
-                yield return StartCoroutine(SkillManager.Instance.UseSkill());
-            }
+            buttonOn[(int)enumButtonOn.Skill1] = false;
+            SkillManager.Instance.useSkill[skillSlot[2]] = true;
+            yield return StartCoroutine(SkillManager.Instance.UseSkill());
         }
 
         yield return StartCoroutine(NextProcess(1.0f));
@@ -681,14 +626,15 @@ public class BattleManager: Singleton<BattleManager>
         SoundManager.Instance.PlaySE((int)SoundManager.enumSENumber.Lose);
         SoundManager.Instance.StopBGM();
         mainText.text = $"{playerName}は負けた";
-        if (PlayerPrefs.GetInt("Difficulty") == 0)
+        // 現在のフロアの一つ前のフロアまでをクリアフロア数として保存
+        if (PlayerPrefs.GetInt("Difficulty") == (int)TitleManager.enumDifficultyID.Easy)
         {
             if (PlayerPrefs.GetInt("EasyClearFloor") < GameManager.Instance.floorNumber-1)
             {
                 PlayerPrefs.SetInt("EasyClearFloor", (int)GameManager.Instance.floorNumber-1);
             }
         }
-        else if (PlayerPrefs.GetInt("Difficulty") == 1)
+        else if (PlayerPrefs.GetInt("Difficulty") == (int)TitleManager.enumDifficultyID.Normal)
         {
             if (PlayerPrefs.GetInt("NormalClearFloor") < GameManager.Instance.floorNumber-1)
             {
@@ -730,11 +676,12 @@ public class BattleManager: Singleton<BattleManager>
 
         yield return StartCoroutine(NextProcess(1.0f));
 
+        // 経験値が一定に達したらレベルアップ
         if (playerEXP >= playerNextLvEXP)
         {
             SoundManager.Instance.PlaySE((int)SoundManager.enumSENumber.LvUp);
             mainText.text = "レベルが上がった！\nステータスが上昇！";
-            if (PlayerPrefs.GetInt("Character") == 0)
+            if (PlayerPrefs.GetInt("Character") == (int)TitleManager.enumCharacterID.Warrior)
             {
                 playerLv += 1;
                 playerMaxHP += 10;
@@ -743,7 +690,7 @@ public class BattleManager: Singleton<BattleManager>
                 playerEXP = 0;
                 playerNextLvEXP *= 2;
             }
-            else if (PlayerPrefs.GetInt("Character") == 1)
+            else if (PlayerPrefs.GetInt("Character") == (int)TitleManager.enumCharacterID.Magician)
             {
                 playerLv += 1;
                 playerMaxHP += 5;
@@ -772,7 +719,7 @@ public class BattleManager: Singleton<BattleManager>
 
         }
 
-
+        // ボスバトルだった場合はクリアシーンへ
         if (bossBattle)
         {
             SoundManager.Instance.PlaySE((int)SoundManager.enumSENumber.Win);
@@ -780,14 +727,14 @@ public class BattleManager: Singleton<BattleManager>
 
             yield return StartCoroutine(NextProcess(1.0f));
 
-            if (PlayerPrefs.GetInt("Difficulty") == 0)
+            if (PlayerPrefs.GetInt("Difficulty") == (int)TitleManager.enumDifficultyID.Easy)
             {
                 if (PlayerPrefs.GetInt("EasyClearFloor") < GameManager.Instance.floorNumber)
                 {
                     PlayerPrefs.SetInt("EasyClearFloor", (int)GameManager.Instance.floorNumber);
                 }
             }
-            else if (PlayerPrefs.GetInt("Difficulty") == 1)
+            else if (PlayerPrefs.GetInt("Difficulty") == (int)TitleManager.enumDifficultyID.Normal)
             {
                 if (PlayerPrefs.GetInt("NormalClearFloor") < GameManager.Instance.floorNumber)
                 {
@@ -815,52 +762,61 @@ public class BattleManager: Singleton<BattleManager>
         }
     }
 
+    // 攻撃コマンドのボタン
     public void AttackComand()
     {
         buttonOn[(int)enumButtonOn.Attack] = true;
     }
 
+    // スキルコマンドのボタン
     public void SkillComand()
     {
         buttonOn[(int)enumButtonOn.Skill] = true;
     }
 
+    // アイテムコマンドのボタン
     public void ItemComand()
     {
         buttonOn[(int)enumButtonOn.Item] = true;
     }
 
+    // スキル１のボタン
     public void Skill1()
     {
         skillUse = true;
         buttonOn[(int)enumButtonOn.Skill1] = true;
     }
 
+    // スキル２のボタン
     public void Skill2()
     {
         skillUse = true;
         buttonOn[(int)enumButtonOn.Skill2] = true;
     }
 
+    // スキル３のボタン
     public void Skill3()
     {
         skillUse = true;
         buttonOn[(int)enumButtonOn.Skill3] = true;
     }
 
+    // アイテム使用確認時の使用ボタン
     public void ItemUse()
     {
         buttonOn[(int)enumButtonOn.ItemUse] = true;
     }
 
+    // アイテム使用確認時の戻るボタン
     public void ItemBack()
     {
         buttonOn[(int)enumButtonOn.Back] = true;
     }
 
-    public void Back()
+    // スキル選択ウィンドウを閉じるボタン
+    public void SkillBack()
     {
-        back = true;
+        skillBack = true;
     }
 }
 

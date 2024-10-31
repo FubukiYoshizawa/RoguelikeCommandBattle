@@ -22,7 +22,7 @@ public class TreasureManager : Singleton<TreasureManager>
         OpenTreasure, // 宝箱開封背景
         Num // フロア背景数
     }
-    public int[] getItemNumber;
+    public int[] getItemNumber; // アイテムの番号
     public enum enumGetItemNumber
     {
         Healherb,
@@ -38,11 +38,14 @@ public class TreasureManager : Singleton<TreasureManager>
 
     private void Start()
     {
+        // ScriptableObjectの読み込み
         itemValueManager = Resources.Load<ItemValueManager>("ScriptableObject/ItemValueManager");
 
+        // 各配列の初期化
         floorSprite = new Sprite[(int)enumFloorSprite.Num];
         getItemNumber = new int[(int)enumGetItemNumber.Num];
 
+        // 各UIオブジェクトの読み込み
         mainText = GameObject.Find("MainText").GetComponent<TextMeshProUGUI>();
         selectWindow = GameObject.Find("ItemChangeWindow");
         defaultButton = GameObject.Find("ItemChangeYes");
@@ -50,14 +53,17 @@ public class TreasureManager : Singleton<TreasureManager>
         floorSprite[(int)enumFloorSprite.NotOpenTreasure] = Resources.Load<Sprite>("Images/FloorBacks/NotOpenTreasure");
         floorSprite[(int)enumFloorSprite.OpenTreasure] = Resources.Load<Sprite>("Images/FloorBacks/OpenTreasure");
 
+        // データリストからの読み込み
         getItemNumber[(int)enumGetItemNumber.Healherb] = itemValueManager.DataList[3].itemID;
         getItemNumber[(int)enumGetItemNumber.DamageBomb] = itemValueManager.DataList[4].itemID;
         getItemNumber[(int)enumGetItemNumber.ATKJewel] = itemValueManager.DataList[5].itemID;
 
+        // 初期非表示ウィンドウを非表示
         selectWindow.SetActive(false);
 
     }
 
+    // ランダムにアイテムを抽選する処理
     public IEnumerator RandomItem()
     {
         int randomValue = Random.Range(0, 10);
@@ -79,6 +85,7 @@ public class TreasureManager : Singleton<TreasureManager>
 
     }
 
+    // 宝箱の処理
     public IEnumerator Item()
     {
         floorImage.sprite = floorSprite[(int)enumFloorSprite.NotOpenTreasure];
@@ -153,11 +160,13 @@ public class TreasureManager : Singleton<TreasureManager>
         }
     }
 
+    // 選択肢ボタンはい
     public void Yes()
     {
         yes = true;
     }
 
+    // 選択肢ボタンいいえ
     public void No()
     {
         no = true;
