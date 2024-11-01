@@ -356,6 +356,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bgmManager: {fileID: 11400000, guid: 6714c3b2fa25e764893c89e499c9df2d, type: 2}
   seManager: {fileID: 11400000, guid: 27b12ce262b51924fb84fbc9b227fcdf, type: 2}
+  bgmNumber: 
+  seNumber: 
   bgmVolumeSlider: {fileID: 0}
   seVolumeSlider: {fileID: 0}
   bgmMixerGroup: {fileID: 0}
@@ -839,6 +841,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1309825210}
   - component: {fileID: 1309825209}
+  - component: {fileID: 1309825211}
   m_Layer: 0
   m_Name: GameClearManager
   m_TagString: Untagged
@@ -875,6 +878,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1309825211
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1309825208}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18249924cc754ce44b6efdf391267ba5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1490092664
 GameObject:
   m_ObjectHideFlags: 0

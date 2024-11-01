@@ -43,21 +43,57 @@ public class ItemManager : Singleton<ItemManager>
     {
         if (getItem[(int)enumGetItem.HPPotion])
         {
+            if (BattleManager.Instance.playerHP == BattleManager.Instance.playerMaxHP)
+            {
+                mainText.text = "HP回復は必要ない！";
+
+                yield return StartCoroutine(NextProcess(1.0f));
+                yield return StartCoroutine(BattleManager.Instance.Battle());
+
+            }
+
             getItem[(int)enumGetItem.HPPotion] = false;
             yield return StartCoroutine(HPPotion());
         }
         else if (getItem[(int)enumGetItem.SPPotion])
         {
+            if (BattleManager.Instance.playerSP == BattleManager.Instance.playerMaxSP)
+            {
+                mainText.text = "SP回復は必要ない！";
+
+                yield return StartCoroutine(NextProcess(1.0f));
+                yield return StartCoroutine(BattleManager.Instance.Battle());
+
+            }
+
             getItem[(int)enumGetItem.SPPotion] = false;
             yield return StartCoroutine(SPPotion());
         }
         else if (getItem[(int)enumGetItem.ATKPotion])
         {
+            if (BattleManager.Instance.powerUp)
+            {
+                mainText.text = "すでに攻撃力が上がっている！";
+
+                yield return StartCoroutine(NextProcess(1.0f));
+                yield return StartCoroutine(BattleManager.Instance.Battle());
+
+            }
+
             getItem[(int)enumGetItem.ATKPotion] = false;
             yield return StartCoroutine(ATKPotion());
         }
         else if (getItem[(int)enumGetItem.HealHerb])
         {
+            if (BattleManager.Instance.playerHP == BattleManager.Instance.playerMaxHP)
+            {
+                mainText.text = "HP回復は必要ない！";
+
+                yield return StartCoroutine(NextProcess(1.0f));
+                yield return StartCoroutine(BattleManager.Instance.Battle());
+
+            }
+
             getItem[(int)enumGetItem.HealHerb] = false;
             yield return StartCoroutine(HealHerb());
         }
@@ -68,6 +104,15 @@ public class ItemManager : Singleton<ItemManager>
         }
         else if (getItem[(int)enumGetItem.ATKJewel])
         {
+            if (BattleManager.Instance.powerUp)
+            {
+                mainText.text = "すでに攻撃力が上がっている！";
+
+                yield return StartCoroutine(NextProcess(1.0f));
+                yield return StartCoroutine(BattleManager.Instance.Battle());
+
+            }
+
             getItem[(int)enumGetItem.ATKJewel] = false;
             yield return StartCoroutine(ATKJewel());
         }
@@ -129,7 +174,8 @@ public class ItemManager : Singleton<ItemManager>
         SoundManager.Instance.PlaySE((int)SoundManager.enumSENumber.PowerCharge);
         FlashManager.Instance.FlashScreen(Color.yellow, 0.3f);
         mainText.text = "攻撃力が２倍になった！";
-        BattleManager.Instance.powerUp2 = true;
+        BattleManager.Instance.powerUp = true;
+        BattleManager.Instance.baseAttack = BattleManager.Instance.playerATK;
         BattleManager.Instance.playerATK *= itemValueManager.DataList[2].itemValue;
         haveItem = false;
 
@@ -202,8 +248,9 @@ public class ItemManager : Singleton<ItemManager>
         SoundManager.Instance.PlaySE((int)SoundManager.enumSENumber.PowerCharge);
         FlashManager.Instance.FlashScreen(Color.yellow, 0.3f);
         mainText.text = "攻撃力が3倍になった！";
-        BattleManager.Instance.powerUp3 = true;
-        BattleManager.Instance.playerATK *= itemValueManager.DataList[5].itemValue;
+        BattleManager.Instance.powerUp = true;
+        BattleManager.Instance.baseAttack = BattleManager.Instance.playerATK;
+        BattleManager.Instance.playerATK *= itemValueManager.DataList[2].itemValue;
         haveItem = false;
 
         yield return StartCoroutine(NextProcess(1.0f));

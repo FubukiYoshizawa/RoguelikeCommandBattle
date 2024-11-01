@@ -35,9 +35,10 @@ public class BattleManager: Singleton<BattleManager>
     public int enemyATK; // 敵攻撃力
     public int enemyEXP; // 敵経験値
 
-    public bool powerUp2 = false; // 攻撃力2倍状態を表す
-    public bool powerUp3 = false; // 攻撃力3倍状態を表す
-    public bool bossBattle;
+    public int baseAttack; // 攻撃力上昇時の元の攻撃力
+    public bool powerUp; // 攻撃力上昇状態を表す
+
+    public bool bossBattle; // 現在がボスバトルかどうか
 
     public Image floorBackImage; // フロアの背景を当てはめるImageオブジェクト
     public Sprite floorBackSprite; // フロア画像
@@ -450,21 +451,10 @@ public class BattleManager: Singleton<BattleManager>
             enemyHP = 0;
         }
 
-        if (powerUp2 && powerUp3)
+        if (powerUp)
         {
-            powerUp2 = false;
-            powerUp3 = false;
-            playerATK /= 6;
-        }
-        else if (powerUp2)
-        {
-            powerUp2 = false;
-            playerATK /= 2;
-        }
-        else if (powerUp3)
-        {
-            powerUp3 = false;
-            playerATK /= 3;
+            powerUp = false;
+            playerATK = baseAttack;
         }
 
         yield return StartCoroutine(NextProcess(1.0f));
@@ -654,15 +644,11 @@ public class BattleManager: Singleton<BattleManager>
     {
         SoundManager.Instance.PlaySE((int)SoundManager.enumSENumber.Win);
         SoundManager.Instance.StopBGM();
-        if (powerUp2)
+        
+        if (powerUp)
         {
-            powerUp2 = false;
-            playerATK /= 2;
-        }
-        else if (powerUp3)
-        {
-            powerUp3 = false;
-            playerATK /= 3;
+            powerUp = false;
+            playerATK = baseAttack;
         }
 
         displayEnemyImage.sprite = noneEnemy;

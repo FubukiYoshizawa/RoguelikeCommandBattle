@@ -153,9 +153,9 @@ public class SkillManager : Singleton<SkillManager>
             {
                 yield return StartCoroutine(NotEnoughSP());
             }
-            else if (BattleManager.Instance.powerUp2 == true)
+            else if (BattleManager.Instance.powerUp == true)
             {
-                mainText.text = "すでに使用している！";
+                mainText.text = "すでに攻撃力が上がっている！";
 
                 yield return StartCoroutine(NextProcess(1.0f));
 
@@ -175,7 +175,7 @@ public class SkillManager : Singleton<SkillManager>
             }
             else if (BattleManager.Instance.playerHP == BattleManager.Instance.playerMaxHP)
             {
-                mainText.text = "回復は必要ない！";
+                mainText.text = "HP回復は必要ない！";
 
                 yield return StartCoroutine(NextProcess(1.0f));
 
@@ -219,7 +219,7 @@ public class SkillManager : Singleton<SkillManager>
             }
             else if (BattleManager.Instance.playerHP == BattleManager.Instance.playerMaxHP)
             {
-                mainText.text = "回復は必要ない！";
+                mainText.text = "HP回復は必要ない！";
 
                 yield return StartCoroutine(NextProcess(1.0f));
 
@@ -262,21 +262,10 @@ public class SkillManager : Singleton<SkillManager>
             BattleManager.Instance.enemyHP = 0;
         }
 
-        if(BattleManager.Instance.powerUp2&&BattleManager.Instance.powerUp3)
+        if(BattleManager.Instance.powerUp)
         {
-            BattleManager.Instance.powerUp2 = false;
-            BattleManager.Instance.powerUp3 = false;
-            BattleManager.Instance.playerATK /= 6;
-        }
-        else if (BattleManager.Instance.powerUp2)
-        {
-            BattleManager.Instance.powerUp2 = false;
-            BattleManager.Instance.playerATK /= 2;
-        }
-        else if (BattleManager.Instance.powerUp3)
-        {
-            BattleManager.Instance.powerUp3 = false;
-            BattleManager.Instance.playerATK /= 3;
+            BattleManager.Instance.powerUp = false;
+            BattleManager.Instance.playerATK = BattleManager.Instance.baseAttack;
         }
 
         yield return StartCoroutine(NextProcess(1.0f));
@@ -292,7 +281,7 @@ public class SkillManager : Singleton<SkillManager>
 
     }
 
-    // パワーアタック
+    // パワーチャージ
     public IEnumerator PowerUp()
     {
         mainText.text = "パワーチャージを使った！";
@@ -304,7 +293,9 @@ public class SkillManager : Singleton<SkillManager>
         mainText.text = "攻撃力が2倍になった！";
 
         BattleManager.Instance.playerSP -= skillValueManager.DataList[1].needSkillValue;
-        BattleManager.Instance.powerUp2 = true;
+
+        BattleManager.Instance.powerUp = true;
+        BattleManager.Instance.baseAttack = BattleManager.Instance.playerATK;
         BattleManager.Instance.playerATK *= 2;
 
         yield return StartCoroutine(NextProcess(1.0f));

@@ -126,7 +126,7 @@ public class TitleManager : MonoBehaviour
     void Update()
     {
         // スペースが押されたら初期選択ウィンドウを表示（1度だけ）
-        if (!TitleOff && (Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0)))
+        if (!TitleOff && (Input.GetKeyDown(KeyCode.Space)))
         {
             SoundManager.Instance.PlaySE((int)SoundManager.enumSENumber.Select);
             canvas[(int)enumCanvas.Title].SetActive(false);
